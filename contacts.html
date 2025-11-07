@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <link rel="icon" href="favicon.ico">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>kondrashov-m | Контакты</title>
+
+    <!-- Link Swiper's CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+
+    <!--Bootstrap ================================================== -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+
+    <!--vendor css ================================================== -->
+    <link rel="stylesheet" type="text/css" href="css/vendor.css">
+
+    <!-- Style Sheet -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    
+    <style>
+    .contact-card {
+        background-color: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        padding: 2rem;
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+    
+    .contact-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0, 163, 255, 0.2);
+        border-color: rgba(0, 163, 255, 0.3);
+    }
+    
+    .contact-icon {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, rgba(0,163,255,0.18), rgba(255,255,255,0.06));
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1.5rem;
+        border: 1px solid rgba(255,255,255,0.06);
+    }
+    
+    .contact-form {
+        background-color: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        padding: 2.5rem;
+    }
+    
+    .form-control {
+        background-color: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: white;
+        padding: 0.75rem 1rem;
+        border-radius: 12px;
+    }
+    
+    .form-control:focus {
+        background-color: rgba(255, 255, 255, 0.08);
+        border-color: rgba(0, 163, 255, 0.5);
+        box-shadow: 0 0 0 0.2rem rgba(0, 163, 255, 0.25);
+        color: white;
+    }
+    
+    .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+    }
+    
+    .map-container {
+        border-radius: 20px;
+        overflow: hidden;
+        height: 400px;
+        background-color: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .social-links a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 50px;
+        height: 50px;
+        background: rgba(255, 255, 255, 0.06);
+        border-radius: 50%;
+        margin-right: 10px;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .social-links a:hover {
+        background: rgba(0, 163, 255, 0.2);
+        transform: translateY(-3px);
+    }
+    </style>
+</head>
+
+<body>
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <symbol id="quote-left" viewBox="0 0 24 24">
+            <path fill="currentColor"
+                d="M3.691 6.292C5.094 4.771 7.217 4 10 4h1v2.819l-.804.161c-1.37.274-2.323.813-2.833 1.604A2.9 2.9 0 0 0 6.925 10H10a1 1 0 0 1 1 1v7c0 1.103-.897 2-2 2H3a1 1 0 0 1-1-1v-5l.003-2.919c-.009-.111-.199-2.741 1.688-4.789M20 20h-6a1 1 0 0 1-1-1v-5l.003-2.919c-.009-.111-.199-2.741 1.688-4.789C16.094 4.771 18.217 4 21 4h1v2.819l-.804.161c-1.37.274-2.323.813-2.833 1.604A2.9 2.9 0 0 0 17.925 10H21a1 1 0 0 1 1 1v7c0 1.103-.897 2-2 2" />
+        </symbol>
+        <symbol id="arrow-right" viewBox="0 0 24 24">
+            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+        </symbol>
+        <symbol id="arrow-left" viewBox="0 0 24 24">
+            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+        </symbol>
+        <symbol id="facebook" viewBox="0 0 24 24">
+            <path fill="currentColor"
+                d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95" />
+        </symbol>
+        <symbol id="twitter" viewBox="0 0 16 16">
+            <path fill="currentColor"
+                d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334q.002-.211-.006-.422A6.7 6.7 0 0 0 16 3.542a6.7 6.7 0 0 1-1.889.518a3.3 3.3 0 0 0 1.447-1.817a6.5 6.5 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.32 9.32 0 0 1-6.767-3.429a3.29 3.29 0 0 0 1.018 4.382A3.3 3.3 0 0 1 .64 6.575v.045a3.29 3.29 0 0 0 2.632 3.218a3.2 3.2 0 0 1-.865.115a3 3 0 0 1-.614-.057a3.28 3.28 0 0 0 3.067 2.277A6.6 6.6 0 0 1 .78 13.58a6 6 0 0 1-.78-.045A9.34 9.34 0 0 0 5.026 15" />
+        </symbol>
+        <symbol id="instagram" viewBox="0 0 24 24">
+            <path fill="currentColor"
+                d="M13.028 2c1.125.003 1.696.009 2.189.023l.194.007c.224.008.445.018.712.03c1.064.05 1.79.218 2.427.465c.66.254 1.216.598 1.772 1.153a4.9 4.9 0 0 1 1.153 1.772c.247.637.415 1.363.465 2.428c.012.266.022.487.03.712l.006.194c.015.492.021 1.063.023 2.188l.001.746v1.31a79 79 0 0 1-.023 2.188l-.006.194c-.008.225-.018.446-.03.712c-.05 1.065-.22 1.79-.466 2.428a4.9 4.9 0 0 1-1.153 1.772a4.9 4.9 0 0 1-1.772 1.153c-.637.247-1.363.415-2.427.465l-.712.03l-.194.006c-.493.014-1.064.021-2.189.023l-.746.001h-1.309a78 78 0 0 1-2.189-.023l-.194-.006a63 63 0 0 1-.712-.031c-1.064-.05-1.79-.218-2.428-.465a4.9 4.9 0 0 1-1.771-1.153a4.9 4.9 0 0 1-1.154-1.772c-.247-.637-.415-1.363-.465-2.428l-.03-.712l-.005-.194A79 79 0 0 1 2 13.028v-2.056a79 79 0 0 1 .022-2.188l.007-.194c.008-.225.018-.446.03-.712c.05-1.065.218-1.79.465-2.428A4.9 4.9 0 0 1 3.68 3.678a4.9 4.9 0 0 1 1.77-1.153c.638-.247 1.363-.415 2.428-.465c.266-.012.488-.022.712-.03l.194-.006a79 79 0 0 1 2.188-.023zM12 7a5 5 0 1 0 0 10a5 5 0 0 0 0-10m0 2a3 3 0 1 1 .001 6a3 3 0 0 1 0-6m5.25-3.5a1.25 1.25 0 0 0 0 2.5a1.25 1.25 0 0 0 0-2.5" />
+        </symbol>
+        <symbol id="pinterest" viewBox="0 0 24 24">
+            <g fill="none">
+                <path
+                    d="m12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z" />
+                <path fill="currentColor"
+                    d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2S2 6.477 2 12c0 4.006 2.356 7.462 5.758 9.058l2.29-10.766a1 1 0 0 1 1.956.416C11.73 12 11.49 12.5 11.501 13.1c.017.940.273 1.442.521 1.702c.253.265.618.408 1.095.4c.487-.01 1.038-.181 1.526-.489C15.592 14.117 16 13.095 16 12a4 4 0 1 0-7.668 1.6a1 1 0 0 1-1.832.8a6 6 0 1 1 11 0c-.368.848-1.04 1.534-1.792 2.007c-.755.475-1.657.779-2.555.795c-.819.015-1.672-.212-2.359-.808L9.66 21.726c.75.18 1.534.275 2.339.275Z" />
+            </g>
+        </symbol>
+        <symbol id="youtube" viewBox="0 0 24 24">
+            <path fill="currentColor"
+                d="m10 15l5.19-3L10 9zm11.56-7.83c.13.47.22 1.1.28 1.9c.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83c-.25.9-.83 1.48-1.73 1.73c-.47.13-1.33.22-2.65.28c-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44c-.9-.25-1.48-.83-1.73-1.73c-.13-.47-.22-1.1-.28-1.9c-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83c.25-.9.83-1.48 1.73-1.73c.47-.13 1.33-.22 2.65-.28c1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44c.9.25 1.48.83 1.73 1.73" />
+        </symbol>
+        <symbol id="vk" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M15.07 2H8.93C3.33 2 2 3.33 2 8.93v6.14C2 20.67 3.33 22 8.93 22h6.14c5.6 0 6.93-1.33 6.93-6.93V8.93C22 3.33 20.67 2 15.07 2m3.08 14.27h-1.46c-.55 0-.72-.45-1.69-1.44c-.86-.83-1.23-.94-1.44-.94c-.29 0-.37.08-.37.48v1.31c0 .34-.11.54-.99.54a5.32 5.32 0 0 1-4.19-2.52c-1.7-2.36-2.17-4.13-2.17-4.49c0-.19.07-.37.48-.37h1.46c.36 0 .5.16.64.54c.69 2 1.85 3.76 2.33 3.76c.18 0 .26-.08.26-.54V9.24c-.06-1-.58-1.08-.58-1.44c0-.17.14-.34.37-.34h2.29c.31 0 .42.16.42.53v2.88c0 .31.13.42.23.42c.18 0 .32-.11.64-.43c.99-1.12 1.69-2.83 1.69-2.83c.09-.21.25-.41.62-.41h1.46c.44 0 .54.22.44.53c-.18.89-1.96 3.33-1.96 3.33c-.16.25-.22.37 0 .65c.16.22.69.66 1.04 1.06c.65.71 1.14 1.31 1.27 1.73c.14.41-.1.62-.51.62"/>
+        </symbol>
+        <symbol id="telegram" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19c-.14.75-.41 1-.67 1.02c-.57.05-1-.38-1.56-.73c-.87-.53-1.36-.86-2.19-1.38c-.97-.6-.34-1.13.21-1.79c.14-.17 2.63-2.42 2.68-2.63c.01-.03.01-.14-.06-.19s-.17-.04-.25-.02c-.11.02-1.79 1.14-5.06 3.35c-.48.33-.91.49-1.3.48c-.43-.01-1.25-.24-1.86-.44c-.75-.24-1.35-.37-1.3-.79c.03-.22.31-.45.82-.68c3.2-1.39 5.33-2.31 6.38-2.76c3.04-1.31 3.67-1.54 4.08-1.55c.09 0 .29.02.42.19c.11.14.13.33.15.47c0 .14.02.27.02.47z"/>
+        </symbol>
+        <symbol id="gmail" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M20 18h-2V9.25L12 13L6 9.25V18H4V6h1.2l6.8 4.25L18.8 6H20m0-2H4c-1.11 0-2 .89-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6c0-1.11-.9-2-2-2Z"/>
+        </symbol>
+        <symbol id="github" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5c.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34c-.46-1.16-1.11-1.47-1.11-1.47c-.91-.62.07-.6.07-.6c1 .07 1.53 1.03 1.53 1.03c.87 1.52 2.34 1.07 2.91.83c.09-.65.35-1.09.63-1.34c-2.22-.25-4.55-1.11-4.55-4.92c0-1.11.38-2 1.03-2.71c-.1-.25-.45-1.29.1-2.64c0 0 .84-.27 2.75 1.02c.79-.22 1.65-.33 2.5-.33c.85 0 1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02c.55 1.35.2 2.39.1 2.64c.65.71 1.03 1.6 1.03 2.71c0 3.82-2.34 4.66-4.57 4.91c.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2Z"/>
+        </symbol>
+        <symbol id="paintbrush" viewBox="0 0 16 16">
+            <path fill="currentColor"
+                d="m5.6 11.6l-1.2-1.2c-.8-.2-2-.1-2.7 1c-.8 1.1-.3 2.8-1.7 4.6c0 0 3.5 0 4.8-1.3c1.2-1.2 1.2-2.2 1-3zm.2-3.5c-.2.3-.5.7-.7 1c0 .2-.1.3-.2.4L6.4 11c.1-.1.3-.2.4-.3c.3-.2.7-.4 1-.7c.4 0 .6-.2.8-.4L6.4 7.4c-.2.2-.4.4-.6.7m10-7.9c-.3-.3-.7-.3-1-.1c0 0-3 2.5-5.9 5.1c-.4.4-.7.7-1.1 1c-.2.2-.4.4-.6.5l2.1 2.1c.2-.2.4-.4.5-.7c.3-.4.6-.7.9-1.1c2.5-3 5.1-5.9 5.1-5.9c.3-.2.3-.6 0-.9" />
+        </symbol>
+        <symbol id="t-shirt" viewBox="0 0 20 20">
+            <g fill="currentColor">
+                <path fill-rule="evenodd"
+                    d="m2.668 10.009l1.166-.583V16.5a2.5 2.5 0 0 0 2.5 2.5h7.335a2.5 2.5 0 0 0 2.5-2.5V9.425l1.166.581a.5.5 0 0 0 .71-.338l.945-4.236a.5.5 0 0 0-.135-.463l-2.248-2.24A2.5 2.5 0 0 0 14.842 2h-2.007a.5.5 0 0 0-.493.415c-.287 1.658-1.04 2.409-2.342 2.409c-1.3 0-2.054-.751-2.34-2.409A.5.5 0 0 0 7.167 2H5.161a2.5 2.5 0 0 0-1.766.73L1.15 4.97a.5.5 0 0 0-.135.462l.943 4.238a.5.5 0 0 0 .711.338M5.161 3h1.598C7.195 4.84 8.297 5.824 10 5.824S12.806 4.84 13.243 3h1.6a1.5 1.5 0 0 1 1.058.437l2.053 2.046l-.745 3.343l-1.317-.656a.5.5 0 0 0-.723.448V16.5a1.5 1.5 0 0 1-1.5 1.5H6.334a1.5 1.5 0 0 1-1.5-1.5V8.618a.5.5 0 0 0-.724-.448l-1.316.658l-.744-3.345l2.051-2.045A1.5 1.5 0 0 1 5.161 3"
+                    clip-rule="evenodd" />
+                <path d="M12 10.5a.5.5 0 0 1 0-1h2a.5.5 0 0 1 0 1z" />
+            </g>
+        </symbol>
+        <symbol id="box" viewBox="0 0 24 24">
+            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"
+                d="m15.578 3.382l2 1.05c2.151 1.129 3.227 1.693 3.825 2.708C22 8.154 22 9.417 22 11.942v.117c0 2.524 0 3.787-.597 4.801c-.598 1.015-1.674 1.58-3.825 2.709l-2 1.049C13.822 21.539 12.944 22 12 22s-1.822-.46-3.578-1.382l-2-1.05c-2.151-1.129-3.227-1.693-3.825-2.708C2 15.846 2 14.583 2 12.06v-.117c0-2.525 0-3.788.597-4.802c.598-1.015 1.674-1.58 3.825-2.708l2-1.05C10.178 2.461 11.056 2 12 2s1.822.46 3.578 1.382ZM21 7.5l-4 2M12 12L3 7.5m9 4.5v9.5m0-9.5l4.5-2.25l.5-.25m0 0V13m0-3.5l-9.5-5" />
+        </symbol>
+        <symbol id="search" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+            <path fill="currentColor"
+                d="M19 3C13.488 3 9 7.488 9 13c0 2.395.84 4.59 2.25 6.313L3.281 27.28l1.439 1.44l7.968-7.969A9.922 9.922 0 0 0 19 23c5.512 0 10-4.488 10-10S24.512 3 19 3zm0 2c4.43 0 8 3.57 8 8s-3.57 8-8 8s-8-3.57-8-8s3.57-8 8-8z" />
+        </symbol>
+        <symbol xmlns="http://www.w3.org/2000/svg" id="close" viewBox="0 0 16 16">
+            <path
+                d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
+        </symbol>
+    </svg>
+
+    <div class="preloader">
+        <div class="loader"></div>
+    </div>
+
+    <nav id="header-nav" class="navbar navbar-expand-lg py-4" data-bs-theme="dark">
+        <div class="container-fluid padding-side">
+            <a class="navbar-brand" href="index.html"><img src="images/logo.png" alt="logo"></a>
+
+            <button class="navbar-toggler shadow-none" type="button" data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
+                aria-labelledby="offcanvasNavbarLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Меню</h5>
+                    <button type="button" class="btn-close text-reset shadow-none" data-bs-dismiss="offcanvas"
+                        aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <ul class="navbar-nav text-center align-items-center justify-content-end flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link pe-lg-5" href="index.html">Главная</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link pe-lg-5" href="berloga.html">Берлога</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link pe-lg-5 dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+                                aria-expanded="false">Проекты</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="services.html" class="dropdown-item"> Конструктор сайтов <span
+                                            class="badge bg-dark">Активно</span></a></li>
+                                <li><a href="service-details.html" class="dropdown-item">Automatics_v18
+                                        <span class="badge bg-dark">Активно</span></a></li>
+                                <li><a href="service-details.html" class="dropdown-item">Берлога программиста
+                                        <span class="badge bg-dark">Активно</span></a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link pe-lg-5 dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+                                aria-expanded="false">Портфолио</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="portfolio.html" class="dropdown-item">Портфолио<span
+                                            class="badge bg-dark"></span></a></li>
+                                <li><a href="portfolio-details.html" class="dropdown-item">Перейти в GitHub
+                                        <span class="badge bg-dark"></span></a></li>
+                            </ul>
+                        </li>
+                       
+                        <li class="nav-item">
+                            <a class="nav-link pe-lg-5 active" href="contacts.html">Контакты</a>
+                        </li>
+                       
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section id="hero" class="padding-medium">
+        <div class="container text-white"> 
+            <div class="row justify-content-center text-center">
+                <div class="col-xl-8">
+                    <p class="text-primary" data-aos="fade-up" data-aos-duration="1400">
+                        Свяжитесь со мной
+                    </p>
+                    <h1 class="display-3" data-aos="fade-up" data-aos-duration="1600">
+                        Давайте создадим что-то <span class="text-primary">удивительное</span> вместе
+                    </h1>
+                    <p data-aos="fade-up" data-aos-duration="1800">
+                        Готов обсудить ваш проект, ответить на вопросы или просто пообщаться о технологиях
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container-fluid padding-side position-relative">
+        <div class="border border-light border-opacity-25 rounded-5"
+            style="background-color: rgba(255, 255, 255, 0.06); box-shadow: 0px 12px 90px rgba(0, 163, 255, 0.2);">
+            
+            <section id="contact-info" class="padding-medium">
+                <div class="container">
+                    <div class="row justify-content-center text-center mb-5">
+                        <div class="col-lg-8">
+                            <h3 class="display-3 mb-4">Мои контакты<span class="text-primary">.</span></h3>
+                            <p class="lead">Выберите удобный для вас способ связи. Отвечаю быстро!</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row g-4">
+                        <div class="col-lg-4 col-md-6">
+                            <div class="contact-card">
+                                <div class="contact-icon">
+                                    <svg class="text-primary" width="30" height="30">
+                                        <use xlink:href="#telegram"></use>
+                                    </svg>
+                                </div>
+                                <h5 class="display-6">Telegram</h5>
+                                <p class="mb-3">Самый быстрый способ связаться со мной</p>
+                                <a href="https://t.me/kondrashov_m" class="text-primary fw-semibold">@kondrashov_m</a>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-4 col-md-6">
+                            <div class="contact-card">
+                                <div class="contact-icon">
+                                    <svg class="text-primary" width="30" height="30">
+                                        <use xlink:href="#gmail"></use>
+                                    </svg>
+                                </div>
+                                <h5 class="display-6">Email</h5>
+                                <p class="mb-3">Для официальных запросов и предложений</p>
+                                <a href="mailto:kondrashov.m@inbox.ru" class="text-primary fw-semibold">kondrashov.m@inbox.ru</a>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-4 col-md-6">
+                            <div class="contact-card">
+                                <div class="contact-icon">
+                                    <svg class="text-primary" width="30" height="30">
+                                        <use xlink:href="#github"></use>
+                                    </svg>
+                                </div>
+                                <h5 class="display-6">GitHub</h5>
+                                <p class="mb-3">Мои проекты и исходный код</p>
+                                <a href="https://github.com/kondrashov-m" class="text-primary fw-semibold">kondrashov-m</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="contact-form-section" class="padding-medium pt-0">
+                <div class="container">
+                    <div class="row g-5">
+                        <div class="col-lg-6">
+                            <div class="contact-form">
+                                <h3 class="display-6 mb-4">Напишите мне<span class="text-primary">.</span></h3>
+                                <form id="contactForm">
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="name" class="form-label">Ваше имя</label>
+                                                <input type="text" class="form-control" id="name" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="email" class="form-label">Email</label>
+                                                <input type="email" class="form-control" id="email" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label for="subject" class="form-label">Тема</label>
+                                                <input type="text" class="form-control" id="subject" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label for="message" class="form-label">Сообщение</label>
+                                                <textarea class="form-control" id="message" rows="5" required></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <button type="submit" class="btn button rounded-pill px-5 py-3">
+                                                <span>Отправить сообщение</span>
+                                                <div class="position-absolute top-50 end-0 translate-middle-y me-2">
+                                                    <svg class="arrow-right bg-white text-black rounded-circle p-2" width="35" height="35">
+                                                        <use xlink:href="#arrow-right"></use>
+                                                    </svg>
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-6">
+                            <div class="ps-lg-4">
+                                <h3 class="display-6 mb-4">Часто задаваемые вопросы<span class="text-primary">.</span></h3>
+                                
+                                <div class="accordion" id="faqAccordion">
+                                    <div class="accordion-item border-0 mb-3 rounded-3" style="background-color: rgba(255, 255, 255, 0.05);">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed text-white" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" style="background-color: rgba(255, 255, 255, 0.05);">
+                                                Сколько времени занимает разработка проекта?
+                                            </button>
+                                        </h2>
+                                        <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                            <div class="accordion-body">
+                                                Сроки зависят от сложности проекта. Простой лендинг - 1-2 недели, сложный веб-сервис - от 1 месяца. После обсуждения деталей я предоставлю точные сроки.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="accordion-item border-0 mb-3 rounded-3" style="background-color: rgba(255, 255, 255, 0.05);">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed text-white" type="button" data-bs-toggle="collapse" data-bs-target="#faq2" style="background-color: rgba(255, 255, 255, 0.05);">
+                                                Вы работаете с постоянной поддержкой?
+                                            </button>
+                                        </h2>
+                                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                            <div class="accordion-body">
+                                                Да, я предоставляю техническую поддержку после завершения проекта. Также возможны договоренности о долгосрочном сотрудничестве.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="accordion-item border-0 mb-3 rounded-3" style="background-color: rgba(255, 255, 255, 0.05);">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed text-white" type="button" data-bs-toggle="collapse" data-bs-target="#faq3" style="background-color: rgba(255, 255, 255, 0.05);">
+                                                Какие технологии вы используете?
+                                            </button>
+                                        </h2>
+                                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                            <div class="accordion-body">
+                                                В работе я использую стек: HTML, CSS, JS для фронтенда, Node.js/Python/Wordpress для бэкенда, а также различные базы данных. Технологии подбираются индивидуально под каждый проект.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="accordion-item border-0 rounded-3" style="background-color: rgba(255, 255, 255, 0.05);">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed text-white" type="button" data-bs-toggle="collapse" data-bs-target="#faq4" style="background-color: rgba(255, 255, 255, 0.05);">
+                                                Можно ли посмотреть примеры работ?
+                                            </button>
+                                        </h2>
+                                        <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                            <div class="accordion-body">
+                                                Конечно! Посмотрите мое <a href="portfolio.html" class="text-primary">портфолио</a> или зайдите на <a href="https://github.com/kondrashov-m" class="text-primary">GitHub</a>, где я выкладываю некоторые из своих проектов.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-5">
+                                    <h5 class="mb-3">Социальные сети</h5>
+                                    <div class="social-links">
+                                        <a href="https://t.me/kondrashov_m" class="text-white">
+                                            <svg width="24" height="24">
+                                                <use xlink:href="#telegram"></use>
+                                            </svg>
+                                        </a>
+                                        <a href="https://github.com/kondrashov-m" class="text-white">
+                                            <svg width="24" height="24">
+                                                <use xlink:href="#github"></use>
+                                            </svg>
+                                        </a>
+                                        <a href="https://vk.com/kondrashov_m" class="text-white">
+                                            <svg width="24" height="24">
+                                                <use xlink:href="#vk"></use>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="map" class="padding-medium pt-0">
+                <div class="container">
+                    <div class="row justify-content-center text-center mb-5">
+                        <div class="col-lg-8">
+                            <h3 class="display-3 mb-4">Где я нахожусь<span class="text-primary">.</span></h3>
+                            <p class="lead">Москва, Россия. Работаю удаленно с клиентами по всему миру</p>
+                        </div>
+                    </div>
+                    
+                    <div class="map-container">
+                        <!-- Здесь можно вставить карту, например через Google Maps API -->
+                        <div class="w-100 h-100 d-flex align-items-center justify-content-center text-white-50">
+                            <div class="text-center">
+                                <svg class="text-primary mb-3" width="60" height="60">
+                                    <use xlink:href="#box"></use>
+                                </svg>
+                                <p>Карта местоположения</p>
+                                <small>Москва, Россия</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    
+
+    <section  style="margin-top: 52px;">
+        
+        
+    </section>
+    <section id="footer">
+        <div class="container padding-medium pt-0" data-aos="fade-up">
+            <div class="text-center">
+                <img src="images/logo.png" alt="logo">
+            </div>
+
+            <ul class="d-flex gap-5 list-unstyled justify-content-center my-3 mt-5">
+                <li>
+                    <a class="nav-link p-0" href="https://t.me/mikondra">
+                        <svg class="accent-color" width="24" height="24">
+                            <use xlink:href="#telegram"></use>
+                        </svg>
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link p-0" href="https://github.com/kondrashov-m">
+                        <svg class="accent-color" width="24" height="24">
+                            <use xlink:href="#github"></use>
+                        </svg>
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link p-0" href="https://vk.com/kondrashov.mikhail">
+                        <svg class="accent-color" width="24" height="24">
+                            <use xlink:href="#vk"></use>
+                        </svg>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="text-center mt-5">
+                <p class="mb-0">© 2025. Автор: Михаил Кондрашов | 
+                    <span class="version-info" title="codename: Alka">Версия 0.1</span>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- script ================================================== -->
+    <script src="js/jquery-1.11.0.min.js"></script>
+
+    <!-- Bootstarp script ================================================== -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+        crossorigin="anonymous"></script>
+
+    <!-- Swiper script ================================================== -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+
+    <!--iconify script ================================================== -->
+    <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.7/dist/iconify-icon.min.js"></script>
+
+    <script src="js/plugins.js"></script>
+    <script src="js/script.js"></script>
+    
+    <script>
+    // Обработка формы контактов
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Здесь можно добавить код для отправки формы
+        // Например, через AJAX или подключение к сервису форм
+        
+        alert('Сообщение отправлено! Я свяжусь с вами в ближайшее время.');
+        this.reset();
+    });
+    </script>
+</body>
+
+</html>
