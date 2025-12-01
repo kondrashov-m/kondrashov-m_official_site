@@ -86,12 +86,24 @@
       once: true,
     });
 
-    // Swiper Slider Init
+    // Swiper Slider Init - ИСПРАВЛЕННАЯ ВЕРСИЯ
     if ($('.testimonial-swiper').length) {
       new Swiper('.testimonial-swiper', {
         slidesPerView: 1,
-        pagination: { el: '.swiper-pagination', clickable: true },
-        navigation: { nextEl: '.main-slider-button-next', prevEl: '.main-slider-button-prev' },
+        loop: true,
+        autoplay: {
+          delay: 15000,
+          disableOnInteraction: false,
+        },
+        speed: 1000,
+        pagination: { 
+          el: '.swiper-pagination', 
+          clickable: true 
+        },
+        navigation: { 
+          nextEl: '.main-slider-button-next', 
+          prevEl: '.main-slider-button-prev' 
+        },
       });
     }
 
