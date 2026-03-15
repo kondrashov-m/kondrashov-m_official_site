@@ -15,24 +15,6 @@
 <!-- /Yandex.Metrika counter -->
 
 <head>
-<!-- Top.Mail.Ru counter -->
-<script type="text/javascript">
-var _tmr = window._tmr || (window._tmr = []);
-_tmr.push({id: "3744704", type: "pageView", start: (new Date()).getTime()});
-(function (d, w, id) {
-  if (d.getElementById(id)) return;
-  var ts = d.createElement("script"); ts.type = "text/javascript"; ts.async = true; ts.id = id;
-  ts.src = "https://top-fwz1.mail.ru/js/code.js";
-  var f = function () {var s = d.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ts, s);};
-  if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); }
-})(document, window, "tmr-code");
-</script>
-<noscript><div><img src="https://top-fwz1.mail.ru/counter?id=3744704;js=na" style="position:absolute;left:-9999px;" alt="Top.Mail.Ru" /></div></noscript>
-<!-- /Top.Mail.Ru counter -->
-</script>
-<noscript><div><img src="https://top-fwz1.mail.ru/counter?id=3744704;js=na" style="position:absolute;left:-9999px;" alt="Top.Mail.Ru" /></div></noscript>
-<!-- /Top.Mail.Ru counter -->
-
     <link rel="icon" href="favicon.ico">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -290,19 +272,64 @@ _tmr.push({id: "3744704", type: "pageView", start: (new Date()).getTime()});
 </head>
 
 <body>
+
+
+    <style>
+
+        /* Прелоадер - затемненный фон на весь экран */
+            .preloader {
+                position: fixed;      /* Фиксированное позиционирование поверх всего */
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: #000;     /* Черный фон */
+                z-index: 9999;        /* Очень высокий z-index, чтобы быть поверх всего */
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: opacity 0.5s ease;  /* Плавное исчезновение */
+            }
+
+            /* Сам спиннер (вращающийся круг) */
+            .loader {
+                width: 50px;
+                height: 50px;
+                border: 3px solid rgba(255,255,255,0.1);           /* Светло-серая обводка */
+                border-top-color: #00a3ff;                          /* Верхняя часть - синяя */
+                border-radius: 50%;                                  /* Круглая форма */
+                animation: spin 1s linear infinite;                  /* Бесконечное вращение */
+            }
+
+            /* Анимация вращения */
+            @keyframes spin {
+                to { transform: rotate(360deg); }                    /* Поворот на 360 градусов */
+            }
+    
+    </style>
+
+        <!-- Прелоадер -->
+    <div class="preloader">
+        <div class="loader"></div>
+    </div>
+    
+    <script>
+    // Скрыть прелоадер после загрузки
+    window.addEventListener('load', function() {
+        document.querySelector('.preloader').style.opacity = '0';
+        setTimeout(() => {
+            document.querySelector('.preloader').style.display = 'none';
+        }, 500);  // Ждем завершения анимации исчезновения
+    });
+    </script>
+
+
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
         <!-- Все существующие символы остаются без изменений -->
         <!-- ... -->
     </svg>
 
-    <div class="preloader">
-        <div class="loader"></div>
-    </div>
-
-    <nav id="header-nav" class="navbar navbar-expand-lg py-4" data-bs-theme="dark">
-        <!-- Навигация без изменений -->
-        <!-- ... -->
-    </nav>
+    <div id="header-placeholder"></div>
 
     <div class="container-fluid padding-side position-relative">
         <div class="border border-light border-opacity-25 rounded-5"
@@ -474,10 +501,7 @@ _tmr.push({id: "3744704", type: "pageView", start: (new Date()).getTime()});
 
     <section style="margin-top: 52px;"></section>
 
-    <section id="footer">
-        <!-- Футер без изменений -->
-        <!-- ... -->
-    </section>
+    <div id="footer-placeholder"></div>
 
     <!-- script ================================================== -->
     <script src="js/jquery-1.11.0.min.js"></script>
@@ -557,6 +581,49 @@ _tmr.push({id: "3744704", type: "pageView", start: (new Date()).getTime()});
         }
     });
     </script>
+
+<script>
+// Загрузка header и footer
+document.addEventListener('DOMContentLoaded', function() {
+    // Загрузка header
+    fetch('header.html')
+        .then(response => response.text())
+        .then(data => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(data, 'text/html');
+            const content = doc.querySelector('body').innerHTML;
+            document.getElementById('header-placeholder').innerHTML = content;
+            // После загрузки header, установить активную ссылку
+            setActiveNavLink();
+        })
+        .catch(error => console.error('Error loading header:', error));
+
+    // Загрузка footer
+    fetch('footer.html')
+        .then(response => response.text())
+        .then(data => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(data, 'text/html');
+            const content = doc.querySelector('body').innerHTML;
+            document.getElementById('footer-placeholder').innerHTML = content;
+        })
+        .catch(error => console.error('Error loading footer:', error));
+});
+
+// Функция для установки активной ссылки в навигации
+function setActiveNavLink() {
+    const currentPath = window.location.pathname.split('/').pop(); // Получить имя файла
+    const navLinks = document.querySelectorAll('#header-nav .nav-link');
+
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+        const href = link.getAttribute('href');
+        if (href === currentPath || (currentPath === '' && href === 'index.html')) {
+            link.classList.add('active');
+        }
+    });
+}
+</script>
 </body>
 
 </html>
