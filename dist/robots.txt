@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /js/
+Disallow: /css/vendor.css
+Sitemap: https://kondrashov-m.ru/sitemap.xml
