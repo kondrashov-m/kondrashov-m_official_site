@@ -454,8 +454,8 @@
         
         navLinks.forEach(link => {
             link.classList.remove('active');
-            const href = link.getAttribute('href');
-            if (href === currentPath) {
+            const href = link.getAttribute('href') || '';
+            if (href.split('/').pop() === currentPath) {
                 link.classList.add('active');
             }
         });
@@ -553,7 +553,7 @@
                         </div>
                     </div>
 
-                    <!-- Форма обратной связи -->
+                    <!-- Форма обратной связи
                     <div class="row justify-content-center mt-5" data-aos="fade-up" data-aos-duration="1500">
                         <div class="col-lg-8">
                             <div class="text-center mb-4">
@@ -598,7 +598,7 @@
                                 </form>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
 
                     <!-- FAQ секция -->
                     <div class="row justify-content-center mt-5 pt-4" data-aos="fade-up" data-aos-duration="1500">

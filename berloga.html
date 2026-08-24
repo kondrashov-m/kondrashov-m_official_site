@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <!-- AOS CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <link rel="icon" href="favicon.ico">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>kondrashov-m | Берлога</title>
+
+    <!-- Link Swiper's CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+
+    <!--Bootstrap ================================================== -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+
+    <!--vendor css ================================================== -->
+    <link rel="stylesheet" type="text/css" href="css/vendor.css">
+
+    <!-- Style Sheet -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+
+    <style>
+    /* Берлога — зелёная тема вместо стандартной синей */
+    .protocol-card {
+        background-color: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        padding: 2rem;
+        transition: all 0.3s ease;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .protocol-card .open-protocol-btn {
+        margin-top: auto;
+    }
+
+    .protocol-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0, 230, 118, 0.2);
+        border-color: rgba(0, 230, 118, 0.3);
+    }
+
+    .protocol-card--warn:hover {
+        box-shadow: 0 15px 30px rgba(255, 193, 7, 0.2);
+        border-color: rgba(255, 193, 7, 0.35);
+    }
+
+    .protocol-top {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        margin-bottom: 1rem;
+    }
+
+    .platform-badge, .app-badge {
+        font-size: 0.7rem;
+        font-weight: 600;
+        padding: 0.3rem 0.6rem;
+        border-radius: 50px;
+        border: 1px solid rgba(0, 230, 118, 0.35);
+        color: #00e676;
+        background: rgba(0, 230, 118, 0.1);
+        white-space: nowrap;
+    }
+
+    .app-badge {
+        color: rgba(255, 255, 255, 0.75);
+        border-color: rgba(255, 255, 255, 0.15);
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .status-badge {
+        font-size: 0.7rem;
+        font-weight: 600;
+        padding: 0.3rem 0.6rem;
+        border-radius: 50px;
+        white-space: nowrap;
+    }
+
+    .status-badge.status-ok {
+        border: 1px solid rgba(0, 230, 118, 0.35);
+        color: #00e676;
+        background: rgba(0, 230, 118, 0.1);
+    }
+
+    .status-badge.status-warn {
+        border: 1px solid rgba(255, 193, 7, 0.4);
+        color: #ffc107;
+        background: rgba(255, 193, 7, 0.1);
+    }
+
+    .link-row {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+
+    .link-input {
+        flex: 1;
+        min-width: 0;
+        background-color: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.7);
+        padding: 0.6rem 0.9rem;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        font-family: monospace;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .copy-btn {
+        flex-shrink: 0;
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        border: 1px solid rgba(0, 230, 118, 0.35);
+        background: rgba(0, 230, 118, 0.1);
+        color: #00e676;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .copy-btn:hover {
+        background: rgba(0, 230, 118, 0.25);
+    }
+
+    .qr-wrap {
+        margin-top: 1rem;
+        display: flex;
+        justify-content: center;
+        padding: 1rem;
+        background: #0b0b0b;
+        border-radius: 16px;
+        border: 1px solid rgba(0, 230, 118, 0.25);
+    }
+
+    .qr-wrap img, .qr-wrap canvas {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+    }
+
+    /* Оверлей карточки протокола */
+    .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(4px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 2000;
+        padding: 1.5rem;
+    }
+
+    .modal-overlay.active {
+        display: flex;
+    }
+
+    .modal-panel {
+        background: #0d0f12;
+        border: 1px solid rgba(0, 230, 118, 0.3);
+        border-radius: 20px;
+        padding: 2rem;
+        max-width: 420px;
+        width: 100%;
+        position: relative;
+        box-shadow: 0 20px 60px rgba(0, 230, 118, 0.15);
+    }
+
+    .modal-close {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        background: rgba(255, 255, 255, 0.08);
+        color: white;
+        font-size: 1.2rem;
+        line-height: 1;
+        cursor: pointer;
+    }
+
+    /* Единый стиль кнопок (зелёный вариант) */
+    .button {
+        background: linear-gradient(135deg, rgba(0, 230, 118, 0.2), rgba(255, 255, 255, 0.05));
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        border-radius: 50px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+    }
+
+    .button:hover {
+        background: linear-gradient(135deg, rgba(0, 230, 118, 0.3), rgba(255, 255, 255, 0.1));
+        border-color: rgba(0, 230, 118, 0.5);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 230, 118, 0.3);
+    }
+
+    .button::before {
+        --size: 0;
+        content: '';
+        position: absolute;
+        left: var(--x);
+        top: var(--y);
+        width: var(--size);
+        height: var(--size);
+        background: radial-gradient(circle closest-side, rgba(255,255,255,0.3), transparent);
+        transform: translate(-50%, -50%);
+        transition: width .3s ease, height .3s ease;
+        border-radius: 50%;
+        pointer-events: none;
+    }
+
+    .button:hover::before {
+        --size: 400px;
+    }
+
+    .button svg {
+        width: 20px;
+        height: 20px;
+        transition: transform 0.3s ease;
+    }
+
+    .button:hover svg:not(.no-animate) {
+        transform: translateX(3px);
+    }
+
+    .button:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    .button:disabled:hover {
+        transform: none;
+        box-shadow: none;
+    }
+
+    /* Кнопка поддержки — выделяется на фоне остальных */
+    .button.support-button {
+        background: linear-gradient(135deg, #00e676, #00b85c);
+        border: none;
+        color: #06210f;
+        font-weight: 700;
+        padding: 1rem 2rem;
+        font-size: 1.05rem;
+        animation: supportPulse 2.4s ease-in-out infinite;
+    }
+
+    .button.support-button:hover {
+        background: linear-gradient(135deg, #1dffa0, #00e676);
+        color: #06210f;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 40px rgba(0, 230, 118, 0.55);
+    }
+
+    @keyframes supportPulse {
+        0%, 100% { box-shadow: 0 8px 25px rgba(0, 230, 118, 0.3); }
+        50% { box-shadow: 0 8px 40px rgba(0, 230, 118, 0.65); }
+    }
+
+    .updated-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 1rem 1.75rem;
+        border-radius: 50px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        background: rgba(255, 255, 255, 0.05);
+        color: rgba(255, 255, 255, 0.85);
+        font-weight: 600;
+        font-size: 1.05rem;
+        white-space: nowrap;
+    }
+
+    .display-3 {
+        font-size: 2.5rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .display-6 {
+        font-size: 1.25rem;
+        font-weight: 500;
+        margin-bottom: 1rem;
+    }
+
+    .protocol-name {
+        position: relative;
+        padding-bottom: 0.75rem;
+        margin-bottom: 1rem;
+    }
+
+    .protocol-name::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 36px;
+        height: 3px;
+        border-radius: 2px;
+        background: #00e676;
+    }
+
+    .lead {
+        font-size: 1.1rem;
+        color: rgba(255, 255, 255, 0.8);
+        line-height: 1.6;
+    }
+
+    .text-accent {
+        color: #00e676 !important;
+    }
+
+    .text-white-50 {
+        color: rgba(255, 255, 255, 0.5) !important;
+    }
+
+    /* Аккордеон FAQ */
+    .accordion-item {
+        background-color: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px !important;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .accordion-item:hover {
+        border-color: rgba(0, 230, 118, 0.3);
+    }
+
+    .accordion-button {
+        background-color: transparent !important;
+        color: white !important;
+        font-weight: 500;
+        padding: 1.25rem;
+        box-shadow: none !important;
+    }
+
+    .accordion-button:not(.collapsed) {
+        background-color: rgba(0, 230, 118, 0.1) !important;
+        border-bottom: 1px solid rgba(0, 230, 118, 0.3);
+    }
+
+    .accordion-button::after {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2300e676' viewBox='0 0 16 16'%3E%3Cpath d='M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z'/%3E%3C/svg%3E");
+        transition: transform 0.3s ease;
+    }
+
+    .accordion-button:not(.collapsed)::after {
+        transform: rotate(45deg);
+    }
+
+    .accordion-body {
+        color: rgba(255, 255, 255, 0.8);
+        padding: 1.25rem;
+        background-color: rgba(255, 255, 255, 0.02);
+    }
+
+    /* Версия в шапке */
+    .version-info {
+        cursor: help;
+        border-bottom: 1px dashed #ffffff;
+        color: #ffffff;
+        transition: color 0.3s ease;
+    }
+
+    .version-info:hover {
+        color: #00e676;
+    }
+
+    /* Стрелка вверх */
+    .scroll-to-top {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 50px;
+        height: 50px;
+        background: rgba(0, 230, 118, 0.8);
+        backdrop-filter: blur(10px);
+        border: none;
+        border-radius: 50%;
+        color: #06210f;
+        font-size: 20px;
+        cursor: pointer;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 20px rgba(0, 230, 118, 0.3);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .scroll-to-top:hover {
+        background: rgba(0, 230, 118, 1);
+        transform: translateY(-3px);
+        box-shadow: 0 6px 25px rgba(0, 230, 118, 0.4);
+    }
+
+    .scroll-to-top.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    /* Адаптивность */
+    @media (max-width: 992px) {
+        .display-3 {
+            font-size: 2.2rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .button {
+            width: 100%;
+        }
+
+        .display-3 {
+            font-size: 2rem;
+        }
+
+        .scroll-to-top {
+            bottom: 20px;
+            right: 20px;
+            width: 45px;
+            height: 45px;
+            font-size: 18px;
+        }
+
+        .link-row {
+            flex-wrap: wrap;
+        }
+
+        .link-input {
+            width: 100%;
+        }
+
+        .copy-btn {
+            width: 100%;
+        }
+    }
+
+    .padding-side {
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+
+    @media (max-width: 768px) {
+        .padding-side {
+            padding-left: 3%;
+            padding-right: 3%;
+        }
+    }
+
+    /* Навигация */
+    .navbar-nav .nav-link {
+        color: rgba(255, 255, 255, 0.8) !important;
+        transition: color 0.3s ease;
+    }
+
+    .navbar-nav .nav-link:hover,
+    .navbar-nav .nav-link.active {
+        color: #00e676 !important;
+    }
+
+    .dropdown-menu {
+        background-color: rgba(10, 10, 10, 0.95);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .dropdown-item {
+        color: white;
+        transition: all 0.3s ease;
+    }
+
+    .dropdown-item:hover {
+        background-color: rgba(0, 230, 118, 0.2);
+        color: #00e676;
+    }
+
+    .badge.bg-dark {
+        background-color: rgba(0, 230, 118, 0.3) !important;
+        color: white !important;
+    }
+
+    /* Прелоадер "Берлоги" */
+    .preloader {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        background: #05070a;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.5s ease;
+        overflow: hidden;
+    }
+
+    #matrixCanvas {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.55;
+    }
+
+    .loader-content {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        padding: 0 1.5rem;
+    }
+
+    .terminal-panel {
+        display: inline-block;
+        background: rgba(5, 7, 10, 0.78);
+        border: 1px solid rgba(0, 230, 118, 0.3);
+        border-radius: 14px;
+        padding: 1.5rem 2rem;
+        backdrop-filter: blur(3px);
+        box-shadow: 0 0 40px rgba(0, 230, 118, 0.12);
+    }
+
+    .terminal-text {
+        font-family: 'Courier New', monospace;
+        color: #00e676;
+        font-size: clamp(0.8rem, 2.5vw, 1.15rem);
+        white-space: pre-line;
+        min-height: 6em;
+        text-shadow: 0 0 8px rgba(0, 230, 118, 0.6);
+    }
+
+    .password-area {
+        margin-top: 1.25rem;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+    }
+
+    .password-row {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-family: 'Courier New', monospace;
+        color: #00e676;
+        font-size: 1rem;
+        cursor: text;
+    }
+
+    .password-input {
+        background: transparent;
+        border: none;
+        border-bottom: 2px solid rgba(0, 230, 118, 0.5);
+        color: #00e676;
+        font-family: 'Courier New', monospace;
+        font-size: 1rem;
+        padding: 0.25rem 0.4rem;
+        outline: none;
+        width: 140px;
+        letter-spacing: 0.2em;
+    }
+
+    .password-input:focus {
+        border-bottom-color: #00e676;
+    }
+
+    .password-submit {
+        font-family: 'Courier New', monospace;
+        font-size: 0.85rem;
+        font-weight: 600;
+        padding: 0.5rem 1.25rem;
+        border-radius: 50px;
+        border: 1px solid rgba(0, 230, 118, 0.4);
+        background: rgba(0, 230, 118, 0.12);
+        color: #00e676;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .password-submit:hover {
+        background: rgba(0, 230, 118, 0.25);
+    }
+
+    .red-flash {
+        position: absolute;
+        inset: 0;
+        background: #ff1744;
+        opacity: 0;
+        pointer-events: none;
+        z-index: 3;
+    }
+
+    .red-flash.active {
+        animation: redFlashBlink 0.15s steps(1) 6;
+    }
+
+    @keyframes redFlashBlink {
+        0%, 100% { opacity: 0; }
+        50% { opacity: 0.55; }
+    }
+
+    .deny-screen {
+        position: absolute;
+        inset: 0;
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1.5rem;
+        text-align: center;
+        padding: 2rem;
+        z-index: 4;
+        background: rgba(5, 7, 10, 0.95);
+    }
+
+    .deny-screen.active {
+        display: flex;
+    }
+
+    .deny-screen p {
+        margin: 0;
+        max-width: 520px;
+        color: #ff5252;
+        font-family: 'Courier New', monospace;
+        font-weight: 700;
+        font-size: clamp(1.1rem, 3vw, 1.6rem);
+        text-shadow: 0 0 20px rgba(255, 23, 68, 0.7);
+    }
+    </style>
+</head>
+
+<body>
+
+    <!-- SVG спрайт -->
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <symbol id="arrow-right" viewBox="0 0 24 24">
+            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+        </symbol>
+    </svg>
+
+    <div class="preloader" id="pirateLoader">
+        <canvas id="matrixCanvas"></canvas>
+        <div class="red-flash" id="redFlash"></div>
+        <div class="loader-content" id="loaderContent">
+            <div class="terminal-panel">
+                <div class="terminal-text" id="terminalText"></div>
+                <form id="passwordForm" class="password-area" style="display:none;">
+                    <label class="password-row" for="passwordInput">
+                        <span>&gt; Пароль:</span>
+                        <input type="password" id="passwordInput" class="password-input" autocomplete="off" spellcheck="false" inputmode="numeric">
+                    </label>
+                    <button type="submit" class="password-submit">Войти</button>
+                </form>
+            </div>
+        </div>
+        <div class="deny-screen" id="denyScreen">
+            <p>Для доступа в Берлогу напишите разработчику сайта</p>
+            <a href="contacts.html" class="button">Написать разработчику</a>
+        </div>
+        <audio id="bootAudio" src="berloga/berloga.wav" preload="auto"></audio>
+    </div>
+
+<script>
+    // Функция для установки активной ссылки в навигации
+    function setActiveNavLink() {
+        const currentPath = window.location.pathname.split('/').pop() || 'berloga.html';
+        const navLinks = document.querySelectorAll('#header-nav .nav-link');
+
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            const href = link.getAttribute('href') || '';
+            if (href.split('/').pop() === currentPath) {
+                link.classList.add('active');
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        AOS.init({
+            duration: 1500,
+            once: true,
+            offset: 100
+        });
+
+        fetch('header.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('header-placeholder').innerHTML = data;
+                setTimeout(setActiveNavLink, 100);
+            })
+            .catch(error => console.error('Error loading header:', error));
+
+        fetch('footer.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('footer-placeholder').innerHTML = data;
+                setTimeout(function() {
+                    AOS.refresh();
+                }, 200);
+            })
+            .catch(error => console.error('Error loading footer:', error));
+    });
+</script>
+    <!-- Навигация -->
+    <div id="header-placeholder"></div>
+
+    <!-- Основной контент -->
+    <div class="container-fluid padding-side position-relative" style="margin-top: 52px;">
+        <div class="border border-light border-opacity-25 rounded-5"
+            style="background-color: rgba(255, 255, 255, 0.06); box-shadow: 0px 12px 90px rgba(0, 230, 118, 0.2);">
+
+            <section id="berloga-hero" class="padding-medium">
+                <div class="container">
+                    <div class="row justify-content-center text-center mb-5" data-aos="fade-up" data-aos-duration="1500">
+                        <div class="col-lg-8 d-flex flex-column align-items-center">
+                            <h3 class="display-3 mb-4">Берлога<span class="text-accent">.</span></h3>
+                            <p class="lead">Берлога — это мой проект, где я раздаю рабочие VPN-протоколы бесплатно на базе своих VPS. Бери готовый конфиг и подключайся.</p>
+                        </div>
+                    </div>
+
+                    <!-- Карточки протоколов -->
+                    <div class="row g-4 justify-content-center" id="protocolsGrid" data-aos="fade-up" data-aos-duration="1500">
+                        <!-- рендерится из PROTOCOLS в скрипте внизу -->
+                    </div>
+
+                    <!-- <div class="row justify-content-center mt-4">
+                        <div class="col-lg-8 text-center text-white-50" style="font-size: 0.9rem;">
+                            Хочешь свой протокол в списке? Положи файл в папку <code class="text-accent">SEKRET/</code> и допиши его в массив <code class="text-accent">PROTOCOLS</code> в конце этой страницы.
+                        </div>
+                    </div> -->
+
+                    <!-- FAQ -->
+                    <div class="row justify-content-center mt-5" data-aos="fade-up" data-aos-duration="1500">
+                        <div class="col-12">
+                            <div class="accordion" id="berlogaFaq">
+                                <div class="accordion-item border-0 mb-3">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#bfaq1">
+                                            Неужели это законно?
+                                        </button>
+                                    </h2>
+                                    <div id="bfaq1" class="accordion-collapse collapse show" data-bs-parent="#berlogaFaq">
+                                        <div class="accordion-body">
+                                            Незаконно это нехрена, но мы поднимаем столько бабла, что нам как-то похер                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="accordion-item border-0 mb-3">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#bfaq2">
+                                            Как подключиться?
+                                        </button>
+                                    </h2>
+                                    <div id="bfaq2" class="accordion-collapse collapse" data-bs-parent="#berlogaFaq">
+                                        <div class="accordion-body">
+                                            Для HTTP Injector скачай файл конфига из карточки и импортируй его в приложении. Для v2rayTun скопируй ссылку (или отсканируй QR-код) и вставь через «Импорт из буфера обмена».
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="accordion-item border-0 mb-3">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#bfaq3">
+                                            Почему бесплатно?
+                                        </button>
+                                    </h2>
+                                    <div id="bfaq3" class="accordion-collapse collapse" data-bs-parent="#berlogaFaq">
+                                        <div class="accordion-body">
+                                            Это мои сервера и я могу делать всё, что захочу.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row justify-content-center mt-5 text-center" data-aos="fade-up" data-aos-duration="1500">
+                        <div class="col-lg-8 d-flex flex-wrap align-items-center justify-content-center gap-3">
+                            <button class="button support-button" id="supportBtn">
+                                <span>❤️ Поддержать проект</span>
+                            </button>
+                            <span class="updated-badge">Обновлено: 24.08.2026</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Футер -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Оверлей протокола -->
+    <div class="modal-overlay" id="protocolModal">
+        <div class="modal-panel">
+            <button class="modal-close" id="modalClose" aria-label="Закрыть">&times;</button>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <!-- Стрелка вверх -->
+    <button id="scrollToTop" class="scroll-to-top" aria-label="Вернуться наверх">↑</button>
+
+    <!-- Scripts -->
+    <script src="js/jquery-1.11.0.min.js"></script>
+
+    <!-- AOS script -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <!-- Bootstrap script -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+        crossorigin="anonymous"></script>
+
+    <!-- Swiper script -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+
+    <!-- iconify script -->
+    <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.7/dist/iconify-icon.min.js"></script>
+
+    <!-- QR code generator -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
+    <script src="js/plugins.js"></script>
+    <script src="js/script.js"></script>
+
+    <script>
+    // ===== Протоколы =====
+    // Формат файла ('type: file') — кнопка "Скачать", путь к файлу в SEKRET/.
+    // Формат ссылки ('type: link') — поле для копирования + QR-код.
+    const PROTOCOLS = [
+        {
+            name: 'SSL/TLS + SSH',
+            app: 'HTTP Injector',
+            platform: 'Android',
+            type: 'file',
+            file: 'SEKRET/android-httpinjector.ehi',
+            desc: 'Конфиг на базе SSL/TLS с проксированием через SSH. Помогает обходить ограничения трафика оператора — работает, даже если интернет по тарифу закончился.',
+            status: 'ok'
+        },
+        {
+            name: 'VLESS',
+            app: 'v2rayTun',
+            platform: 'iOS / Android / PC',
+            type: 'link',
+            link: 'vless://0a46026f-e16b-4d20-955a-193a16a8a4f3@155.212.135.98:443?security=reality&encryption=none&pbk=tploRyzgAjpcu9_iYEmnuvkJEUibM6W4T-R9qLqZ6F4&headerType=none&fp=firefox&spx=%2F&type=tcp&flow=xtls-rprx-vision&sni=github.com&sid=7f15c6e0d67b6d67#MIvpn1',
+            desc: 'Каскадный VPN на базе VLESS и Reality. Работает на серверах России и Германии, и автоматически переключается в зависимости от сайтов, которые вы посещаете.',
+            status: 'ok'
+        },
+        {
+            name: 'AmneziaWG',
+            app: 'Amnezia',
+            platform: 'iOS / Android / PC',
+            type: 'link',
+            link: 'vless://REPLACE-WITH-YOUR-LINK@example.com:443?security=tls&type=tcp#berloga-backup',
+            desc: 'Запасной сервер, если основной перегружен.',
+            status: 'maintenance'
+        }
+    ];
+
+    const STATUS_LABELS = {
+        ok: { text: 'Работает', className: 'status-ok' },
+        maintenance: { text: 'Тех. работы', className: 'status-warn' }
+    };
+
+    function renderProtocols() {
+        const grid = document.getElementById('protocolsGrid');
+        if (!grid) return;
+
+        // Все карточки одного вида: бейджи + заголовок + описание + одна кнопка.
+        // Разница между "файл" и "ссылка" уходит внутрь оверлея (см. openProtocolModal).
+        grid.innerHTML = PROTOCOLS.map(function(p, idx) {
+            const status = STATUS_LABELS[p.status];
+            const statusBadge = status
+                ? '<span class="status-badge ' + status.className + '">' + (status.className === 'status-ok' ? '✅' : '🛠️') + ' ' + status.text + '</span>'
+                : '';
+            const isMaintenance = p.status === 'maintenance';
+            const cardClass = isMaintenance ? 'protocol-card protocol-card--warn' : 'protocol-card';
+            const btnDisabled = isMaintenance ? ' disabled' : '';
+            return '<div class="col-lg-4 col-md-6">' +
+                        '<div class="' + cardClass + '">' +
+                            '<div class="protocol-top">' +
+                                '<span class="platform-badge">' + p.platform + '</span>' +
+                                '<span class="app-badge">' + p.app + '</span>' +
+                                statusBadge +
+                            '</div>' +
+                            '<h5 class="display-6 protocol-name">' + p.name + '</h5>' +
+                            '<p class="mb-3 opacity-75">' + p.desc + '</p>' +
+                            '<button class="button w-100 open-protocol-btn" data-idx="' + idx + '"' + btnDisabled + '>' +
+                                '<span>' + (isMaintenance ? 'Недоступно' : 'Показать конфиг') + '</span>' +
+                                '<svg class="no-animate" width="18" height="18"><use xlink:href="#arrow-right"></use></svg>' +
+                            '</button>' +
+                        '</div>' +
+                   '</div>';
+        }).join('');
+
+        grid.querySelectorAll('.open-protocol-btn:not([disabled])').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                openProtocolModal(Number(this.dataset.idx));
+            });
+        });
+
+        attachButtonRipple();
+    }
+
+    document.addEventListener('DOMContentLoaded', renderProtocols);
+
+    // ===== Оверлей протокола =====
+    function bindCopyButton(btn, getValue) {
+        btn.addEventListener('click', function() {
+            const value = getValue();
+            const done = function() {
+                btn.textContent = '✅';
+                setTimeout(function() { btn.textContent = '📋'; }, 1200);
+            };
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(value).then(done).catch(function() {
+                    document.execCommand('copy');
+                    done();
+                });
+            } else {
+                document.execCommand('copy');
+                done();
+            }
+        });
+    }
+
+    function openProtocolModal(idx) {
+        const p = PROTOCOLS[idx];
+        const modal = document.getElementById('protocolModal');
+        const body = document.getElementById('modalBody');
+
+        const header = '<div class="protocol-top">' +
+                            '<span class="platform-badge">' + p.platform + '</span>' +
+                            '<span class="app-badge">' + p.app + '</span>' +
+                        '</div>' +
+                        '<h5 class="display-6 protocol-name">' + p.name + '</h5>' +
+                        '<p class="mb-3 opacity-75">' + p.desc + '</p>';
+
+        if (p.type === 'file') {
+            body.innerHTML = header +
+                '<a href="' + p.file + '" download class="button w-100"><span>Скачать конфиг</span><svg class="no-animate" width="18" height="18"><use xlink:href="#arrow-right"></use></svg></a>';
+        } else {
+            body.innerHTML = header +
+                '<div class="link-row">' +
+                    '<input type="text" readonly value="' + p.link + '" class="link-input" id="modalLinkInput">' +
+                    '<button class="copy-btn" id="modalCopyBtn" title="Копировать">📋</button>' +
+                '</div>' +
+                '<div class="qr-wrap mt-3" id="modalQrWrap"></div>';
+
+            bindCopyButton(document.getElementById('modalCopyBtn'), function() {
+                return document.getElementById('modalLinkInput').value;
+            });
+
+            try {
+                new QRCode(document.getElementById('modalQrWrap'), {
+                    text: p.link,
+                    width: 200,
+                    height: 200,
+                    colorDark: '#00e676',
+                    colorLight: '#0b0b0b',
+                    correctLevel: QRCode.CorrectLevel.L
+                });
+            } catch (err) {
+                document.getElementById('modalQrWrap').innerHTML = '<span class="text-white-50" style="font-size:.85rem;">Ссылка слишком длинная для QR — используй копирование</span>';
+            }
+        }
+
+        modal.classList.add('active');
+        attachButtonRipple();
+    }
+
+    function closeProtocolModal() {
+        document.getElementById('protocolModal').classList.remove('active');
+    }
+
+    // ===== Поддержать проект =====
+    function openSupportModal() {
+        const modal = document.getElementById('protocolModal');
+        const body = document.getElementById('modalBody');
+        body.innerHTML =
+            '<h5 class="display-6">Поддержать проект</h5>' +
+            '<p class="mb-3 opacity-75">Если Берлога пригодилась — можешь закинуть на сервер. Любая сумма, без комиссии, из любого банка через СБП.</p>' +
+            '<div class="qr-wrap mb-3"><img src="images/support-qr.jpg" alt="QR для оплаты" style="max-width:220px;"></div>' +
+            '<a href="https://finance.ozon.ru/apps/sbp/ozonbankpay/01a033c7-d16c-7aea-a847-635cf210222c" target="_blank" rel="noopener" class="button w-100">' +
+                '<span>Перейти к оплате</span>' +
+                '<svg class="no-animate" width="18" height="18"><use xlink:href="#arrow-right"></use></svg>' +
+            '</a>' +
+            '<p class="text-white-50 text-center mt-3 mb-0" style="font-size:.85rem;">Получатель: Михаил К.</p>';
+        modal.classList.add('active');
+        attachButtonRipple();
+    }
+    document.getElementById('supportBtn').addEventListener('click', openSupportModal);
+
+    document.getElementById('modalClose').addEventListener('click', closeProtocolModal);
+    document.getElementById('protocolModal').addEventListener('click', function(e) {
+        if (e.target === this) closeProtocolModal();
+    });
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeProtocolModal();
+    });
+
+    // ===== Прелоадер: матрица + звук =====
+    (function() {
+        const canvas = document.getElementById('matrixCanvas');
+        const ctx2d = canvas.getContext('2d');
+        let w, h, drops, tapeCursors;
+
+        // Дождь из бинарного кода berloga.txt (0/1), пока не подгрузится — просто случайные 0/1
+        let binaryTape = '01';
+
+        // Разносим стартовые позиции колонок по всей ленте, иначе все читают один и тот же
+        // символ одновременно и вместо дождя получаются горизонтальные полосы
+        function spreadCursors() {
+            tapeCursors = drops.map(function(_, idx) {
+                return Math.floor((idx / drops.length) * binaryTape.length);
+            });
+        }
+
+        function resize() {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+            const cols = Math.floor(w / 16);
+            drops = new Array(cols).fill(1);
+            spreadCursors();
+        }
+        resize();
+        window.addEventListener('resize', resize);
+
+        fetch('berloga/berloga.txt')
+            .then(function(r) { return r.text(); })
+            .then(function(t) {
+                const clean = t.replace(/\s+/g, '');
+                if (clean.length > 0) {
+                    binaryTape = clean;
+                    spreadCursors();
+                }
+            })
+            .catch(function() { /* остаёмся на случайных 0/1 */ });
+
+        const matrixInterval = setInterval(function() {
+            ctx2d.fillStyle = 'rgba(5, 7, 10, 0.08)';
+            ctx2d.fillRect(0, 0, w, h);
+            ctx2d.fillStyle = '#00e676';
+            ctx2d.font = '14px monospace';
+            for (let i = 0; i < drops.length; i++) {
+                tapeCursors[i] = (tapeCursors[i] + 1) % binaryTape.length;
+                const text = binaryTape[tapeCursors[i]];
+                ctx2d.fillText(text, i * 16, drops[i] * 16);
+                if (drops[i] * 16 > h && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            }
+        }, 40);
+
+        const lines = [
+            '> kondrashov-m | berloga 0.3.2',
+            '> подключение к берлоге...',
+            '> проверка протоколов...',
+            '> успешно'
+        ];
+        const termEl = document.getElementById('terminalText');
+        const bootAudio = document.getElementById('bootAudio');
+        const passwordForm = document.getElementById('passwordForm');
+        const passwordInput = document.getElementById('passwordInput');
+        const redFlash = document.getElementById('redFlash');
+        const loaderContent = document.getElementById('loaderContent');
+        const denyScreen = document.getElementById('denyScreen');
+
+        // Пароли лежат в password.txt через запятую — свой список без правки этой страницы
+        let validPasswords = [];
+        fetch('berloga/password.txt')
+            .then(function(r) { return r.text(); })
+            .then(function(t) {
+                validPasswords = t.split(',').map(function(s) { return s.trim(); }).filter(Boolean);
+            })
+            .catch(function() { /* пустой список — пароль ни у кого не подойдёт, пока файл не появится */ });
+
+        function hideLoader() {
+            const loader = document.getElementById('pirateLoader');
+            loader.style.opacity = '0';
+            setTimeout(function() {
+                loader.style.display = 'none';
+                clearInterval(matrixInterval);
+            }, 500);
+        }
+
+        // "Тудум" при неверном пароле — короткий высокий удар + низкий сустейн
+        function playErrorSound() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const now = audioCtx.currentTime;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sawtooth';
+
+                const cycles = 3;
+                const cycleDur = 0.28;
+                const totalDur = cycles * cycleDur;
+
+                osc.frequency.setValueAtTime(500, now);
+                for (let i = 0; i < cycles; i++) {
+                    const t0 = now + i * cycleDur;
+                    osc.frequency.linearRampToValueAtTime(1000, t0 + cycleDur * 0.5);
+                    osc.frequency.linearRampToValueAtTime(500, t0 + cycleDur);
+                }
+
+                gain.gain.setValueAtTime(0.0001, now);
+                gain.gain.exponentialRampToValueAtTime(0.22, now + 0.05);
+                gain.gain.setValueAtTime(0.22, now + totalDur - 0.08);
+                gain.gain.exponentialRampToValueAtTime(0.0001, now + totalDur);
+
+                osc.connect(gain).connect(audioCtx.destination);
+                osc.start(now);
+                osc.stop(now + totalDur + 0.05);
+            } catch (e) { /* Web Audio недоступен */ }
+        }
+
+        function showDenyScreen() {
+            playErrorSound();
+            redFlash.classList.add('active');
+            setTimeout(function() {
+                redFlash.classList.remove('active');
+                loaderContent.style.display = 'none';
+                denyScreen.classList.add('active');
+            }, 900);
+        }
+
+        passwordForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const value = passwordInput.value.trim();
+            if (value && validPasswords.indexOf(value) !== -1) {
+                passwordForm.style.display = 'none';
+                bootAudio.play().catch(function() {});
+                hideLoader();
+            } else {
+                passwordInput.value = '';
+                showDenyScreen();
+            }
+        });
+
+        function onTypingDone() {
+            passwordForm.style.display = 'flex';
+            passwordInput.focus();
+        }
+
+        let li = 0, ci = 0;
+        function typeLine() {
+            if (li >= lines.length) {
+                onTypingDone();
+                return;
+            }
+            if (ci <= lines[li].length) {
+                termEl.textContent = lines.slice(0, li).join('\n') + (li > 0 ? '\n' : '') + lines[li].slice(0, ci);
+                ci++;
+                setTimeout(typeLine, 18);
+            } else {
+                li++; ci = 0;
+                setTimeout(typeLine, 150);
+            }
+        }
+        typeLine();
+    })();
+
+    // Эффект волны для кнопок (переприменяется после рендера карточек протоколов)
+    function attachButtonRipple() {
+        document.querySelectorAll('.button:not([data-ripple-bound])').forEach(btn => {
+            btn.dataset.rippleBound = '1';
+            btn.addEventListener('mousemove', function(e) {
+                const rect = this.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                this.style.setProperty('--x', x + 'px');
+                this.style.setProperty('--y', y + 'px');
+            });
+            btn.addEventListener('mouseleave', function() {
+                this.style.setProperty('--size', '0');
+            });
+        });
+    }
+    attachButtonRipple();
+
+    // Стрелка вверх
+    const scrollToTopBtn = document.getElementById('scrollToTop');
+    window.addEventListener('scroll', function() {
+        if (window.pageYOffset > 300) {
+            scrollToTopBtn.classList.add('active');
+        } else {
+            scrollToTopBtn.classList.remove('active');
+        }
+    });
+    scrollToTopBtn.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    </script>
+</body>
+</html>

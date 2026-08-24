@@ -569,9 +569,10 @@ function setActiveNavLink() {
 
     navLinks.forEach(link => {
         link.classList.remove('active');
-        const href = link.getAttribute('href');
-        if (href === currentPath || (currentPath === '' && href === 'index.html') || 
-            (currentPath === 'resume.html' && href === 'resume.html')) {
+        const href = link.getAttribute('href') || '';
+        const hrefFile = href.split('/').pop();
+        if (hrefFile === currentPath || (currentPath === '' && hrefFile === 'index.html') ||
+            (currentPath === 'resume.html' && hrefFile === 'resume.html')) {
             link.classList.add('active');
         }
     });

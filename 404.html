@@ -360,8 +360,8 @@
         
         navLinks.forEach(link => {
             link.classList.remove('active');
-            const href = link.getAttribute('href');
-            if (href === currentPath) {
+            const href = link.getAttribute('href') || '';
+            if (href.split('/').pop() === currentPath) {
                 link.classList.add('active');
             }
         });

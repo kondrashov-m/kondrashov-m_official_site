@@ -31,7 +31,9 @@
   /* on scroll count */
   var a = 0;
   $(window).scroll(function () {
-    var oTop = $('#counter').offset().top - window.innerHeight;
+    var $counter = $('#counter');
+    if (!$counter.length) return;
+    var oTop = $counter.offset().top - window.innerHeight;
     if (a == 0 && $(window).scrollTop() > oTop) {
       $('.counter-value').each(function () {
         var $this = $(this),
