@@ -1,6 +1,8 @@
 User-agent: *
 Allow: /
+Disallow: /admin.html
 Disallow: /admin/
+Disallow: /bebra.html
 Disallow: /js/
 Disallow: /css/vendor.css
 Sitemap: https://kondrashov-m.ru/sitemap.xml
