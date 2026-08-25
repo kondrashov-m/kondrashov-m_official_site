@@ -509,13 +509,6 @@
         margin-bottom: 1rem;
     }
 
-    /* Описание протокола раскрывается по наведению — как блок "Опыт" на главной */
-    .protocol-desc-wrap {
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.6s ease-out;
-    }
-
     .lead {
         font-size: 1.1rem;
         color: rgba(255, 255, 255, 0.8);
@@ -681,6 +674,48 @@
             padding-left: 1.25rem;
             padding-right: 1.25rem;
         }
+    }
+
+    /* Хедер/футер поверх матрицы, пока не введён пароль — эффект единой "приборной панели" */
+    body.locked #header-placeholder,
+    body.locked #footer-placeholder {
+        position: fixed;
+        left: 0;
+        right: 0;
+        z-index: 10000;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        background: rgba(5, 7, 10, 0.55);
+    }
+
+    body.locked #header-placeholder {
+        top: 0;
+        border-bottom: 1px solid rgba(0, 230, 118, 0.15);
+    }
+
+    body.locked #footer-placeholder {
+        bottom: 0;
+        border-top: 1px solid rgba(0, 230, 118, 0.15);
+    }
+
+    /* Пока идёт прелоадер, футер остаётся пустой полоской — без лого, иконок и копирайта */
+    body.locked #footer-placeholder section,
+    body.locked #footer-placeholder img,
+    body.locked #footer-placeholder ul,
+    body.locked #footer-placeholder .text-center.mt-5 {
+        display: none !important;
+    }
+
+    body.locked #footer-placeholder .container {
+        padding-top: 1.25rem !important;
+        padding-bottom: 1.25rem !important;
+    }
+
+    /* AOS считает позицию по обычной прокрутке и не запускает fade-up для
+       зафиксированного футера — форсируем видимость, пока активен прелоадер */
+    body.locked #footer-placeholder [data-aos] {
+        opacity: 1 !important;
+        transform: none !important;
     }
 
     /* Навигация */
@@ -865,7 +900,7 @@
     </style>
 </head>
 
-<body>
+<body class="locked">
 
     <!-- SVG спрайт -->
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
@@ -992,16 +1027,21 @@
                     </div> -->
 
                     <!-- FAQ -->
-                    <div class="row justify-content-center mt-5" data-aos="fade-up" data-aos-duration="1500">
-                        <div class="col-12">
+                    <div class="row justify-content-center mt-5 pt-4" data-aos="fade-up" data-aos-duration="1500">
+                        <div class="col-lg-10">
+                            <div class="text-center mb-5">
+                                <h3 class="display-6 mb-3">Часто задаваемые вопросы<span class="text-accent">.</span></h3>
+                                <p class="lead text-white-50">Здесь вы найдете ответы на самые популярные вопросы</p>
+                            </div>
+
                             <div class="accordion" id="berlogaFaq">
                                 <div class="accordion-item border-0 mb-3">
                                     <h2 class="accordion-header">
-                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#bfaq1">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#bfaq1">
                                             Неужели это законно?
                                         </button>
                                     </h2>
-                                    <div id="bfaq1" class="accordion-collapse collapse show" data-bs-parent="#berlogaFaq">
+                                    <div id="bfaq1" class="accordion-collapse collapse" data-bs-parent="#berlogaFaq">
                                         <div class="accordion-body">
                                             Незаконно это нихрена, но мы поднимаем столько бабла, что нам как-то похер.                                        </div>
                                     </div>
@@ -1129,9 +1169,6 @@
                                 statusBadge +
                             '</div>' +
                             '<h5 class="display-6 protocol-name">' + p.name + '</h5>' +
-                            '<div class="protocol-desc-wrap">' +
-                                '<p class="mb-3 opacity-75">' + p.desc + '</p>' +
-                            '</div>' +
                             '<button class="button w-100 open-protocol-btn" data-idx="' + idx + '"' + btnDisabled + '>' +
                                 '<span>' + (isMaintenance ? 'Недоступно' : 'Показать конфиг') + '</span>' +
                             '</button>' +
@@ -1146,25 +1183,47 @@
         });
 
         attachButtonRipple();
-        attachDescReveal();
+        attachCardHoverSound();
     }
 
-    // Раскрытие описания протокола по наведению — тот же приём, что и в блоке
-    // "Опыт" на главной странице.
-    function attachDescReveal() {
-        document.querySelectorAll('.protocol-card').forEach(function(card) {
-            const content = card.querySelector('.protocol-desc-wrap');
-            if (!content || card.dataset.descBound) return;
-            card.dataset.descBound = '1';
+    // "Тудум" при наведении на карточку протокола (подсветку даёт чистый CSS :hover) —
+    // короткий низкий гул.
+    let thudAudioCtx = null;
 
-            card.addEventListener('mouseenter', function() {
-                card.classList.add('active');
-                content.style.maxHeight = content.scrollHeight + 'px';
-            });
-            card.addEventListener('mouseleave', function() {
-                card.classList.remove('active');
-                content.style.maxHeight = '0';
-            });
+    function getThudAudioContext() {
+        if (!thudAudioCtx) {
+            thudAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        return thudAudioCtx;
+    }
+
+    function playCardThud() {
+        try {
+            const ctx = getThudAudioContext();
+            if (ctx.state === 'suspended') ctx.resume();
+            const now = ctx.currentTime;
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(180, now);
+            osc.frequency.exponentialRampToValueAtTime(55, now + 0.18);
+
+            gain.gain.setValueAtTime(0.0001, now);
+            gain.gain.exponentialRampToValueAtTime(0.3, now + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.22);
+
+            osc.connect(gain).connect(ctx.destination);
+            osc.start(now);
+            osc.stop(now + 0.25);
+        } catch (e) { /* Web Audio недоступен */ }
+    }
+
+    function attachCardHoverSound() {
+        document.querySelectorAll('.protocol-card').forEach(function(card) {
+            if (card.dataset.hoverSoundBound) return;
+            card.dataset.hoverSoundBound = '1';
+            const isWarn = card.classList.contains('protocol-card--warn');
+            card.addEventListener('mouseenter', isWarn ? playOkStatusThud : playCardHoverBlip);
         });
     }
 
@@ -1268,7 +1327,11 @@
                 const acc = document.getElementById('modalAccordion');
                 if (acc) {
                     acc.classList.add('open');
-                    acc.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    // Ждём завершения CSS-анимации раскрытия (max-height 0.3s), иначе
+                    // scrollIntoView считает позицию по ещё не раскрывшемуся блоку.
+                    setTimeout(function() {
+                        acc.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }, 320);
                 }
                 break;
             }
@@ -1437,7 +1500,7 @@
         }, 40);
 
         const lines = [
-            '> kondrashov-m | berloga 0.3.2',
+            '> kondrashov-m | berloga 0.3.3',
             '> подключение к берлоге...',
             '> проверка протоколов...',
             '> успешно'
@@ -1461,6 +1524,7 @@
 
         function hideLoader() {
             const loader = document.getElementById('pirateLoader');
+            document.body.classList.remove('locked');
             loader.style.opacity = '0';
             setTimeout(function() {
                 loader.style.display = 'none';

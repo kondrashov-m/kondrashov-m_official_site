@@ -66,12 +66,19 @@
         padding: 2rem;
         transition: all 0.3s ease;
         height: 100%;
+        display: block;
+        color: inherit;
+        text-decoration: none;
+        overflow-wrap: break-word;
+        word-break: break-word;
     }
-    
+
     .contact-card:hover {
         transform: translateY(-5px);
         box-shadow: 0 15px 30px rgba(0, 163, 255, 0.2);
         border-color: rgba(0, 163, 255, 0.3);
+        color: inherit;
+        text-decoration: none;
     }
     
     .contact-icon {
@@ -527,7 +534,7 @@
                     <!-- Карточки контактов -->
                     <div class="row g-4 justify-content-center" data-aos="fade-up" data-aos-duration="1500">
                         <div class="col-lg-4 col-md-6">
-                            <div class="contact-card">
+                            <a href="https://t.me/mikondra" class="contact-card">
                                 <div class="contact-icon">
                                     <svg class="text-primary" width="30" height="30">
                                         <use xlink:href="#telegram"></use>
@@ -535,12 +542,12 @@
                                 </div>
                                 <h5 class="display-6">Telegram</h5>
                                 <p class="mb-3 opacity-75">Самый быстрый способ связаться со мной</p>
-                                <a href="https://t.me/mikondra" class="text-primary fw-semibold text-decoration-none">@mikondra</a>
-                            </div>
+                                <span class="text-primary fw-semibold">@mikondra</span>
+                            </a>
                         </div>
-                        
+
                         <div class="col-lg-4 col-md-6">
-                            <div class="contact-card">
+                            <a href="mailto:mig2018kondrashov@gmail.com" class="contact-card">
                                 <div class="contact-icon">
                                     <svg class="text-primary" width="30" height="30">
                                         <use xlink:href="#gmail"></use>
@@ -548,12 +555,12 @@
                                 </div>
                                 <h5 class="display-6">Email</h5>
                                 <p class="mb-3 opacity-75">Для официальных запросов и предложений</p>
-                                <a href="mailto:mig2018kondrashov@gmail.com" class="text-primary fw-semibold text-decoration-none">mig2018kondrashov@gmail.com</a>
-                            </div>
+                                <span class="text-primary fw-semibold">mig2018kondrashov@<wbr>gmail.com</span>
+                            </a>
                         </div>
-                        
+
                         <div class="col-lg-4 col-md-6">
-                            <div class="contact-card">
+                            <a href="https://github.com/kondrashov-m" class="contact-card">
                                 <div class="contact-icon">
                                     <svg class="text-primary" width="30" height="30">
                                         <use xlink:href="#github"></use>
@@ -561,8 +568,8 @@
                                 </div>
                                 <h5 class="display-6">GitHub</h5>
                                 <p class="mb-3 opacity-75">Больше моих проектов здесь</p>
-                                <a href="https://github.com/kondrashov-m" class="text-primary fw-semibold text-decoration-none">kondrashov-m</a>
-                            </div>
+                                <span class="text-primary fw-semibold">kondrashov-m</span>
+                            </a>
                         </div>
                     </div>
 
@@ -730,6 +737,41 @@
         btn.addEventListener('mouseleave', function() {
             this.style.setProperty('--size', '0');
         });
+    });
+
+    // "Тудум" при наведении на плитку контакта — короткий низкий гул (как на карточках в Берлоге).
+    let thudAudioCtx = null;
+
+    function getThudAudioContext() {
+        if (!thudAudioCtx) {
+            thudAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        return thudAudioCtx;
+    }
+
+    function playCardThud() {
+        try {
+            const ctx = getThudAudioContext();
+            if (ctx.state === 'suspended') ctx.resume();
+            const now = ctx.currentTime;
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(180, now);
+            osc.frequency.exponentialRampToValueAtTime(55, now + 0.18);
+
+            gain.gain.setValueAtTime(0.0001, now);
+            gain.gain.exponentialRampToValueAtTime(0.3, now + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.22);
+
+            osc.connect(gain).connect(ctx.destination);
+            osc.start(now);
+            osc.stop(now + 0.25);
+        } catch (e) { /* Web Audio недоступен */ }
+    }
+
+    document.querySelectorAll('.contact-card').forEach(function(card) {
+        card.addEventListener('mouseenter', playCardThud);
     });
 
     // Функция для стрелки вверх
