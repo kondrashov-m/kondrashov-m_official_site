@@ -1,0 +1,118 @@
+{
+  "protocols": [
+    {
+      "name": "SSL/TLS + SSH",
+      "app": "HTTP Injector (только для моб.интернета)",
+      "platform": "Android",
+      "type": "file",
+      "file": "SEKRET/android-httpinjector.ehi",
+      "link": "",
+      "desc": "Конфиг на базе SSL/TLS с проксированием через SSH. Помогает обходить ограничения трафика оператора — работает, даже если интернет по тарифу закончился.",
+      "status": "ok",
+      "steps": [
+        {
+          "icon": "download",
+          "title": "Скачайте конфиг",
+          "text": "Нажмите кнопку ниже, чтобы скачать конфигурационный файл.",
+          "buttonLabel": "Скачать конфиг",
+          "action": "download",
+          "url": ""
+        },
+        {
+          "icon": "import",
+          "title": "Подключитесь",
+          "text": "Импортируйте конфиг в HTTP injector и нажмите «Запуск».",
+          "buttonLabel": "Подробная инструкция",
+          "action": "details",
+          "url": ""
+        },
+        {
+          "icon": "shield",
+          "title": "Пользуйтесь",
+          "text": "После подключения интернет должен работать стабильно.",
+          "buttonLabel": "Нужна помощь?",
+          "action": "link",
+          "url": "contacts.html"
+        }
+      ],
+      "details": "<p>1. Скачайте и установите приложение <a href=\"https://play.google.com/store/apps/details?id=com.evozi.injector&pli=1\" target=\"_blank\" rel=\"noopener\">HTTP Injector</a> из Google Play.</p><p>2. Скачайте конфигурационный файл по кнопке выше.</p><p>3. Откройте конфигурационный файл android-httpinjector.ehi через HTTP Injector.</p><p>4. Нажмите кнопку «Запуск»</p><p>5. Переключитесь на вкладку «Журнал».</p><p>Вы должны увидеть надпись «[VPN] Подлючено» — после этого интернет будет идти через конфиг.</p>",
+      "note": "Этот конфиг работает только с HTTP Injector на Android. Не гарантируется работа на всех сетях и устройствах. "
+    },
+    {
+      "name": "VLESS",
+      "app": "v2rayTun",
+      "platform": "iOS / Android / PC",
+      "type": "link",
+      "file": "",
+      "link": "vless://0a46026f-e16b-4d20-955a-193a16a8a4f3@155.212.135.98:443?security=reality&encryption=none&pbk=tploRyzgAjpcu9_iYEmnuvkJEUibM6W4T-R9qLqZ6F4&headerType=none&fp=firefox&spx=%2F&type=tcp&flow=xtls-rprx-vision&sni=github.com&sid=7f15c6e0d67b6d67#MIvpn1",
+      "desc": "Каскадный VPN на базе VLESS и Reality. Работает на серверах России и Германии, и автоматически переключается в зависимости от сайтов, которые вы посещаете.",
+      "status": "ok",
+      "steps": [
+        {
+          "icon": "link",
+          "title": "Скопируйте ссылку",
+          "text": "Нажмите кнопку ниже, чтобы скопировать ссылку на конфиг.",
+          "buttonLabel": "Скопировать ссылку",
+          "action": "copy",
+          "url": ""
+        },
+        {
+          "icon": "import",
+          "title": "Импортируйте",
+          "text": "Вставьте ссылку в v2rayTun или отсканируйте QR-код ниже.",
+          "buttonLabel": "Инструкция ниже",
+          "action": "details",
+          "url": ""
+        },
+        {
+          "icon": "shield",
+          "title": "Пользуйтесь",
+          "text": "После подключения интернет будет работать через VPN.",
+          "buttonLabel": "Нужна помощь?",
+          "action": "link",
+          "url": "contacts.html"
+        }
+      ],
+      "details": "<p>1. Скачайте и установите приложение v2rayTun из App Store / Google Play.</p><p>2. Скопируйте ссылку по кнопке выше или отсканируйте QR-код камерой приложения.</p><p>3. Откройте v2rayTun и нажмите «Импорт из буфера обмена» (или отсканируйте QR прямо в приложении).</p><p>4. Выберите добавленный сервер и нажмите на кнопку подключения.</p>",
+      "note": "Ссылку также можно отсканировать через QR-код ниже — это быстрее, чем копировать вручную."
+    },
+    {
+      "name": "AmneziaWG",
+      "app": "Amnezia",
+      "platform": "iOS / Android / PC",
+      "type": "link",
+      "file": "",
+      "link": "vless://REPLACE-WITH-YOUR-LINK@example.com:443?security=tls&type=tcp#berloga-backup",
+      "desc": "Запасной сервер, если основной перегружен.",
+      "status": "maintenance",
+      "steps": [
+        {
+          "icon": "link",
+          "title": "Скопируйте ссылку",
+          "text": "Нажмите кнопку ниже, чтобы скопировать ссылку на конфиг.",
+          "buttonLabel": "Скопировать ссылку",
+          "action": "copy",
+          "url": ""
+        },
+        {
+          "icon": "import",
+          "title": "Импортируйте",
+          "text": "Добавьте сервер в приложении Amnezia.",
+          "buttonLabel": "Инструкция ниже",
+          "action": "details",
+          "url": ""
+        },
+        {
+          "icon": "shield",
+          "title": "Пользуйтесь",
+          "text": "После подключения интернет будет работать через VPN.",
+          "buttonLabel": "Нужна помощь?",
+          "action": "link",
+          "url": "contacts.html"
+        }
+      ],
+      "details": "<p>1. Скачайте и установите приложение Amnezia.</p><p>2. Скопируйте ссылку по кнопке выше.</p><p>3. В приложении выберите «Добавить сервер» → «Импортировать конфиг» и вставьте ссылку.</p><p>4. Нажмите на кнопку подключения.</p>",
+      "note": "Сервер временно на технических работах. Используйте как резерв, если основной сервер перегружен."
+    }
+  ]
+}

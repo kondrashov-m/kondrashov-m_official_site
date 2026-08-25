@@ -175,8 +175,10 @@
         border: 1px solid rgba(0, 230, 118, 0.3);
         border-radius: 20px;
         padding: 2rem;
-        max-width: 420px;
+        max-width: 720px;
         width: 100%;
+        max-height: calc(100vh - 3rem);
+        overflow-y: auto;
         position: relative;
         box-shadow: 0 20px 60px rgba(0, 230, 118, 0.15);
     }
@@ -194,6 +196,182 @@
         font-size: 1.2rem;
         line-height: 1;
         cursor: pointer;
+    }
+
+    /* Шаги подключения в оверлее */
+    .step-grid {
+        display: flex;
+        align-items: stretch;
+        gap: 0.5rem;
+        margin: 1.5rem 0;
+    }
+
+    .step-card {
+        flex: 1;
+        min-width: 0;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
+        padding: 1.25rem 0.9rem;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .step-arrow {
+        flex-shrink: 0;
+        align-self: center;
+        color: rgba(255, 255, 255, 0.3);
+        font-size: 1.1rem;
+        margin-top: 2.6rem;
+    }
+
+    .step-num {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: #00e676;
+        color: #06210f;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 0.6rem;
+        font-size: 0.9rem;
+        flex-shrink: 0;
+    }
+
+    .step-icon {
+        width: 34px;
+        height: 34px;
+        color: #00e676;
+        margin-bottom: 0.6rem;
+        flex-shrink: 0;
+    }
+
+    .step-title {
+        font-weight: 600;
+        color: white;
+        font-size: 0.92rem;
+        margin-bottom: 0.4rem;
+    }
+
+    .step-text {
+        font-size: 0.78rem;
+        color: rgba(255, 255, 255, 0.6);
+        margin-bottom: 1rem;
+        flex-grow: 1;
+        line-height: 1.45;
+    }
+
+    .button.step-btn {
+        font-size: 0.78rem;
+        padding: 0.55rem 0.7rem;
+        width: 100%;
+    }
+
+    /* Аккордеон "Подробная инструкция" внутри оверлея */
+    .modal-accordion {
+        margin-top: 0.75rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .modal-accordion-btn {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: rgba(255, 255, 255, 0.04);
+        border: none;
+        color: white;
+        font-weight: 500;
+        padding: 0.9rem 1.1rem;
+        cursor: pointer;
+        font-size: 0.9rem;
+    }
+
+    .modal-accordion-btn .chevron {
+        width: 16px;
+        height: 16px;
+        transition: transform 0.3s ease;
+        color: #00e676;
+        flex-shrink: 0;
+    }
+
+    .modal-accordion.open .modal-accordion-btn .chevron {
+        transform: rotate(180deg);
+    }
+
+    .modal-accordion-body {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+        background: rgba(255, 255, 255, 0.02);
+    }
+
+    .modal-accordion.open .modal-accordion-body {
+        max-height: 700px;
+    }
+
+    .modal-accordion-body-inner {
+        padding: 1.1rem;
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.75);
+        line-height: 1.6;
+    }
+
+    .modal-accordion-body-inner p {
+        margin-bottom: 0.75rem;
+    }
+
+    .modal-accordion-body-inner p:last-child {
+        margin-bottom: 0;
+    }
+
+    .modal-accordion-body-inner a {
+        color: #00e676;
+        text-decoration: underline;
+        text-underline-offset: 2px;
+    }
+
+    .modal-accordion-body-inner a:hover {
+        color: #1dffa0;
+    }
+
+    /* Инфо-плашка в оверлее */
+    .modal-note {
+        display: flex;
+        gap: 0.75rem;
+        align-items: flex-start;
+        margin-top: 1.25rem;
+        padding: 1rem 1.1rem;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        font-size: 0.78rem;
+        color: rgba(255, 255, 255, 0.65);
+        line-height: 1.5;
+    }
+
+    .modal-note svg {
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+        color: #00e676;
+        margin-top: 1px;
+    }
+
+    @media (max-width: 576px) {
+        .step-grid {
+            flex-direction: column;
+        }
+
+        .step-arrow {
+            display: none;
+        }
     }
 
     /* Единый стиль кнопок (зелёный вариант) */
@@ -687,6 +865,30 @@
             <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                 d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
         </symbol>
+        <symbol id="icon-download" viewBox="0 0 24 24">
+            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3v12m0 0l-4-4m4 4l4-4M4 20h16" />
+        </symbol>
+        <symbol id="icon-import" viewBox="0 0 24 24">
+            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4M10 16l5-4-5-4M15 12H3" />
+        </symbol>
+        <symbol id="icon-shield" viewBox="0 0 24 24">
+            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3l7 3v6c0 4.5-3 8.5-7 9.5-4-1-7-5-7-9.5V6l7-3z" />
+            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4" />
+        </symbol>
+        <symbol id="icon-link" viewBox="0 0 24 24">
+            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 15l6-6M10 6l1-1a4 4 0 0 1 5.5 5.5l-1 1M14 18l-1 1A4 4 0 0 1 7.5 13.5l1-1" />
+        </symbol>
+        <symbol id="icon-external" viewBox="0 0 24 24">
+            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" />
+        </symbol>
+        <symbol id="icon-info" viewBox="0 0 24 24">
+            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z" />
+            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 11v5" />
+            <circle cx="12" cy="8" r="0.9" fill="currentColor" stroke="none" />
+        </symbol>
+        <symbol id="icon-chevron" viewBox="0 0 24 24">
+            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 9l6 6 6-6" />
+        </symbol>
     </svg>
 
     <div class="preloader" id="pirateLoader">
@@ -878,37 +1080,19 @@
 
     <script>
     // ===== Протоколы =====
-    // Формат файла ('type: file') — кнопка "Скачать", путь к файлу в SEKRET/.
-    // Формат ссылки ('type: link') — поле для копирования + QR-код.
-    const PROTOCOLS = [
-        {
-            name: 'SSL/TLS + SSH',
-            app: 'HTTP Injector',
-            platform: 'Android',
-            type: 'file',
-            file: 'SEKRET/android-httpinjector.ehi',
-            desc: 'Конфиг на базе SSL/TLS с проксированием через SSH. Помогает обходить ограничения трафика оператора — работает, даже если интернет по тарифу закончился.',
-            status: 'ok'
-        },
-        {
-            name: 'VLESS',
-            app: 'v2rayTun',
-            platform: 'iOS / Android / PC',
-            type: 'link',
-            link: 'vless://0a46026f-e16b-4d20-955a-193a16a8a4f3@155.212.135.98:443?security=reality&encryption=none&pbk=tploRyzgAjpcu9_iYEmnuvkJEUibM6W4T-R9qLqZ6F4&headerType=none&fp=firefox&spx=%2F&type=tcp&flow=xtls-rprx-vision&sni=github.com&sid=7f15c6e0d67b6d67#MIvpn1',
-            desc: 'Каскадный VPN на базе VLESS и Reality. Работает на серверах России и Германии, и автоматически переключается в зависимости от сайтов, которые вы посещаете.',
-            status: 'ok'
-        },
-        {
-            name: 'AmneziaWG',
-            app: 'Amnezia',
-            platform: 'iOS / Android / PC',
-            type: 'link',
-            link: 'vless://REPLACE-WITH-YOUR-LINK@example.com:443?security=tls&type=tcp#berloga-backup',
-            desc: 'Запасной сервер, если основной перегружен.',
-            status: 'maintenance'
-        }
-    ];
+    // Данные протоколов и их инструкции живут в berloga/protocols.json.
+    // Их можно править вручную или через admin.html (локальная админка).
+    let PROTOCOLS = [];
+
+    fetch('berloga/protocols.json')
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            PROTOCOLS = data.protocols || [];
+            renderProtocols();
+        })
+        .catch(function(err) {
+            console.error('Не удалось загрузить berloga/protocols.json', err);
+        });
 
     const STATUS_LABELS = {
         ok: { text: 'Работает', className: 'status-ok' },
@@ -954,8 +1138,6 @@
         attachButtonRipple();
     }
 
-    document.addEventListener('DOMContentLoaded', renderProtocols);
-
     // ===== Оверлей протокола =====
     function bindCopyButton(btn, getValue) {
         btn.addEventListener('click', function() {
@@ -976,6 +1158,102 @@
         });
     }
 
+    const STEP_ICONS = {
+        download: 'icon-download',
+        import: 'icon-import',
+        shield: 'icon-shield',
+        link: 'icon-link',
+        help: 'icon-external',
+        info: 'icon-info'
+    };
+
+    function renderSteps(p) {
+        if (!p.steps || !p.steps.length) return '';
+        const cards = p.steps.map(function(s, i) {
+            const iconId = STEP_ICONS[s.icon] || 'icon-download';
+            const isExternalLink = s.action === 'link' && /^https?:\/\//.test(s.url || '');
+            return '<div class="step-card">' +
+                        '<div class="step-num">' + (i + 1) + '</div>' +
+                        '<svg class="step-icon"><use xlink:href="#' + iconId + '"></use></svg>' +
+                        '<div class="step-title">' + s.title + '</div>' +
+                        '<div class="step-text">' + s.text + '</div>' +
+                        '<button type="button" class="button step-btn" data-step-idx="' + i + '">' +
+                            '<span>' + s.buttonLabel + '</span>' +
+                            (isExternalLink ? '<svg class="no-animate" style="width:14px;height:14px;"><use xlink:href="#icon-external"></use></svg>' : '') +
+                        '</button>' +
+                   '</div>';
+        }).join('<div class="step-arrow">→</div>');
+        return '<div class="step-grid">' + cards + '</div>';
+    }
+
+    function renderAccordion(p) {
+        if (!p.details) return '';
+        return '<div class="modal-accordion" id="modalAccordion">' +
+                    '<button type="button" class="modal-accordion-btn" id="modalAccordionToggle">' +
+                        '<span>Подробная инструкция</span>' +
+                        '<svg class="chevron"><use xlink:href="#icon-chevron"></use></svg>' +
+                    '</button>' +
+                    '<div class="modal-accordion-body"><div class="modal-accordion-body-inner">' + p.details + '</div></div>' +
+               '</div>';
+    }
+
+    function renderNote(p) {
+        if (!p.note) return '';
+        return '<div class="modal-note">' +
+                    '<svg><use xlink:href="#icon-info"></use></svg>' +
+                    '<span>' + p.note + '</span>' +
+               '</div>';
+    }
+
+    function handleStepAction(p, step, btn) {
+        switch (step.action) {
+            case 'download': {
+                const a = document.createElement('a');
+                a.href = p.file;
+                a.download = '';
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                break;
+            }
+            case 'copy': {
+                const label = btn.querySelector('span');
+                const original = label.textContent;
+                const done = function() {
+                    label.textContent = 'Скопировано ✅';
+                    setTimeout(function() { label.textContent = original; }, 1200);
+                };
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(p.link || '').then(done).catch(function() {
+                        document.execCommand('copy');
+                        done();
+                    });
+                } else {
+                    document.execCommand('copy');
+                    done();
+                }
+                break;
+            }
+            case 'details': {
+                const acc = document.getElementById('modalAccordion');
+                if (acc) {
+                    acc.classList.add('open');
+                    acc.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+                break;
+            }
+            case 'link': {
+                const url = step.url || '#';
+                if (/^https?:\/\//.test(url)) {
+                    window.open(url, '_blank', 'noopener');
+                } else {
+                    window.location.href = url;
+                }
+                break;
+            }
+        }
+    }
+
     function openProtocolModal(idx) {
         const p = PROTOCOLS[idx];
         const modal = document.getElementById('protocolModal');
@@ -988,17 +1266,36 @@
                         '<h5 class="display-6 protocol-name">' + p.name + '</h5>' +
                         '<p class="mb-3 opacity-75">' + p.desc + '</p>';
 
-        if (p.type === 'file') {
-            body.innerHTML = header +
-                '<a href="' + p.file + '" download class="button w-100"><span>Скачать конфиг</span><use xlink:href="#arrow-right"></use></svg></a>';
-        } else {
-            body.innerHTML = header +
-                '<div class="link-row">' +
-                    '<input type="text" readonly value="' + p.link + '" class="link-input" id="modalLinkInput">' +
-                    '<button class="copy-btn" id="modalCopyBtn" title="Копировать">📋</button>' +
-                '</div>' +
-                '<div class="qr-wrap mt-3" id="modalQrWrap"></div>';
+        let html = header;
+        const hasSteps = p.steps && p.steps.length;
 
+        if (hasSteps) {
+            html += renderSteps(p);
+        } else if (p.type === 'file') {
+            html += '<a href="' + p.file + '" download class="button w-100"><span>Скачать конфиг</span></a>';
+        }
+
+        if (p.type === 'link') {
+            html += '<div class="link-row' + (hasSteps ? ' mt-1' : '') + '">' +
+                        '<input type="text" readonly value="' + p.link + '" class="link-input" id="modalLinkInput">' +
+                        '<button class="copy-btn" id="modalCopyBtn" title="Копировать">📋</button>' +
+                    '</div>' +
+                    '<div class="qr-wrap mt-3" id="modalQrWrap"></div>';
+        }
+
+        html += renderAccordion(p);
+        html += renderNote(p);
+
+        body.innerHTML = html;
+
+        if (hasSteps) {
+            body.querySelectorAll('.step-btn').forEach(function(btn) {
+                const step = p.steps[Number(btn.dataset.stepIdx)];
+                btn.addEventListener('click', function() { handleStepAction(p, step, btn); });
+            });
+        }
+
+        if (p.type === 'link') {
             bindCopyButton(document.getElementById('modalCopyBtn'), function() {
                 return document.getElementById('modalLinkInput').value;
             });
@@ -1015,6 +1312,13 @@
             } catch (err) {
                 document.getElementById('modalQrWrap').innerHTML = '<span class="text-white-50" style="font-size:.85rem;">Ссылка слишком длинная для QR — используй копирование</span>';
             }
+        }
+
+        const accToggle = document.getElementById('modalAccordionToggle');
+        if (accToggle) {
+            accToggle.addEventListener('click', function() {
+                document.getElementById('modalAccordion').classList.toggle('open');
+            });
         }
 
         modal.classList.add('active');

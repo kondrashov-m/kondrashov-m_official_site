@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Берлога — Админка инструкций</title>
+<style>
+    * { box-sizing: border-box; }
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        background: #05070a;
+        color: rgba(255, 255, 255, 0.9);
+        padding: 2rem 1.5rem 6rem;
+    }
+    h1 {
+        font-size: 1.6rem;
+        margin: 0 0 0.25rem;
+    }
+    .sub {
+        color: rgba(255, 255, 255, 0.5);
+        margin: 0 0 1.5rem;
+        font-size: 0.9rem;
+    }
+    .warning {
+        border: 1px solid rgba(255, 193, 7, 0.4);
+        background: rgba(255, 193, 7, 0.08);
+        color: #ffc107;
+        border-radius: 12px;
+        padding: 1rem 1.25rem;
+        font-size: 0.85rem;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+        max-width: 900px;
+    }
+    .toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        max-width: 900px;
+    }
+    button, .file-btn {
+        font-family: inherit;
+        font-size: 0.85rem;
+        font-weight: 600;
+        padding: 0.6rem 1.1rem;
+        border-radius: 10px;
+        border: 1px solid rgba(0, 230, 118, 0.35);
+        background: rgba(0, 230, 118, 0.1);
+        color: #00e676;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    button:hover, .file-btn:hover {
+        background: rgba(0, 230, 118, 0.25);
+    }
+    button.primary {
+        background: #00e676;
+        color: #06210f;
+        border-color: #00e676;
+    }
+    button.primary:hover {
+        background: #1dffa0;
+    }
+    button.danger {
+        border-color: rgba(255, 82, 82, 0.4);
+        background: rgba(255, 82, 82, 0.08);
+        color: #ff5252;
+    }
+    button.danger:hover {
+        background: rgba(255, 82, 82, 0.2);
+    }
+    button.ghost {
+        background: transparent;
+        border-color: rgba(255, 255, 255, 0.15);
+        color: rgba(255, 255, 255, 0.7);
+    }
+    button.ghost:hover {
+        border-color: rgba(255, 255, 255, 0.3);
+        background: rgba(255, 255, 255, 0.05);
+    }
+    button:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+    #status {
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.5);
+        min-height: 1.2em;
+    }
+    #status.ok { color: #00e676; }
+    #status.err { color: #ff5252; }
+    #fallbackInput { display: none; }
+
+    #protocolsList {
+        max-width: 900px;
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+    }
+    .empty-state {
+        max-width: 900px;
+        border: 1px dashed rgba(255, 255, 255, 0.15);
+        border-radius: 14px;
+        padding: 2.5rem;
+        text-align: center;
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 0.9rem;
+    }
+
+    .p-card {
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 16px;
+        overflow: hidden;
+    }
+    .p-card-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 1rem 1.25rem;
+        cursor: pointer;
+        background: rgba(255, 255, 255, 0.03);
+    }
+    .p-card-head:hover {
+        background: rgba(255, 255, 255, 0.06);
+    }
+    .p-card-title {
+        font-weight: 600;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+    }
+    .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        flex-shrink: 0;
+    }
+    .status-dot.ok { background: #00e676; }
+    .status-dot.maintenance { background: #ffc107; }
+    .p-card-head .chevron {
+        transition: transform 0.2s ease;
+        color: rgba(255, 255, 255, 0.5);
+    }
+    .p-card.open .chevron { transform: rotate(180deg); }
+    .p-card-body {
+        display: none;
+        padding: 1.25rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .p-card.open .p-card-body { display: block; }
+
+    .field-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+    label {
+        display: block;
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        color: rgba(255, 255, 255, 0.45);
+        margin-bottom: 0.3rem;
+    }
+    input[type="text"], select, textarea {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        color: white;
+        padding: 0.55rem 0.7rem;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-family: inherit;
+    }
+    input[type="text"]:focus, select:focus, textarea:focus {
+        outline: none;
+        border-color: rgba(0, 230, 118, 0.5);
+    }
+    textarea {
+        resize: vertical;
+        min-height: 4.5em;
+        line-height: 1.5;
+    }
+    .field {
+        margin-bottom: 0.75rem;
+    }
+    .field.grow {
+        grid-column: 1 / -1;
+    }
+
+    .section-label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.75);
+        margin: 1.25rem 0 0.6rem;
+        padding-top: 0.75rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .step-block {
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 10px;
+        padding: 0.9rem;
+        margin-bottom: 0.6rem;
+        background: rgba(255, 255, 255, 0.02);
+    }
+    .step-block-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+        font-size: 0.78rem;
+        color: rgba(255, 255, 255, 0.5);
+        font-weight: 600;
+    }
+    .step-block-head button {
+        padding: 0.25rem 0.6rem;
+        font-size: 0.7rem;
+    }
+
+    .card-actions {
+        display: flex;
+        justify-content: space-between;
+        gap: 0.6rem;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .card-actions .left { display: flex; gap: 0.6rem; }
+
+    .add-protocol-btn {
+        max-width: 900px;
+        width: 100%;
+        padding: 0.9rem;
+        margin-top: 0.5rem;
+    }
+
+    .save-bar {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding: 1rem 1.5rem;
+        background: rgba(5, 7, 10, 0.92);
+        backdrop-filter: blur(8px);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        z-index: 10;
+    }
+    .hint {
+        font-size: 0.7rem;
+        color: rgba(255, 255, 255, 0.4);
+        margin-top: 0.2rem;
+    }
+</style>
+</head>
+<body>
+
+<h1>Берлога — Админка инструкций</h1>
+<p class="sub">Правка протоколов и инструкций для оверлеев на berloga.html — без правки кода.</p>
+
+<div class="warning">
+    ⚠️ Эта страница работает только локально, у тебя на компьютере. Она напрямую читает/пишет файл
+    <code>berloga/protocols.json</code> через File System Access API (Chrome/Edge) — открой этот файл
+    в браузере (двойным кликом или через Live Server) и нажми «Открыть protocols.json».<br><br>
+    Сайт лежит на GitHub Pages статически, поэтому эта страница ничего не меняет на живом сайте сама по себе.
+    После правок и сохранения — закоммить и запушь изменённый <code>berloga/protocols.json</code> в репозиторий,
+    только тогда изменения появятся на сайте.
+</div>
+
+<div class="toolbar">
+    <button class="primary" id="openBtn">📂 Открыть protocols.json</button>
+    <label class="file-btn" for="fallbackInput" id="fallbackLabel" style="display:none;">📄 Загрузить файл (без прямой записи)</label>
+    <input type="file" id="fallbackInput" accept="application/json,.json">
+    <button id="saveBtn" disabled>💾 Сохранить</button>
+    <button class="ghost" id="downloadBtn" disabled>⬇️ Скачать JSON</button>
+    <span id="status"></span>
+</div>
+
+<div id="protocolsList"></div>
+<div class="empty-state" id="emptyState">Файл ещё не загружен. Нажми «Открыть protocols.json» выше.</div>
+<button class="add-protocol-btn" id="addProtocolBtn" style="display:none;">+ Добавить протокол</button>
+
+<script>
+    let protocols = [];
+    let fileHandle = null;
+    let loaded = false;
+
+    const ICONS = [
+        ['download', 'Скачивание (стрелка вниз)'],
+        ['import', 'Импорт / подключение'],
+        ['shield', 'Щит с галочкой'],
+        ['link', 'Ссылка (цепь)'],
+        ['help', 'Внешняя ссылка'],
+        ['info', 'Информация']
+    ];
+    const ACTIONS = [
+        ['download', 'Скачать файл'],
+        ['copy', 'Скопировать ссылку'],
+        ['details', 'Показать подробную инструкцию'],
+        ['link', 'Открыть ссылку / страницу']
+    ];
+
+    function setStatus(text, cls) {
+        const el = document.getElementById('status');
+        el.textContent = text;
+        el.className = cls || '';
+    }
+
+    function htmlToPlain(html) {
+        if (!html) return '';
+        return html
+            .replace(/<br\s*\/?>/gi, '\n')
+            .replace(/<\/p>\s*<p>/gi, '\n\n')
+            .replace(/^<p>/i, '')
+            .replace(/<\/p>\s*$/i, '')
+            .trim();
+    }
+
+    function plainToHtml(text) {
+        if (!text) return '';
+        return text.split(/\n\s*\n/).map(function(para) {
+            return '<p>' + para.trim().replace(/\n/g, '<br>') + '</p>';
+        }).join('');
+    }
+
+    function blankStep() {
+        return { icon: 'download', title: '', text: '', buttonLabel: '', action: 'download', url: '' };
+    }
+
+    function blankProtocol() {
+        return {
+            name: 'Новый протокол',
+            app: '',
+            platform: '',
+            type: 'file',
+            file: '',
+            link: '',
+            desc: '',
+            status: 'ok',
+            steps: [blankStep(), blankStep(), blankStep()],
+            details: '',
+            note: ''
+        };
+    }
+
+    function loadData(data) {
+        protocols = (data && data.protocols) || [];
+        loaded = true;
+        document.getElementById('saveBtn').disabled = false;
+        document.getElementById('downloadBtn').disabled = false;
+        document.getElementById('addProtocolBtn').style.display = 'block';
+        renderList();
+        setStatus('Файл загружен: ' + protocols.length + ' протокол(ов).', 'ok');
+    }
+
+    function collectData() {
+        return { protocols: protocols };
+    }
+
+    function renderList() {
+        const list = document.getElementById('protocolsList');
+        const empty = document.getElementById('emptyState');
+        if (!loaded) {
+            list.innerHTML = '';
+            empty.style.display = 'block';
+            return;
+        }
+        empty.style.display = protocols.length ? 'none' : 'block';
+        list.innerHTML = '';
+        protocols.forEach(function(p, i) {
+            list.appendChild(renderProtocolCard(p, i));
+        });
+    }
+
+    function el(tag, attrs, children) {
+        const node = document.createElement(tag);
+        Object.keys(attrs || {}).forEach(function(k) {
+            if (k === 'class') node.className = attrs[k];
+            else if (k === 'html') node.innerHTML = attrs[k];
+            else node.setAttribute(k, attrs[k]);
+        });
+        (children || []).forEach(function(c) { node.appendChild(c); });
+        return node;
+    }
+
+    function textField(labelText, value, onChange, multiline) {
+        const wrap = document.createElement('div');
+        wrap.className = 'field';
+        const lbl = document.createElement('label');
+        lbl.textContent = labelText;
+        const input = document.createElement(multiline ? 'textarea' : 'input');
+        if (!multiline) input.type = 'text';
+        input.value = value || '';
+        input.addEventListener('input', function() { onChange(input.value); });
+        wrap.appendChild(lbl);
+        wrap.appendChild(input);
+        return wrap;
+    }
+
+    function selectField(labelText, value, options, onChange) {
+        const wrap = document.createElement('div');
+        wrap.className = 'field';
+        const lbl = document.createElement('label');
+        lbl.textContent = labelText;
+        const select = document.createElement('select');
+        options.forEach(function(opt) {
+            const o = document.createElement('option');
+            o.value = opt[0];
+            o.textContent = opt[1];
+            if (opt[0] === value) o.selected = true;
+            select.appendChild(o);
+        });
+        select.addEventListener('change', function() { onChange(select.value); });
+        wrap.appendChild(lbl);
+        wrap.appendChild(select);
+        return wrap;
+    }
+
+    function renderStepBlock(p, step, idx) {
+        const block = document.createElement('div');
+        block.className = 'step-block';
+
+        const head = document.createElement('div');
+        head.className = 'step-block-head';
+        head.appendChild(document.createTextNode('Шаг ' + (idx + 1)));
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'danger';
+        removeBtn.type = 'button';
+        removeBtn.textContent = 'Удалить шаг';
+        removeBtn.addEventListener('click', function() {
+            p.steps.splice(idx, 1);
+            renderList();
+        });
+        head.appendChild(removeBtn);
+        block.appendChild(head);
+
+        const row1 = document.createElement('div');
+        row1.className = 'field-row';
+        row1.appendChild(selectField('Иконка', step.icon, ICONS, function(v) { step.icon = v; }));
+        row1.appendChild(textField('Заголовок', step.title, function(v) { step.title = v; }));
+        block.appendChild(row1);
+
+        block.appendChild(textField('Описание шага', step.text, function(v) { step.text = v; }, true));
+
+        const row2 = document.createElement('div');
+        row2.className = 'field-row';
+        row2.appendChild(textField('Текст на кнопке', step.buttonLabel, function(v) { step.buttonLabel = v; }));
+        row2.appendChild(selectField('Действие кнопки', step.action, ACTIONS, function(v) {
+            step.action = v;
+            renderList();
+        }));
+        block.appendChild(row2);
+
+        if (step.action === 'link') {
+            block.appendChild(textField('Ссылка / страница (напр. contacts.html или https://...)', step.url, function(v) { step.url = v; }));
+        }
+
+        return block;
+    }
+
+    function renderProtocolCard(p, idx) {
+        const card = document.createElement('div');
+        card.className = 'p-card';
+
+        const head = document.createElement('div');
+        head.className = 'p-card-head';
+        head.addEventListener('click', function() {
+            card.classList.toggle('open');
+        });
+
+        const title = document.createElement('div');
+        title.className = 'p-card-title';
+        const dot = document.createElement('span');
+        dot.className = 'status-dot ' + (p.status === 'maintenance' ? 'maintenance' : 'ok');
+        title.appendChild(dot);
+        title.appendChild(document.createTextNode(p.name || '(без названия)'));
+        head.appendChild(title);
+
+        const chevron = document.createElement('span');
+        chevron.className = 'chevron';
+        chevron.textContent = '▾';
+        head.appendChild(chevron);
+
+        card.appendChild(head);
+
+        const body = document.createElement('div');
+        body.className = 'p-card-body';
+
+        const row1 = document.createElement('div');
+        row1.className = 'field-row';
+        row1.appendChild(textField('Название', p.name, function(v) { p.name = v; title.lastChild.textContent = v || '(без названия)'; }));
+        row1.appendChild(textField('Приложение', p.app, function(v) { p.app = v; }));
+        row1.appendChild(textField('Платформа', p.platform, function(v) { p.platform = v; }));
+        body.appendChild(row1);
+
+        const row2 = document.createElement('div');
+        row2.className = 'field-row';
+        row2.appendChild(selectField('Тип', p.type, [['file', 'Файл (скачивание)'], ['link', 'Ссылка (копирование + QR)']], function(v) {
+            p.type = v;
+            renderList();
+        }));
+        row2.appendChild(selectField('Статус', p.status, [['ok', 'Работает'], ['maintenance', 'Тех. работы']], function(v) {
+            p.status = v;
+            dot.className = 'status-dot ' + (v === 'maintenance' ? 'maintenance' : 'ok');
+        }));
+        if (p.type === 'file') {
+            row2.appendChild(textField('Путь к файлу (напр. SEKRET/config.ehi)', p.file, function(v) { p.file = v; }));
+        } else {
+            row2.appendChild(textField('Ссылка (vless://...)', p.link, function(v) { p.link = v; }));
+        }
+        body.appendChild(row2);
+
+        body.appendChild(textField('Короткое описание (в карточке и в шапке оверлея)', p.desc, function(v) { p.desc = v; }, true));
+
+        const stepsLabel = document.createElement('div');
+        stepsLabel.className = 'section-label';
+        stepsLabel.textContent = 'Шаги (карточки 1-2-3 в оверлее)';
+        body.appendChild(stepsLabel);
+
+        const stepsWrap = document.createElement('div');
+        if (!p.steps) p.steps = [];
+        p.steps.forEach(function(step, si) {
+            stepsWrap.appendChild(renderStepBlock(p, step, si));
+        });
+        body.appendChild(stepsWrap);
+
+        const addStepBtn = document.createElement('button');
+        addStepBtn.type = 'button';
+        addStepBtn.textContent = '+ Добавить шаг';
+        addStepBtn.addEventListener('click', function() {
+            p.steps.push(blankStep());
+            renderList();
+        });
+        body.appendChild(addStepBtn);
+
+        const detailsLabel = document.createElement('div');
+        detailsLabel.className = 'section-label';
+        detailsLabel.textContent = 'Подробная инструкция (аккордеон)';
+        body.appendChild(detailsLabel);
+
+        const detailsField = textField('Каждый абзац — с новой пустой строки', htmlToPlain(p.details), function(v) {
+            p.details = plainToHtml(v);
+        }, true);
+        detailsField.querySelector('textarea').style.minHeight = '8em';
+        body.appendChild(detailsField);
+
+        const noteLabel = document.createElement('div');
+        noteLabel.className = 'section-label';
+        noteLabel.textContent = 'Инфо-плашка внизу оверлея';
+        body.appendChild(noteLabel);
+        body.appendChild(textField('Текст плашки (необязательно)', p.note, function(v) { p.note = v; }, true));
+
+        const actions = document.createElement('div');
+        actions.className = 'card-actions';
+        const left = document.createElement('div');
+        left.className = 'left';
+
+        const dupBtn = document.createElement('button');
+        dupBtn.type = 'button';
+        dupBtn.textContent = 'Дублировать';
+        dupBtn.addEventListener('click', function() {
+            const copy = JSON.parse(JSON.stringify(p));
+            copy.name = copy.name + ' (копия)';
+            protocols.splice(idx + 1, 0, copy);
+            renderList();
+        });
+        left.appendChild(dupBtn);
+        actions.appendChild(left);
+
+        const delBtn = document.createElement('button');
+        delBtn.className = 'danger';
+        delBtn.type = 'button';
+        delBtn.textContent = 'Удалить протокол';
+        delBtn.addEventListener('click', function() {
+            if (confirm('Удалить протокол «' + p.name + '»?')) {
+                protocols.splice(idx, 1);
+                renderList();
+            }
+        });
+        actions.appendChild(delBtn);
+
+        body.appendChild(actions);
+        card.appendChild(body);
+
+        if (idx === 0) card.classList.add('open');
+
+        return card;
+    }
+
+    document.getElementById('addProtocolBtn').addEventListener('click', function() {
+        protocols.push(blankProtocol());
+        renderList();
+        const cards = document.querySelectorAll('.p-card');
+        cards.forEach(function(c) { c.classList.remove('open'); });
+        if (cards.length) cards[cards.length - 1].classList.add('open');
+    });
+
+    // ===== Открытие / сохранение файла =====
+    const supportsFSA = !!window.showOpenFilePicker;
+
+    if (!supportsFSA) {
+        document.getElementById('openBtn').style.display = 'none';
+        document.getElementById('fallbackLabel').style.display = 'inline-block';
+        setStatus('Твой браузер не поддерживает прямую запись файлов — используй загрузку/скачивание вручную.', '');
+    }
+
+    document.getElementById('openBtn').addEventListener('click', async function() {
+        try {
+            const [handle] = await window.showOpenFilePicker({
+                types: [{ description: 'JSON', accept: { 'application/json': ['.json'] } }]
+            });
+            fileHandle = handle;
+            const file = await handle.getFile();
+            const text = await file.text();
+            loadData(JSON.parse(text));
+        } catch (e) {
+            if (e.name !== 'AbortError') setStatus('Не удалось открыть файл: ' + e.message, 'err');
+        }
+    });
+
+    document.getElementById('fallbackInput').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function() {
+            try {
+                loadData(JSON.parse(reader.result));
+            } catch (err) {
+                setStatus('Файл повреждён или это не JSON: ' + err.message, 'err');
+            }
+        };
+        reader.readAsText(file);
+    });
+
+    function downloadJson() {
+        const json = JSON.stringify(collectData(), null, 2);
+        const blob = new Blob([json], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'protocols.json';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+    }
+
+    document.getElementById('downloadBtn').addEventListener('click', downloadJson);
+
+    document.getElementById('saveBtn').addEventListener('click', async function() {
+        const json = JSON.stringify(collectData(), null, 2);
+
+        if (fileHandle) {
+            try {
+                const perm = await fileHandle.requestPermission({ mode: 'readwrite' });
+                if (perm !== 'granted') throw new Error('нет разрешения на запись');
+                const writable = await fileHandle.createWritable();
+                await writable.write(json);
+                await writable.close();
+                setStatus('Сохранено в berloga/protocols.json — не забудь закоммитить и запушить.', 'ok');
+                return;
+            } catch (e) {
+                setStatus('Не удалось сохранить напрямую (' + e.message + '), скачиваю файл.', 'err');
+                downloadJson();
+                return;
+            }
+        }
+
+        if (window.showSaveFilePicker) {
+            try {
+                const handle = await window.showSaveFilePicker({
+                    suggestedName: 'protocols.json',
+                    types: [{ description: 'JSON', accept: { 'application/json': ['.json'] } }]
+                });
+                const writable = await handle.createWritable();
+                await writable.write(json);
+                await writable.close();
+                fileHandle = handle;
+                setStatus('Сохранено — не забудь закоммитить и запушить.', 'ok');
+                return;
+            } catch (e) {
+                if (e.name === 'AbortError') return;
+            }
+        }
+
+        downloadJson();
+        setStatus('Файл скачан — замени им berloga/protocols.json вручную, затем закоммить и запушь.', 'ok');
+    });
+</script>
+</body>
+</html>
