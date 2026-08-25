@@ -923,7 +923,6 @@
                             '<p class="mb-3 opacity-75">' + p.desc + '</p>' +
                             '<button class="button w-100 open-protocol-btn" data-idx="' + idx + '"' + btnDisabled + '>' +
                                 '<span>' + (isMaintenance ? 'Недоступно' : 'Показать конфиг') + '</span>' +
-                                '<svg class="no-animate" width="18" height="18"><use xlink:href="#arrow-right"></use></svg>' +
                             '</button>' +
                         '</div>' +
                    '</div>';
@@ -974,7 +973,7 @@
 
         if (p.type === 'file') {
             body.innerHTML = header +
-                '<a href="' + p.file + '" download class="button w-100"><span>Скачать конфиг</span><svg class="no-animate" width="18" height="18"><use xlink:href="#arrow-right"></use></svg></a>';
+                '<a href="' + p.file + '" download class="button w-100"><span>Скачать конфиг</span><use xlink:href="#arrow-right"></use></svg></a>';
         } else {
             body.innerHTML = header +
                 '<div class="link-row">' +
