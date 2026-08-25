@@ -707,6 +707,7 @@
         <div class="deny-screen" id="denyScreen">
             <p>Для доступа в Берлогу напишите разработчику сайта</p>
             <a href="contacts.html" class="button">Написать разработчику</a>
+            <a href="index.html" class="button">Перейти на главную</a>
         </div>
         <audio id="bootAudio" src="berloga/berloga.wav" preload="auto"></audio>
     </div>
@@ -1030,11 +1031,10 @@
         const body = document.getElementById('modalBody');
         body.innerHTML =
             '<h5 class="display-6">Поддержать проект</h5>' +
-            '<p class="mb-3 opacity-75">Если Берлога пригодилась — можешь закинуть на сервер. Любая сумма, без комиссии, из любого банка через СБП.</p>' +
+            '<p class="mb-3 opacity-75">Любая сумма может помочь в развитии проекта, без комиссии, из любого банка через СБП.<br> <br>Просто отсканируй QR-код или перейди по ссылке.</p>' +
             '<div class="qr-wrap mb-3"><img src="images/support-qr.jpg" alt="QR для оплаты" style="max-width:220px;"></div>' +
             '<a href="https://finance.ozon.ru/apps/sbp/ozonbankpay/01a033c7-d16c-7aea-a847-635cf210222c" target="_blank" rel="noopener" class="button w-100">' +
                 '<span>Перейти к оплате</span>' +
-                '<svg class="no-animate" width="18" height="18"><use xlink:href="#arrow-right"></use></svg>' +
             '</a>' +
             '<p class="text-white-50 text-center mt-3 mb-0" style="font-size:.85rem;">Получатель: Михаил К.</p>';
         modal.classList.add('active');

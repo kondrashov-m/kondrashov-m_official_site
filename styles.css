@@ -87,7 +87,6 @@ h6,
   font-family: var(--heading-font);
   font-weight: 400;
   color: var(--white-color);
-  text-transform: capitalize;
 }
 
 a {
@@ -365,7 +364,6 @@ a:hover {
 
 /*---- navigation section style start ----*/
 nav.navbar {
-  text-transform: capitalize;
   font-size: 18px;
   font-weight: 400;
 }
