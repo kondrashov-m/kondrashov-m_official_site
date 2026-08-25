@@ -2,13 +2,13 @@
   "protocols": [
     {
       "name": "SSL/TLS + SSH",
-      "app": "HTTP Injector (только для моб.интернета)",
+      "app": "HTTP Injector",
       "platform": "Android",
       "type": "file",
       "file": "SEKRET/android-httpinjector.ehi",
       "link": "",
       "desc": "Конфиг на базе SSL/TLS с проксированием через SSH. Помогает обходить ограничения трафика оператора — работает, даже если интернет по тарифу закончился.",
-      "status": "ok",
+      "status": "maintenance",
       "steps": [
         {
           "icon": "download",

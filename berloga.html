@@ -506,19 +506,14 @@
 
     .protocol-name {
         position: relative;
-        padding-bottom: 0.75rem;
         margin-bottom: 1rem;
     }
 
-    .protocol-name::after {
-        content: '';
-        position: absolute;
-        left: 0;
-        bottom: 0;
-        width: 36px;
-        height: 3px;
-        border-radius: 2px;
-        background: #00e676;
+    /* Описание протокола раскрывается по наведению — как блок "Опыт" на главной */
+    .protocol-desc-wrap {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.6s ease-out;
     }
 
     .lead {
@@ -1134,7 +1129,9 @@
                                 statusBadge +
                             '</div>' +
                             '<h5 class="display-6 protocol-name">' + p.name + '</h5>' +
-                            '<p class="mb-3 opacity-75">' + p.desc + '</p>' +
+                            '<div class="protocol-desc-wrap">' +
+                                '<p class="mb-3 opacity-75">' + p.desc + '</p>' +
+                            '</div>' +
                             '<button class="button w-100 open-protocol-btn" data-idx="' + idx + '"' + btnDisabled + '>' +
                                 '<span>' + (isMaintenance ? 'Недоступно' : 'Показать конфиг') + '</span>' +
                             '</button>' +
@@ -1149,6 +1146,26 @@
         });
 
         attachButtonRipple();
+        attachDescReveal();
+    }
+
+    // Раскрытие описания протокола по наведению — тот же приём, что и в блоке
+    // "Опыт" на главной странице.
+    function attachDescReveal() {
+        document.querySelectorAll('.protocol-card').forEach(function(card) {
+            const content = card.querySelector('.protocol-desc-wrap');
+            if (!content || card.dataset.descBound) return;
+            card.dataset.descBound = '1';
+
+            card.addEventListener('mouseenter', function() {
+                card.classList.add('active');
+                content.style.maxHeight = content.scrollHeight + 'px';
+            });
+            card.addEventListener('mouseleave', function() {
+                card.classList.remove('active');
+                content.style.maxHeight = '0';
+            });
+        });
     }
 
     // ===== Оверлей протокола =====
