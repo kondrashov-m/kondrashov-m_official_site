@@ -82,9 +82,9 @@
       "platform": "iOS / Android / PC",
       "type": "link",
       "file": "",
-      "link": "vless://REPLACE-WITH-YOUR-LINK@example.com:443?security=tls&type=tcp#berloga-backup",
-      "desc": "Запасной сервер, если основной перегружен.",
-      "status": "maintenance",
+      "link": "vpn://AAAME3jalVbbUvJIEL73KajUf7dyyEnBKi8Q_OWggIT1GIsakkFGQhKTgKBl1b7KvsJW7Xu4b7TTPRGJDheIRXXP93Wnp-frIW97Of6nOIGfEObTKFaOcve4Bn9vawtZ5OWRw9lFBGo8nPpJj7gu8x-r_Dthgc-5ilrKq6WSsv8zps5iMvJoLQimjMJjFR4h4TVUzCOFNIA0KaQDpEshAyBDClHi0qgXBQl1YAdtugJubdB6IavTxt2ABKM_ZmfVydmybmq3k8asdh3daS-EqVXVeVzWq8eytE3cghTRtiL6VsTYipjbkJYDyIEUmpElgGZJjrL0HGVom9KQeGxBB2xGg3mCefKqKeNekGWD-G48IVNaTRI6CxM8ddXMa9Lkfc4OZoOIME_ocotA-vSJn1Z1nNAIyhA5uezK8qx0SldZcomTte3kjb3p-UMZzRISrUgxPGFdmt4SIpW2y8JTVqXi9kicDPnIjhnMo_JmbxlAWzmy0wm0lX3728ghCiSONFTBFY6GjiYcHR1dOAY6hnB-Dguiu0wLJmo5GHcgHC5HdM1S6rPPfaD_XXKCyzWHqExkIhpUhpSsrDab8E1IaRwqKcU3pZMWhdr5gjer4mpBwEqbWxGe6K4ugqy0vaJ8S_RXFa0nnhe8UHfIQijz3lZKBfwURejRERgP3HI8xg-_6WJw5UZ97Z-_dsu6GT53tebsZF50KmfNQ63i1ifaRffcf-5S93E1uRDtF9H8KemOCuWCWtA2oTBii-E0Pd7WsuqobNEYef1GdD5vs8sbepN0yXNF1yvJyaBfduu9q_KiXjMy-cP5aJ1j9xpR7Bh73-RSj8bEoQ-27XOpRzSOc8e5z8KLusbX6x2Lr_3q9ZsX1f7tkLv7uV_Waa3bqac-J_X4vkhCuXA5d6d92X7L4TEHYHCB4uPRJktum2BbKqxWwNK4peOaDpYJlgEoVNpAHhhAwxVkgQEkA4yfo8aRnQbN9uV3BJaON4TtZwWOiJB3CqXihuq4tGExMzAQkI6L7X-fU2gLTKnty2YUQ_PiSZn55ACfTn6emavrc5X_3_cojUAJvfnIY47ojEE6N861enU1uL377d1dhquFZRiTxpnbTw46t9G4b03n7fbv1pNzjDqgvJqIuiI6LFvd5xXpaX92wpNivdowp955S9We-uPrYsU_eLGM_lOreK1eTiG6Ksa02YOy1iO6n8P5tP1T3w0D5mPX1MLhYUGt6AXNKB8ZumGCPHp8myyGo1n3DIRg5lEoKP9JECcdkt45mSwIz5K5mF39UFyi4TolHzkaDjGpuNQxLXKCCK4prALceLoez50aALliGi1olBnxnY5AeZf9zEGF-KoGJUoJfCACJ_CGC9iveOHUC9JXxXg-8mkyJOK6ED_7eF9If5iTiPgxPH6IjwD63A2VDPE9G_f1Cg1sMvPpKyN5_sasfYW9o_UgAhWXjsncS2pb49a82IlY-PlG_fH3x7___fXxD3zn1DXJj8VLSAE_G8uaWAZZrpc_9YQN25STsve-9z8hwjrx",
+      "desc": "Запасной сервер, если основной перегружен. Работает на базе VPS Германии по протоколу AmneziaWG 3.1",
+      "status": "ok",
       "steps": [
         {
           "icon": "link",
@@ -113,6 +113,19 @@
       ],
       "details": "<p>1. Скачайте и установите приложение Amnezia.</p><p>2. Скопируйте ссылку по кнопке выше.</p><p>3. В приложении выберите «Добавить сервер» → «Импортировать конфиг» и вставьте ссылку.</p><p>4. Нажмите на кнопку подключения.</p>",
       "note": "Сервер временно на технических работах. Используйте как резерв, если основной сервер перегружен."
+    },
+    {
+      "name": "MTProto",
+      "app": "Telegram",
+      "platform": "iOS / Android / PC",
+      "type": "link",
+      "file": "",
+      "link": "tg://proxy?server=grid.lovely.lat&port=443&secret=eeec835a34516912f161a0073339be3c64677269642e6c6f76656c792e6c6174",
+      "desc": "Бесплатный прокси для работы в Telegram без VPN сервисов. ",
+      "status": "ok",
+      "steps": [],
+      "details": "",
+      "note": ""
     }
   ]
 }

@@ -676,13 +676,35 @@
         }
     }
 
-    /* Хедер/футер поверх матрицы, пока не введён пароль — эффект единой "приборной панели" */
+    /* Хедер/футер поверх матрицы, пока не введён пароль — эффект единой "приборной панели".
+       backdrop-filter вешаем на псевдоэлемент, а не на сам #header-placeholder: в Chrome
+       backdrop-filter на предке превращает его в containing block для position:fixed
+       потомков — из-за этого мобильное offcanvas-меню (тоже position:fixed) съезжало
+       и пряталось под матрицей вместо того, чтобы раскрываться на весь экран. */
     body.locked #header-placeholder,
     body.locked #footer-placeholder {
         position: fixed;
         left: 0;
         right: 0;
+    }
+
+    /* Офканвас-меню лежит ВНУТРИ #header-placeholder, поэтому весь хедер целиком
+       должен стоять выше футера — иначе футер (позже в DOM, тот же z-index) перекрывает
+       открытое меню, несмотря на его собственный z-index. */
+    body.locked #header-placeholder {
+        z-index: 10010;
+    }
+
+    body.locked #footer-placeholder {
         z-index: 10000;
+    }
+
+    body.locked #header-placeholder::before,
+    body.locked #footer-placeholder::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: -1;
         backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
         background: rgba(5, 7, 10, 0.55);
@@ -696,6 +718,15 @@
     body.locked #footer-placeholder {
         bottom: 0;
         border-top: 1px solid rgba(0, 230, 118, 0.15);
+    }
+
+    /* Подстраховка: офканвас-меню и его подложка всегда должны быть выше матрицы */
+    body.locked .offcanvas-backdrop {
+        z-index: 10040 !important;
+    }
+
+    body.locked .offcanvas {
+        z-index: 10050 !important;
     }
 
     /* Пока идёт прелоадер, футер остаётся пустой полоской — без лого, иконок и копирайта */
@@ -1081,7 +1112,7 @@
                             <button class="button support-button" id="supportBtn">
                                 <span>❤️ Поддержать проект</span>
                             </button>
-                            <span class="updated-badge">Обновлено: 25.08.2026</span>
+                            <span class="updated-badge">Обновлено: 30.08.2026</span>
                         </div>
                     </div>
                 </div>
@@ -1222,8 +1253,7 @@
         document.querySelectorAll('.protocol-card').forEach(function(card) {
             if (card.dataset.hoverSoundBound) return;
             card.dataset.hoverSoundBound = '1';
-            const isWarn = card.classList.contains('protocol-card--warn');
-            card.addEventListener('mouseenter', isWarn ? playOkStatusThud : playCardHoverBlip);
+            card.addEventListener('mouseenter', playCardThud);
         });
     }
 
@@ -1431,7 +1461,7 @@
             '<p class="mb-3 opacity-75">Любая сумма может помочь в развитии проекта, без комиссии, из любого банка через СБП.<br> <br>Просто отсканируй QR-код или перейди по ссылке.</p>' +
             '<div class="qr-wrap mb-3"><img src="images/support-qr.jpg" alt="QR для оплаты" style="max-width:220px;"></div>' +
             '<a href="https://finance.ozon.ru/apps/sbp/ozonbankpay/01a033c7-d16c-7aea-a847-635cf210222c" target="_blank" rel="noopener" class="button w-100">' +
-                '<span>Перейти к оплате</span>' +
+                '<span>Закинуть на печеньки 🍪</span>' +
             '</a>' +
             '<p class="text-white-50 text-center mt-3 mb-0" style="font-size:.85rem;">Получатель: Михаил К.</p>';
         modal.classList.add('active');
@@ -1500,7 +1530,7 @@
         }, 40);
 
         const lines = [
-            '> kondrashov-m | berloga 0.3.3',
+            '> kondrashov-m | berloga 0.3.4',
             '> подключение к берлоге...',
             '> проверка протоколов...',
             '> успешно'
