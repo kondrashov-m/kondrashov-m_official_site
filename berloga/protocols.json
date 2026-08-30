@@ -1,14 +1,15 @@
 {
+  "updated": "31.08.2026",
   "protocols": [
     {
-      "name": "SSL/TLS + SSH",
+      "name": "SSH (DE)",
       "app": "HTTP Injector",
       "platform": "Android",
       "type": "file",
-      "file": "SEKRET/android-httpinjector.ehi",
+      "file": "android-httpinjector.ehi",
       "link": "",
       "desc": "Конфиг на базе SSL/TLS с проксированием через SSH. Помогает обходить ограничения трафика оператора — работает, даже если интернет по тарифу закончился.",
-      "status": "maintenance",
+      "status": "ok",
       "steps": [
         {
           "icon": "download",
@@ -37,6 +38,44 @@
       ],
       "details": "<p>1. Скачайте и установите приложение <a href=\"https://play.google.com/store/apps/details?id=com.evozi.injector&pli=1\" target=\"_blank\" rel=\"noopener\">HTTP Injector</a> из Google Play.</p><p>2. Скачайте конфигурационный файл по кнопке выше.</p><p>3. Откройте конфигурационный файл android-httpinjector.ehi через HTTP Injector.</p><p>4. Нажмите кнопку «Запуск»</p><p>5. Переключитесь на вкладку «Журнал».</p><p>Вы должны увидеть надпись «[VPN] Подлючено» — после этого интернет будет идти через конфиг.</p>",
       "note": "Этот конфиг работает только с HTTP Injector на Android. Не гарантируется работа на всех сетях и устройствах. "
+    },
+    {
+      "name": "SSH (RU)",
+      "app": "HTTP Injector",
+      "platform": "Android",
+      "type": "file",
+      "file": "android-httpinjector.ehi",
+      "link": "",
+      "desc": "Конфиг на базе SSL/TLS с проксированием через SSH. Конфигурация для безлимитного интернета",
+      "status": "maintenance",
+      "steps": [
+        {
+          "icon": "download",
+          "title": "Скачайте конфиг",
+          "text": "Нажмите кнопку ниже, чтобы скачать конфигурационный файл.",
+          "buttonLabel": "Скачать конфиг",
+          "action": "download",
+          "url": ""
+        },
+        {
+          "icon": "import",
+          "title": "Подключитесь",
+          "text": "Импортируйте конфиг в HTTP injector и нажмите «Запуск».",
+          "buttonLabel": "Подробная инструкция",
+          "action": "details",
+          "url": ""
+        },
+        {
+          "icon": "shield",
+          "title": "Пользуйтесь",
+          "text": "После подключения интернет должен работать стабильно.",
+          "buttonLabel": "Нужна помощь?",
+          "action": "link",
+          "url": "contacts.html"
+        }
+      ],
+      "details": "<p>1. Скачайте и установите приложение <a href=\"https://play.google.com/store/apps/details?id=com.evozi.injector&pli=1\" target=\"_blank\" rel=\"noopener\">HTTP Injector</a> из Google Play.</p><p>2. Скачайте конфигурационный файл по кнопке выше.</p><p>3. Откройте конфигурационный файл android-httpinjector.ehi через HTTP Injector.</p><p>4. Нажмите кнопку «Запуск»</p><p>5. Переключитесь на вкладку «Журнал».</p><p>Вы должны увидеть надпись «[VPN] Подлючено» — после этого интернет будет идти через конфиг.</p>",
+      "note": "Этот конфиг работает только с HTTP Injector на Android. Не гарантируется работа на всех сетях и устройствах.  "
     },
     {
       "name": "VLESS",
@@ -111,7 +150,7 @@
           "url": "contacts.html"
         }
       ],
-      "details": "<p>1. Скачайте и установите приложение Amnezia.</p><p>2. Скопируйте ссылку по кнопке выше.</p><p>3. В приложении выберите «Добавить сервер» → «Импортировать конфиг» и вставьте ссылку.</p><p>4. Нажмите на кнопку подключения.</p>",
+      "details": "<p>1. Скачайте и установите приложение <a href=\"https://storage.googleapis.com/amnezia/amnezia.org\" target=\"_blank\" rel=\"noopener\"> Amnezia</a></p><p>2. После перехода по ссылке, нажмите на кнопку «Скачать».</p><p>3. Выберите свою операционную систему и установите приложение AmneziaVPN.</p><p>4. После установки нажмите на значок +, в правом нижнем углу.</p><p>5. Вставьте скопированный выше ключ в приложение.</p><p>6. Нажмите на кнопку подключения.</p>",
       "note": "Сервер временно на технических работах. Используйте как резерв, если основной сервер перегружен."
     },
     {

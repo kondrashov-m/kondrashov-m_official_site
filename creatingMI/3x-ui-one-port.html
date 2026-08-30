@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Подключения на одном порту в 3x-ui</title>
+<meta name="description" content="Установка панели 3x-ui, настройка VLESS, Hysteria2.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#121212;
+    --paper:#121212;
+    --paper-border:rgba(255,255,255,.12);
+    --input-card:#00060c;
+    --param-card:#090f16;
+    --param-row:rgba(255,255,255,.04);
+    --param-row-border:rgba(255,255,255,.08);
+    --code-bg:#2f2f2f;
+    --code-fg:#eeeeee;
+    --text-primary:#ffffff;
+    --text-secondary:rgba(255,255,255,.7);
+    --text-hint:rgba(255,255,255,.5);
+    --divider:rgba(255,255,255,.08);
+    --outline:rgba(255,255,255,.23);
+    --primary:#ffffff;
+    --secondary:#ce93d8;
+    --info-bg:#071318;
+    --info-fg:#b8e7fb;
+    --info-icon:#29b6f6;
+    --json-key:#c792ea;
+    --json-string:#c3e88d;
+    --json-number:#f78c6c;
+    --json-punct:#89ddff;
+    --radius-lg:15px;
+    --radius-md:10px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text-primary);
+    font-family:"Lato","Roboto",sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  .mono{font-family:"Roboto Mono",monospace;}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 16px;}
+
+  /* header */
+  header{
+    background:var(--bg);
+    box-shadow:0 2px 4px -1px rgba(0,0,0,.2),0 4px 5px 0 rgba(0,0,0,.14),0 1px 10px 0 rgba(0,0,0,.12);
+    position:sticky;top:0;z-index:20;
+  }
+  .toolbar{
+    max-width:1200px;margin:0 auto;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:12px 20px;
+  }
+  .brand{display:flex;align-items:center;gap:8px;font-size:1.25rem;font-weight:400;text-decoration:none;color:var(--text-primary);}
+  .brand svg{width:28px;height:28px;fill:currentColor;}
+  .navlinks{display:flex;align-items:center;gap:22px;}
+  .navlinks a{text-decoration:none;color:var(--text-primary);opacity:.85;font-size:.95rem;}
+  .navlinks a:hover{opacity:1;text-decoration:underline;}
+  .globe-btn{background:none;border:none;color:var(--text-primary);cursor:pointer;display:flex;align-items:center;padding:6px;border-radius:50%;}
+  .globe-btn:hover{background:rgba(255,255,255,.08);}
+  .globe-btn svg{width:22px;height:22px;fill:currentColor;}
+
+  .back-row{padding:24px 0 4px;}
+  .back-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:none;color:var(--text-primary);text-decoration:none;font-size:.9rem;font-weight:700;letter-spacing:.02em;cursor:pointer;padding:6px 8px;border-radius:6px;}
+  .back-btn:hover{background:rgba(255,255,255,.06);}
+  .back-btn svg{width:16px;height:16px;fill:currentColor;}
+
+  main{padding:24px 16px 64px;}
+  h1.title{font-size:2.2rem;font-weight:900;text-align:center;margin:8px 0 28px;}
+
+  .alert{
+    display:flex;gap:12px;align-items:flex-start;
+    background:var(--info-bg);color:var(--info-fg);
+    border-radius:8px;padding:12px 16px;margin-bottom:20px;font-size:.95rem;
+  }
+  .alert svg{flex:none;width:22px;height:22px;fill:var(--info-icon);margin-top:1px;}
+
+  .card{
+    background:var(--paper);
+    border:1px solid var(--paper-border);
+    border-radius:var(--radius-lg);
+    margin-bottom:16px;
+  }
+  .card .pad{padding:16px;}
+  .row-between{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+  .yt-link{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--text-primary);font-weight:700;font-size:1.05rem;}
+  .yt-link svg{width:32px;height:32px;fill:#ff0000;}
+  .yt-link:hover span{text-decoration:underline;}
+
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    border:none;border-radius:var(--radius-md);
+    padding:9px 22px;font-weight:700;font-size:.9rem;font-family:inherit;
+    cursor:pointer;text-transform:none;
+  }
+  .btn svg{width:18px;height:18px;fill:currentColor;}
+  .btn-secondary{background:var(--secondary);color:#3a2440;}
+  .btn-secondary:hover{background:#dab8e6;}
+
+  .input-card{
+    background:var(--input-card);
+    border:1px solid var(--paper-border);
+    border-radius:var(--radius-lg);
+    padding:24px;margin-bottom:36px;
+  }
+  .input-card h2{font-size:1.15rem;margin:0 0 20px;font-weight:700;}
+  .field-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px 24px;}
+  @media (max-width:640px){.field-grid{grid-template-columns:1fr;}}
+  .field{display:flex;flex-direction:column;gap:6px;}
+  .field label{font-size:.8rem;color:var(--text-secondary);}
+  .field input[type=text],.field select{
+    background:transparent;color:var(--text-primary);
+    border:1px solid var(--outline);border-radius:6px;
+    padding:12px 14px;font-size:.95rem;font-family:inherit;outline:none;
+    width:100%;
+  }
+  .field input[type=text]:focus,.field select:focus{border-color:var(--text-primary);border-width:2px;padding:11px 13px;}
+  .field select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='white' d='M7 10l5 5 5-5z'/></svg>");background-repeat:no-repeat;background-position:right 12px center;}
+  .field select option{background:#1a1a1a;color:#fff;}
+  .checkbox-row{display:flex;align-items:center;gap:10px;grid-column:1/-1;margin-top:2px;}
+  .checkbox-row.inline{grid-column:auto;}
+  .checkbox-row input[type=checkbox]{width:20px;height:20px;accent-color:var(--text-primary);cursor:pointer;flex:none;}
+  .checkbox-row label{font-size:.95rem;cursor:pointer;}
+
+  /* accordion */
+  .accordion{background:var(--paper);border:1px solid var(--paper-border);border-radius:var(--radius-lg);margin-bottom:8px;overflow:hidden;}
+  .accordion-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;cursor:pointer;user-select:none;}
+  .accordion-head svg{width:20px;height:20px;fill:currentColor;transition:transform .2s;}
+  .accordion.open .accordion-head svg{transform:rotate(180deg);}
+  .accordion-body{max-height:0;overflow:hidden;transition:max-height .25s ease;}
+  .accordion.open .accordion-body{max-height:600px;}
+  .accordion-body ul{list-style:none;margin:0;padding:0 0 8px;}
+  .accordion-body li a{display:flex;align-items:center;gap:10px;padding:10px 20px;text-decoration:none;color:var(--text-primary);font-size:.9rem;}
+  .accordion-body li a:hover{background:rgba(255,255,255,.05);}
+  .accordion-body li svg{width:18px;height:18px;fill:currentColor;opacity:.8;flex:none;}
+
+  .link-card{background:var(--paper);border:1px solid var(--paper-border);border-radius:var(--radius-lg);margin-bottom:8px;}
+  .link-card:last-of-type{margin-bottom:36px;}
+  .link-card a{display:flex;align-items:center;gap:14px;padding:16px;text-decoration:none;color:var(--text-primary);font-size:1.05rem;}
+  .link-card a:hover span{text-decoration:underline;}
+  .link-card svg{width:32px;height:32px;flex:none;}
+
+  article h5{font-size:1.3rem;font-weight:700;margin:28px 0 12px;}
+  article p{margin:0 0 14px;font-size:.98rem;}
+  hr.sep{border:none;border-top:1px solid var(--divider);margin:32px 0;}
+
+  code.inline{
+    font-family:"Roboto Mono",monospace;background:var(--code-bg);color:var(--code-fg);
+    padding:2px 6px;border-radius:4px;font-size:.85em;cursor:default;
+  }
+  code.inline.copy{cursor:pointer;}
+  code.inline.copy:hover{outline:1px solid rgba(255,255,255,.25);}
+
+  .codeblock{position:relative;background:var(--code-bg);border-radius:8px;margin:0 0 16px;overflow:auto;}
+  .codeblock pre{margin:0;padding:20px 20px;font-family:"Roboto Mono",monospace;font-size:.85rem;line-height:1.6;color:var(--code-fg);white-space:pre;}
+  .copy-btn{position:absolute;top:8px;right:8px;background:rgba(255,255,255,.08);border:none;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--code-fg);}
+  .copy-btn:hover{background:rgba(255,255,255,.16);}
+  .copy-btn svg{width:16px;height:16px;fill:currentColor;}
+  .copy-btn.copied svg{fill:#69f0ae;}
+
+  .tabs{display:flex;border-bottom:1px solid var(--divider);margin-bottom:20px;}
+  .tab{flex:1;text-align:center;padding:12px 8px;cursor:pointer;font-weight:700;font-size:.85rem;letter-spacing:.03em;color:var(--text-secondary);border-bottom:2px solid transparent;}
+  .tab.active{color:var(--text-primary);border-color:var(--text-primary);}
+
+  .param-card{background:var(--param-card);border:1px solid var(--paper-border);border-radius:var(--radius-lg);padding:20px;margin-bottom:16px;}
+  .param-head{display:flex;align-items:center;gap:10px;margin-bottom:16px;font-weight:700;font-size:1.05rem;}
+  .param-head svg{width:22px;height:22px;fill:currentColor;}
+  .param-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  @media (max-width:560px){.param-grid{grid-template-columns:1fr;}}
+  .param-item{background:var(--param-row);border:1px solid var(--param-row-border);border-radius:8px;padding:10px 14px;}
+  .param-item .k{display:block;font-size:.75rem;color:var(--text-secondary);margin-bottom:2px;}
+  .param-item .v{font-weight:700;font-size:.9rem;word-break:break-all;}
+
+  .port-input-small{width:140px;margin-bottom:10px;}
+  .port-input-small label{display:block;font-size:.75rem;color:var(--text-secondary);margin-bottom:4px;}
+  .port-input-small input{background:transparent;color:var(--text-primary);border:1px solid var(--outline);border-radius:6px;padding:8px 10px;font-size:.9rem;font-family:inherit;width:100%;}
+
+  footer{padding:40px 16px 60px;text-align:center;}
+  .social{display:flex;justify-content:center;gap:22px;margin-bottom:10px;}
+  .social a{color:var(--text-primary);opacity:.8;}
+  .social a:hover{opacity:1;}
+  .social svg{width:22px;height:22px;fill:currentColor;}
+  footer .copyright{font-size:.85rem;color:var(--text-secondary);}
+
+  .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:100;padding:16px;}
+  .modal-backdrop.open{display:flex;}
+  .modal{background:#1a1a1a;border:1px solid var(--paper-border);border-radius:var(--radius-lg);max-width:420px;width:100%;padding:26px;}
+  .modal h3{margin:0 0 12px;}
+  .modal p{font-size:.92rem;color:var(--text-secondary);margin:0 0 18px;}
+  .modal .btn-close{background:rgba(255,255,255,.1);color:#fff;}
+  .modal .btn-close:hover{background:rgba(255,255,255,.18);}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="toolbar">
+    <a class="brand" href="https://denpiligrim.ru/">
+      <svg viewBox="0 0 24 24"><path d="M9.4 16.6 4.8 12l4.6-4.6L8 6l-6 6 6 6zm5.2 0 4.6-4.6-4.6-4.6L16 6l6 6-6 6z"/></svg>
+      DenPiligrim
+    </a>
+    <div class="navlinks">
+      <button class="globe-btn" title="Language" type="button">
+        <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2m6.93 6h-2.95c-.32-1.25-.78-2.45-1.38-3.56 1.84.63 3.37 1.91 4.33 3.56M12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96M4.26 14C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2s.06 1.34.14 2zm.82 2h2.95c.32 1.25.78 2.45 1.38 3.56-1.84-.63-3.37-1.9-4.33-3.56m2.95-8H5.08c.96-1.66 2.49-2.93 4.33-3.56C8.81 5.55 8.35 6.75 8.03 8M12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96M14.34 14H9.66c-.09-.66-.16-1.32-.16-2s.07-1.35.16-2h4.68c.09.65.16 1.32.16 2s-.07 1.34-.16 2m.25 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95c-.96 1.65-2.49 2.93-4.33 3.56M16.36 14c.08-.66.14-1.32.14-2s-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2z"/></svg>
+      </button>
+      <a href="https://denpiligrim.ru/blog">Blog</a>
+      <a href="https://denpiligrim.ru/dev">Dev</a>
+      <a href="https://denpiligrim.ru/crypto">Crypto</a>
+      <a href="https://denpiligrim.ru/guides">Guides</a>
+    </div>
+  </div>
+</header>
+
+<div class="wrap back-row">
+  <a class="back-btn" href="https://denpiligrim.ru/guides">
+    <svg viewBox="0 0 24 24"><path d="M11.67 3.87 9.9 2.1 0 12l9.9 9.9 1.77-1.77L3.54 12z"/></svg>
+    GUIDES
+  </a>
+</div>
+
+<main class="wrap">
+  <h1 class="title">Подключения на одном порту в 3x-ui</h1>
+
+  <div class="alert">
+    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m1 15h-2v-6h2zm0-8h-2V7h2z"/></svg>
+    <div>Гайд предполагает, что у вас уже есть сервер Ubuntu или Debian. Если у вас есть домен, заранее направьте домен на IP сервера.</div>
+  </div>
+
+  <div class="card">
+    <div class="pad row-between">
+      <a class="yt-link" href="https://youtu.be/I_WjyKyhljo" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg>
+        <span>Смотреть гайд на Ютуб</span>
+      </a>
+      <button class="btn btn-secondary" type="button" id="supportBtn">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m.88 15.76V19h-1.75v-1.29c-.74-.18-2.39-.77-3.02-2.96l1.65-.67c.06.22.58 2.09 2.4 2.09.93 0 1.98-.48 1.98-1.61 0-.96-.7-1.46-2.28-2.03-1.1-.39-3.35-1.03-3.35-3.31 0-.1.01-2.4 2.62-2.96V5h1.75v1.24c1.84.32 2.51 1.79 2.66 2.23l-1.58.67c-.11-.35-.59-1.34-1.9-1.34-.7 0-1.81.37-1.81 1.39 0 .95.86 1.31 2.64 1.9 2.4.83 3.01 2.05 3.01 3.45 0 2.63-2.5 3.13-3.02 3.22"/></svg>
+        Поддержать автора
+      </button>
+    </div>
+  </div>
+
+  <div class="input-card">
+    <h2>Вводные данные</h2>
+    <div class="field-grid">
+      <div class="field">
+        <label for="f-ip">IP сервера</label>
+        <input type="text" id="f-ip" value="1.1.1.1">
+      </div>
+      <div class="field">
+        <label for="f-domain">Домен сервера (опционально)</label>
+        <input type="text" id="f-domain" value="" placeholder="example.com">
+      </div>
+      <div class="field">
+        <label for="f-version">Версия 3x-ui</label>
+        <select id="f-version">
+          <option value="latest">Последняя версия</option>
+          <option value="custom">Указать версию вручную</option>
+        </select>
+      </div>
+      <div class="field" id="f-versionNumber-wrap" style="display:none;">
+        <label for="f-versionNumber">Номер версии</label>
+        <input type="text" id="f-versionNumber" value="2.9.4" placeholder="2.9.4">
+      </div>
+      <div class="field">
+        <label for="f-port">Порт для подключений</label>
+        <input type="text" id="f-port" value="443" placeholder="443">
+      </div>
+      <div class="checkbox-row" id="relay-checkbox-row" style="grid-column:1/-1;">
+        <input type="checkbox" id="f-relay">
+        <label for="f-relay">Использовать <b>промежуточный</b> сервер</label>
+      </div>
+      <div class="field" id="f-relayAddr-wrap" style="display:none;">
+        <label for="f-relayAddr">IP адрес/домен промежуточного</label>
+        <input type="text" id="f-relayAddr" value="relay.example.com">
+      </div>
+      <div class="checkbox-row" style="grid-column:1/-1;">
+        <input type="checkbox" id="f-sudo">
+        <label for="f-sudo">Использовать <b>sudo</b> в командах</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion" id="acc-toc">
+    <div class="accordion-head" onclick="toggleAccordion('acc-toc')">
+      <span>Содержание</span>
+      <svg viewBox="0 0 24 24"><path d="M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg>
+    </div>
+    <div class="accordion-body">
+      <ul id="toc-list"></ul>
+    </div>
+  </div>
+
+  <div class="accordion" id="acc-links">
+    <div class="accordion-head" onclick="toggleAccordion('acc-links')">
+      <span>Полезные ссылки</span>
+      <svg viewBox="0 0 24 24"><path d="M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg>
+    </div>
+    <div class="accordion-body">
+      <ul>
+        <li><a href="https://github.com/MHSanaei/3x-ui" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3z"/></svg> Репозиторий 3x-ui</a></li>
+        <li><a href="https://github.com/denpiligrim/3dp-manager" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3z"/></svg> Репозиторий 3DP-MANAGER</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <article style="margin-top:20px;">
+
+    <div class="link-card">
+      <a href="https://ishosting.io/affiliate/MjIwOSM4" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24"><path fill="#FCC237" d="M12 2 9.5 8.5 2 9l6 4.5L6 21l6-4 6 4-2-7.5 6-4.5-7.5-.5z"/></svg>
+        <span>Аренда зарубежного сервера</span>
+      </a>
+    </div>
+    <div class="link-card">
+      <a href="https://beget.com/p1519472" target="_blank" rel="noopener">
+        <svg viewBox="0 0 40 40"><defs><linearGradient id="bgGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#016fca"/><stop offset="100%" stop-color="#3dcb36"/></linearGradient></defs><path d="M26.538 20C29.5707 18.0781 31.5837 14.6938 31.5837 10.8397C31.5837 4.85303 26.7274 0 20.7367 0C14.746 0 9.88969 4.85303 9.88969 10.8397C9.88969 16.8264 14.746 21.6794 20.7367 21.6794C22.7359 21.6794 24.6162 22.4573 26.0299 23.8707C27.4436 25.2834 28.2227 27.1624 28.2227 29.1603C28.2227 31.1582 27.4443 33.0372 26.0299 34.4499C24.6162 35.8627 22.7359 36.6412 20.7367 36.6412C18.7375 36.6412 16.8572 35.8634 15.4435 34.4499C14.0298 33.0372 13.2507 31.1582 13.2507 29.1603C13.2507 28.4605 13.3468 27.7759 13.5321 27.1203L15.288 28.1275L15.0909 24.8316L14.8939 21.5357L11.947 23.0286L9 24.5214L10.5568 25.414C10.1261 26.5815 9.88969 27.8429 9.88969 29.1603C9.88969 35.147 14.746 40 20.7367 40C26.7274 40 31.5837 35.147 31.5837 29.1603C31.5837 25.3062 29.5707 21.9219 26.538 20ZM20.7367 18.3206C18.7375 18.3206 16.8572 17.5427 15.4435 16.1293C14.0298 14.7166 13.2507 12.8376 13.2507 10.8397C13.2507 8.84184 14.0291 6.9628 15.4435 5.55007C16.8572 4.13734 18.7375 3.35878 20.7367 3.35878C22.7359 3.35878 24.6162 4.13664 26.0299 5.55007C27.4436 6.9628 28.2227 8.84184 28.2227 10.8397C28.2227 12.8376 27.4443 14.7166 26.0299 16.1293C24.6162 17.5421 22.7359 18.3206 20.7367 18.3206Z" fill="url(#bgGrad)"/></svg>
+        <span>Аренда RU сервера и домен</span>
+      </a>
+    </div>
+    <div class="link-card">
+      <a href="https://t.me/futuresbp_bot?start=DenPiligrim" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24"><path fill="#4fc3a1" d="M7.77 6.76 6.23 5.48.82 12l5.41 6.52 1.54-1.28L3.42 12zM7 13h2v-2H7zm10-2h-2v2h2zm-6 2h2v-2h-2zm6.77-7.52-1.54 1.28L20.58 12l-4.35 5.24 1.54 1.28L23.18 12z"/></svg>
+        <span>Обход Глушилок / Белых списков</span>
+      </a>
+    </div>
+
+    <h5 id="install-panel">1. Установка панели 3x-ui на сервер</h5>
+    <p>Подключитесь к серверу командой <code class="inline copy" data-copy="sshCmd">ssh root@1.1.1.1</code>, обновите систему и установите необходимые пакеты.</p>
+    <div class="codeblock"><button class="copy-btn" data-target="code-apt"><svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2m0 16H8V7h11z"/></svg></button><pre id="code-apt"></pre></div>
+
+    <p>Установите выбранную версию панели. По умолчанию используется последняя версия из основного репозитория.</p>
+    <div class="codeblock"><button class="copy-btn" data-target="code-install"><svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2m0 16H8V7h11z"/></svg></button><pre id="code-install"></pre></div>
+
+    <p>Во время установки задайте порт панели, выберите базу данных, параметр установки сертификатов. После установки вы увидите ссылку на панель и доступы. Дополнительные параметры управления вы можете увидеть, выполнив команду <code class="inline">x-ui</code>.</p>
+    <p>Если у вас на сервере настроен файрвол, то обязательно включите порт панели:</p>
+    <div class="port-input-small">
+      <label for="f-panelPort">Порт панели</label>
+      <input type="text" id="f-panelPort" value="2222" placeholder="2222">
+    </div>
+    <div class="codeblock"><button class="copy-btn" data-target="code-ufw"><svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2m0 16H8V7h11z"/></svg></button><pre id="code-ufw"></pre></div>
+
+    <hr class="sep">
+    <h5 id="create-inbound">2. Создание подключений vless/hysteria</h5>
+    <p>Создайте инбаунд в разделе Подключения, указав основные параметры (остальное можно оставить по умолчанию):</p>
+    <div class="tabs">
+      <div class="tab active" id="tab-0" onclick="setTab(0)">VLESS TCP</div>
+      <div class="tab" id="tab-1" onclick="setTab(1)">HYSTERIA2</div>
+    </div>
+
+    <div class="param-card">
+      <div class="param-head">
+        <svg viewBox="0 0 24 24"><path d="M7.77 6.76 6.23 5.48.82 12l5.41 6.52 1.54-1.28L3.42 12zM7 13h2v-2H7zm10-2h-2v2h2zm-6 2h2v-2h-2zm6.77-7.52-1.54 1.28L20.58 12l-4.35 5.24 1.54 1.28L23.18 12z"/></svg>
+        <span id="param-title">Обязательные параметры: VLESS TCP</span>
+      </div>
+      <div class="param-grid" id="param-grid"></div>
+    </div>
+
+    <div class="codeblock"><button class="copy-btn" data-target="code-inbound2"><svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2m0 16H8V7h11z"/></svg></button><pre id="code-inbound2"></pre></div>
+
+    <hr class="sep">
+    <h5 id="main-inbound"><span id="main-inbound-title">3. Создание основного инбаунда на 443 порту</span></h5>
+    <p>Добавьте основной инбаунд на сервер.</p>
+
+    <div class="param-card">
+      <div class="param-head">
+        <svg viewBox="0 0 24 24"><path d="M7.77 6.76 6.23 5.48.82 12l5.41 6.52 1.54-1.28L3.42 12zM7 13h2v-2H7zm10-2h-2v2h2zm-6 2h2v-2h-2zm6.77-7.52-1.54 1.28L20.58 12l-4.35 5.24 1.54 1.28L23.18 12z"/></svg>
+        <span>Обязательные параметры: VLESS TCP TLS</span>
+      </div>
+      <div class="param-grid" id="param-grid-443"></div>
+    </div>
+    <div class="codeblock"><button class="copy-btn" data-target="code-inbound443"><svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2m0 16H8V7h11z"/></svg></button><pre id="code-inbound443"></pre></div>
+
+    <hr class="sep">
+    <h5 id="create-sub">4. Создание подписки и добавление маршрутизации клиента</h5>
+    <p>В разделе Клиенты добавьте нового клиента и выберите ранее созданные подключения.</p>
+    <p>Далее перейдите в Настройки панели &gt; Подписки. Во вкладке Happ добавьте профиль маршрутизации happ://routing:</p>
+    <div class="codeblock"><button class="copy-btn" data-target="code-happ"><svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2m0 16H8V7h11z"/></svg></button><pre id="code-happ">happ://routing/add/ewogICAgIkJsb2NrSXAiOiBbCiAgICBdLAogICAgIkJsb2NrU2l0ZXMiOiBbCiAgICBdLAogICAgIkRpcmVjdElwIjogWwogICAgICAgICIxMC4wLjAuMC84IiwKICAgICAgICAiMTcyLjE2LjAuMC8xMiIsCiAgICAgICAgIjE5Mi4xNjguMC4wLzE2IiwKICAgICAgICAiMTY5LjI1NC4wLjAvMTYiLAogICAgICAgICIyMjQuMC4wLjAvNCIsCiAgICAgICAgIjI1NS4yNTUuMjU1LjI1NSIsCiAgICAgICAgImdlb2lwOlJVIgogICAgXSwKICAgICJEaXJlY3RTaXRlcyI6IFsKICAgICAgICAiZ2Vvc2l0ZTpDQVRFR09SWS1SVSIKICAgIF0sCiAgICAiRG5zSG9zdHMiOiB7CiAgICAgICAgImNsb3VkZmxhcmUtZG5zLmNvbSI6ICIxLjEuMS4xIiwKICAgICAgICAiZG5zLmdvb2dsZSI6ICI4LjguOC44IgogICAgfSwKICAgICJEb21haW5TdHJhdGVneSI6ICJJUElmTm9uTWF0Y2giLAogICAgIkRvbWVzdGljRE5TRG9tYWluIjogImh0dHBzOi8vZG5zLmdvb2dsZS9kbnMtcXVlcnkiLAogICAgIkRvbWVzdGljRE5TSVAiOiAiOC44LjguOCIsCiAgICAiRG9tZXN0aWNETlNUeXBlIjogIkRvSCIsCiAgICAiRmFrZUROUyI6ICJmYWxzZSIsCiAgICAiR2VvaXB1cmwiOiAiaHR0cHM6Ly9naXRodWIuY29tL0xveWFsc29sZGllci92MnJheS1ydWxlcy1kYXQvcmVsZWFzZXMvbGF0ZXN0L2Rvd25sb2FkL2dlb2lwLmRhdCIsCiAgICAiR2Vvc2l0ZXVybCI6ICJodHRwczovL2dpdGh1Yi5jb20vTG95YWxzb2xkaWVyL3YycmF5LXJ1bGVzLWRhdC9yZWxlYXNlcy9sYXRlc3QvZG93bmxvYWQvZ2Vvc2l0ZS5kYXQiLAogICAgIkdsb2JhbFByb3h5IjogInRydWUiLAogICAgIkxhc3RVcGRhdGVkIjogMTc3NTgyODUxNCwKICAgICJOYW1lIjogIlJVIiwKICAgICJQcm94eUlwIjogWwogICAgXSwKICAgICJQcm94eVNpdGVzIjogWwogICAgXSwKICAgICJSZW1vdGVETlNEb21haW4iOiAiaHR0cHM6Ly9jbG91ZGZsYXJlLWRucy5jb20vZG5zLXF1ZXJ5IiwKICAgICJSZW1vdGVETlNJUCI6ICIxLjEuMS4xIiwKICAgICJSZW1vdGVETlNUeXBlIjogIkRvSCIsCiAgICAiUm91dGVPcmRlciI6ICJibG9jay1kaXJlY3QtcHJveHkiCn0K</pre></div>
+
+    <p>Во вкладке Incy добавьте профиль маршрутизации incy://routing:</p>
+    <div class="codeblock"><button class="copy-btn" data-target="code-incy"><svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2m0 16H8V7h11z"/></svg></button><pre id="code-incy">incy://routing/add/ewogICAgIkJsb2NrSXAiOiBbCiAgICBdLAogICAgIkJsb2NrU2l0ZXMiOiBbCiAgICBdLAogICAgIkRpcmVjdElwIjogWwogICAgICAgICIxMC4wLjAuMC84IiwKICAgICAgICAiMTcyLjE2LjAuMC8xMiIsCiAgICAgICAgIjE5Mi4xNjguMC4wLzE2IiwKICAgICAgICAiMTY5LjI1NC4wLjAvMTYiLAogICAgICAgICIyMjQuMC4wLjAvNCIsCiAgICAgICAgIjI1NS4yNTUuMjU1LjI1NSIsCiAgICAgICAgImdlb2lwOlJVIgogICAgXSwKICAgICJEaXJlY3RTaXRlcyI6IFsKICAgICAgICAiZ2Vvc2l0ZTpDQVRFR09SWS1SVSIKICAgIF0sCiAgICAiRG5zSG9zdHMiOiB7CiAgICAgICAgImNsb3VkZmxhcmUtZG5zLmNvbSI6ICIxLjEuMS4xIiwKICAgICAgICAiZG5zLmdvb2dsZSI6ICI4LjguOC44IgogICAgfSwKICAgICJEb21haW5TdHJhdGVneSI6ICJJUElmTm9uTWF0Y2giLAogICAgIkRvbWVzdGljRE5TRG9tYWluIjogImh0dHBzOi8vZG5zLmdvb2dsZS9kbnMtcXVlcnkiLAogICAgIkRvbWVzdGljRE5TSVAiOiAiOC44LjguOCIsCiAgICAiRG9tZXN0aWNETlNUeXBlIjogIkRvSCIsCiAgICAiRmFrZUROUyI6ICJmYWxzZSIsCiAgICAiR2VvaXB1cmwiOiAiaHR0cHM6Ly9naXRodWIuY29tL0xveWFsc29sZGllci92MnJheS1ydWxlcy1kYXQvcmVsZWFzZXMvbGF0ZXN0L2Rvd25sb2FkL2dlb2lwLmRhdCIsCiAgICAiR2Vvc2l0ZXVybCI6ICJodHRwczovL2dpdGh1Yi5jb20vTG95YWxzb2xkaWVyL3YycmF5LXJ1bGVzLWRhdC9yZWxlYXNlcy9sYXRlc3QvZG93bmxvYWQvZ2Vvc2l0ZS5kYXQiLAogICAgIkdsb2JhbFByb3h5IjogInRydWUiLAogICAgIkxhc3RVcGRhdGVkIjogMTc3NTgyODUxNCwKICAgICJOYW1lIjogIlJVIiwKICAgICJQcm94eUlwIjogWwogICAgXSwKICAgICJQcm94eVNpdGVzIjogWwogICAgXSwKICAgICJSZW1vdGVETlNEb21haW4iOiAiaHR0cHM6Ly9jbG91ZGZsYXJlLWRucy5jb20vZG5zLXF1ZXJ5IiwKICAgICJSZW1vdGVETlNJUCI6ICIxLjEuMS4xIiwKICAgICJSZW1vdGVETlNUeXBlIjogIkRvSCIsCiAgICAiUm91dGVPcmRlciI6ICJibG9jay1kaXJlY3QtcHJveHkiCn0K</pre></div>
+
+    <p>Сохраните и перезапустите панель. После снова перейдите в раздел Клиенты и скопируйте ссылку на подписку. Вставьте ссылку в приложение Happ или Incy и проверьте подключение.</p>
+
+    <div id="relay-section" style="display:none;">
+      <hr class="sep">
+      <h5 id="relay-server">5. Настройка промежуточного сервера</h5>
+      <p>Подключитесь к промежуточному серверу командой <code class="inline copy" data-copy="relaySshCmd">ssh root@relay.example.com</code>. Выполните установку перенаправления на сервере, указав IP <code class="inline" id="relay-origin-ip">1.1.1.1</code> основного сервера.</p>
+      <div class="codeblock"><button class="copy-btn" data-target="code-forward"><svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2m0 16H8V7h11z"/></svg></button><pre id="code-forward"></pre></div>
+      <p>После установки перенаправления вы можете отредактировать порты, которые будут перенаправляться. Откройте файл в редакторе:</p>
+      <div class="codeblock"><button class="copy-btn" data-target="code-nano"><svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2m0 16H8V7h11z"/></svg></button><pre id="code-nano"></pre></div>
+      <p>Отредактируйте 2 строки для транспорта TCP и UDP, указав нужные порты. Например:</p>
+      <div class="codeblock"><button class="copy-btn" data-target="code-dnat"><svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2m0 16H8V7h11z"/></svg></button><pre id="code-dnat"></pre></div>
+      <p>Выйти и сохранить изменения: <code class="inline">Ctrl+O</code>, <code class="inline">Enter</code>, <code class="inline">Ctrl+X</code></p>
+      <p>Далее перезапустите файрвол <code class="inline copy" data-copy="ufw reload">ufw reload</code> и систему <code class="inline copy" data-copy="reboot">reboot</code>.</p>
+    </div>
+
+  </article>
+</main>
+
+<footer>
+  <div class="social">
+    <a href="https://x.com/denpiligrim" target="_blank" rel="noopener" title="X"><svg viewBox="0 0 24 24"><path d="M18.9 2H22l-7.5 8.6L23.3 22h-6.9l-5.4-6.6L4.7 22H1.6l8-9.2L0.7 2h7.1l4.9 6.1L18.9 2Zm-1.2 18h1.9L7.4 4H5.4l12.3 16Z"/></svg></a>
+    <a href="https://t.me/denpiligrim_web" target="_blank" rel="noopener" title="Telegram"><svg viewBox="0 0 24 24"><path d="M22 3 2 10.9l5.3 1.8L9 19l3.5-3.6L17 19l5-16Zm-4 3-8.3 6.6-.3 3.4-1.6-4L18 6Z"/></svg></a>
+    <a href="https://github.com/denpiligrim" target="_blank" rel="noopener" title="GitHub"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49v-1.72c-2.78.62-3.37-1.36-3.37-1.36-.46-1.2-1.11-1.52-1.11-1.52-.91-.64.07-.63.07-.63 1 .07 1.53 1.05 1.53 1.05.9 1.58 2.34 1.12 2.91.86.09-.67.35-1.13.64-1.39-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.31.1-2.73 0 0 .84-.28 2.75 1.05a9.3 9.3 0 0 1 5 0c1.9-1.33 2.75-1.05 2.75-1.05.55 1.42.2 2.47.1 2.73.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.06.36.32.68.94.68 1.9v2.82c0 .27.18.6.69.49A10.26 10.26 0 0 0 22 12.25C22 6.58 17.52 2 12 2Z"/></svg></a>
+    <a href="https://www.linkedin.com/in/denpiligrim" target="_blank" rel="noopener" title="LinkedIn"><svg viewBox="0 0 24 24"><path d="M4.98 3.5A2.5 2.5 0 1 1 0 3.5a2.5 2.5 0 0 1 4.98 0ZM.5 8.75h4.9V23H.5V8.75ZM8.5 8.75h4.7v1.95h.07c.65-1.2 2.25-2.47 4.63-2.47 4.95 0 5.86 3.16 5.86 7.27V23h-4.9v-6.72c0-1.6-.03-3.66-2.24-3.66-2.24 0-2.58 1.74-2.58 3.55V23h-4.9V8.75Z"/></svg></a>
+    <a href="https://www.youtube.com/@denpiligrim" target="_blank" rel="noopener" title="YouTube"><svg viewBox="0 0 24 24"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.42 1.55.44 4.79.44 4.83 0 .04-.02 3.28-.44 4.83-.25.9-.83 1.48-1.73 1.73-1.6.44-9.83.44-9.83.44s-8.23 0-9.83-.44c-.9-.25-1.48-.83-1.73-1.73C.02 15.28 0 12.04 0 12c0-.04.02-3.28.44-4.83.25-.9.85-1.48 1.73-1.73C3.77 5 12 5 12 5s8.23 0 9.83.44c.9.25 1.48.83 1.73 1.73Z"/></svg></a>
+  </div>
+  <div class="copyright">© DenPiligrim</div>
+</footer>
+
+<div class="modal-backdrop" id="supportModal">
+  <div class="modal">
+    <h3>Поддержать автора</h3>
+    <p>Спасибо, что хотите поддержать автора! Актуальные способы поддержки уточняйте в профиле автора (Telegram / X) или на канале Ютуб.</p>
+    <button class="btn btn-close" type="button" onclick="document.getElementById('supportModal').classList.remove('open')">Закрыть</button>
+  </div>
+</div>
+
+<script>
+// ---- state (mirrors the original React component's useState hooks) ----
+const state = {
+  sudo: false,
+  relay: false,
+  versionType: "latest",
+  versionNumber: "2.9.4",
+  tab: 0,
+  domain: "",
+  relayAddr: "relay.example.com",
+  ip: "1.1.1.1",
+  port: "443",
+  panelPort: "2222",
+  hysteriaPassword: Math.random().toString(36).slice(-10)
+};
+
+function escapeHtml(str){
+  return String(str).replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+}
+
+function sudoPrefix(){ return state.sudo ? "sudo " : ""; }
+
+function installCmd(){
+  return state.versionType === "latest"
+    ? "bash <(curl -Ls https://raw.githubusercontent.com/MHSanaei/3x-ui/master/install.sh)"
+    : `VERSION=v${state.versionNumber} && bash <(curl -Ls "https://raw.githubusercontent.com/MHSanaei/3x-ui/$VERSION/install.sh") $VERSION`;
+}
+
+function vlessJson(){
+  return `{
+  "listen": "127.0.0.1",
+  "port": 2026,
+  "protocol": "vless",
+  "tag": "in-2026-tcp",
+  "settings": {
+    "clients": [],
+    "decryption": "none",
+    "encryption": "none",
+    "testseed": [
+      900,
+      500,
+      900,
+      256
+    ]
+  },
+  "sniffing": {
+    "enabled": false
+  },
+  "streamSettings": {
+    "network": "tcp",
+    "tcpSettings": {
+      "acceptProxyProtocol": true,
+      "header": {
+        "type": "none"
+      }
+    },
+    "security": "none"
+  }
+}`;
+}
+
+function hysteriaJson(){
+  return `{
+  "listen": "",
+  "port": 8443,
+  "protocol": "hysteria",
+  "tag": "in-8443-udp",
+  "settings": {
+    "clients": [],
+    "version": 2
+  },
+  "sniffing": {
+    "enabled": false
+  },
+  "streamSettings": {
+    "network": "hysteria",
+    "hysteriaSettings": {
+      "version": 2,
+      "udpIdleTimeout": 60,
+      "masquerade": {
+        "type": "",
+        "dir": "",
+        "url": "",
+        "rewriteHost": false,
+        "insecure": false,
+        "content": "",
+        "headers": {},
+        "statusCode": 0
+      }
+    },
+    "security": "tls",
+    "tlsSettings": {
+      "serverName": "${state.ip}",
+      "minVersion": "1.2",
+      "maxVersion": "1.3",
+      "cipherSuites": "",
+      "rejectUnknownSni": false,
+      "disableSystemRoot": false,
+      "enableSessionResumption": false,
+      "certificates": [
+        {
+          "certificateFile": "/root/cert/ip/fullchain.pem",
+          "keyFile": "/root/cert/ip/privkey.pem",
+          "ocspStapling": 0,
+          "oneTimeLoading": false,
+          "usage": "encipherment",
+          "buildChain": false,
+          "useFile": true
+        }
+      ],
+      "alpn": [
+        "h3",
+        "h2",
+        "http/1.1"
+      ],
+      "echServerKeys": "",
+      "settings": {
+        "fingerprint": "firefox",
+        "echConfigList": "",
+        "pinnedPeerCertSha256": [],
+        "verifyPeerCertByName": ""
+      }
+    },
+    "finalmask": {
+      "udp": [
+        {
+          "type": "salamander",
+          "settings": {
+            "password": "${state.hysteriaPassword}"
+          }
+        }
+      ]
+    }
+  }
+}`;
+}
+
+function inbound443Json(){
+  return `{
+  "listen": "",
+  "port": ${state.port},
+  "protocol": "vless",
+  "tag": "in-${state.port}-tcp",
+  "settings": {
+    "clients": [],
+    "decryption": "none",
+    "encryption": "none",
+    "testseed": [
+      900,
+      500,
+      900,
+      256
+    ]
+  },
+  "sniffing": {
+    "enabled": false
+  },
+  "streamSettings": {
+    "network": "tcp",
+    "tcpSettings": {
+      "acceptProxyProtocol": false,
+      "header": {
+        "type": "none"
+      }
+    },
+    "security": "tls",
+    "tlsSettings": {
+      "serverName": "${state.ip}",
+      "minVersion": "1.2",
+      "maxVersion": "1.3",
+      "cipherSuites": "",
+      "rejectUnknownSni": false,
+      "disableSystemRoot": false,
+      "enableSessionResumption": false,
+      "certificates": [
+        {
+          "certificateFile": "/root/cert/ip/fullchain.pem",
+          "keyFile": "/root/cert/ip/privkey.pem",
+          "ocspStapling": 0,
+          "oneTimeLoading": false,
+          "usage": "encipherment",
+          "buildChain": false,
+          "useFile": true
+        }
+      ],
+      "alpn": [
+        "h2",
+        "http/1.1"
+      ],
+      "echServerKeys": "",
+      "settings": {
+        "fingerprint": "firefox",
+        "echConfigList": "",
+        "pinnedPeerCertSha256": [],
+        "verifyPeerCertByName": ""
+      }
+    }
+  }
+}`;
+}
+
+function renderParamGrid(el, rows){
+  el.innerHTML = rows.map(([k,v]) => `<div class="param-item"><span class="k">${escapeHtml(k)}</span><span class="v">${escapeHtml(v)}</span></div>`).join("");
+}
+
+function render(){
+  const sudo = sudoPrefix();
+  const sni = state.domain || state.ip;
+  const addrStrategy = state.relay ? state.relayAddr : "default";
+
+  document.getElementById("code-apt").textContent = `${sudo}apt update && ${sudo}apt upgrade -y`;
+  document.getElementById("code-install").textContent = `${sudo}${installCmd()}`;
+  document.getElementById("code-ufw").textContent =
+`${sudo}ufw allow ${state.panelPort}/tcp
+${sudo}ufw allow ${state.port}/tcp
+${sudo}ufw allow 8443/udp`;
+
+  // step 2 tab content
+  document.getElementById("param-title").textContent = `Обязательные параметры: ${state.tab===0?"VLESS TCP":"Hysteria2"}`;
+  if(state.tab===0){
+    renderParamGrid(document.getElementById("param-grid"), [
+      ["Протокол","vless"],
+      ["Адрес","127.0.0.1"],
+      ["Стратегия адреса для ссылок", addrStrategy],
+      ["Порт","2026"],
+      ["Транспорт","TCP (RAW)"],
+      ["Безопасность","none"]
+    ]);
+    document.getElementById("code-inbound2").textContent = vlessJson();
+  } else {
+    renderParamGrid(document.getElementById("param-grid"), [
+      ["Протокол","hysteria2"],
+      ["Стратегия адреса для ссылок", addrStrategy],
+      ["Порт","8443"],
+      ["Masquerade","404"],
+      ["SNI", sni],
+      ["uTLS","firefox"],
+      ["Путь к сертификату (SSL)","Установить сертификат панели"]
+    ]);
+    document.getElementById("code-inbound2").textContent = hysteriaJson();
+  }
+
+  // step 3
+  document.getElementById("main-inbound-title").textContent = `3. Создание основного инбаунда на ${state.port} порту`;
+  renderParamGrid(document.getElementById("param-grid-443"), [
+    ["Протокол","vless"],
+    ["Стратегия адреса для ссылок", addrStrategy],
+    ["Порт", state.port],
+    ["Fallback","vless-2026"],
+    ["Транспорт","TCP (RAW)"],
+    ["Безопасность","TLS"],
+    ["SNI", sni],
+    ["uTLS","firefox"],
+    ["Путь к сертификату (SSL)","Установить сертификат панели"]
+  ]);
+  document.getElementById("code-inbound443").textContent = inbound443Json();
+
+  // inline code chips
+  document.querySelector('[data-copy="sshCmd"]').textContent = `ssh root@${state.ip}`;
+
+  // relay section (step 5)
+  const relaySection = document.getElementById("relay-section");
+  relaySection.style.display = state.relay ? "" : "none";
+  if(state.relay){
+    const relayTarget = state.relayAddr || "IP_ADDRESS";
+    document.querySelector('[data-copy="relaySshCmd"]').textContent = `ssh root@${relayTarget}`;
+    document.getElementById("relay-origin-ip").textContent = state.ip;
+    document.getElementById("code-forward").textContent = `${sudo}ORIGIN_IP="${state.ip}" bash -c "$(curl -sSL https://raw.githubusercontent.com/denpiligrim/3dp-manager/main/forwarding_install.sh)"`;
+    document.getElementById("code-nano").textContent = `${sudo}nano /etc/ufw/before.rules`;
+    document.getElementById("code-dnat").textContent =
+`-A PREROUTING -p tcp -m multiport --dports ${state.port},8443 -j DNAT --to-destination $ORIGIN_IP
+-A PREROUTING -p udp -m multiport --dports ${state.port},8443 -j DNAT --to-destination $ORIGIN_IP`;
+  }
+
+  // table of contents
+  const tocItems = [
+    ["#install-panel","1. Установка панели 3x-ui на сервер"],
+    ["#create-inbound","2. Создание подключений vless/hysteria"],
+    ["#main-inbound",`3. Создание основного инбаунда на ${state.port} порту`],
+    ["#create-sub","4. Создание подписки и добавление маршрутизации клиента"]
+  ];
+  if(state.relay) tocItems.push(["#relay-server","5. Настройка промежуточного сервера"]);
+  document.getElementById("toc-list").innerHTML = tocItems.map(([href,label]) =>
+    `<li><a href="${href}">${escapeHtml(label)}</a></li>`
+  ).join("");
+}
+
+function setTab(i){
+  state.tab = i;
+  document.getElementById("tab-0").classList.toggle("active", i===0);
+  document.getElementById("tab-1").classList.toggle("active", i===1);
+  render();
+}
+
+function toggleAccordion(id){
+  document.getElementById(id).classList.toggle("open");
+}
+
+// wire up inputs
+document.getElementById("f-ip").addEventListener("input", e => { state.ip = e.target.value.trim(); render(); });
+document.getElementById("f-domain").addEventListener("input", e => { state.domain = e.target.value.trim().toLowerCase(); render(); });
+document.getElementById("f-port").addEventListener("input", e => { state.port = e.target.value.trim().toLowerCase(); render(); });
+document.getElementById("f-panelPort").addEventListener("input", e => { state.panelPort = e.target.value.trim().toLowerCase(); render(); });
+document.getElementById("f-sudo").addEventListener("change", e => { state.sudo = e.target.checked; render(); });
+document.getElementById("f-relayAddr").addEventListener("input", e => { state.relayAddr = e.target.value.trim(); render(); });
+document.getElementById("f-versionNumber").addEventListener("input", e => { state.versionNumber = e.target.value.trim(); render(); });
+document.getElementById("f-version").addEventListener("change", e => {
+  state.versionType = e.target.value;
+  document.getElementById("f-versionNumber-wrap").style.display = state.versionType === "custom" ? "" : "none";
+  render();
+});
+document.getElementById("f-relay").addEventListener("change", e => {
+  state.relay = e.target.checked;
+  document.getElementById("f-relayAddr-wrap").style.display = state.relay ? "" : "none";
+  render();
+});
+
+document.getElementById("supportBtn").addEventListener("click", () => {
+  document.getElementById("supportModal").classList.add("open");
+});
+document.getElementById("supportModal").addEventListener("click", e => {
+  if(e.target.id === "supportModal") e.target.classList.remove("open");
+});
+
+// copy-to-clipboard
+function flashCopied(btn){
+  btn.classList.add("copied");
+  setTimeout(() => btn.classList.remove("copied"), 1200);
+}
+document.querySelectorAll(".copy-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const target = document.getElementById(btn.dataset.target);
+    navigator.clipboard.writeText(target.textContent).then(() => flashCopied(btn));
+  });
+});
+document.querySelectorAll("code.inline.copy").forEach(el => {
+  el.addEventListener("click", () => {
+    navigator.clipboard.writeText(el.textContent);
+  });
+});
+
+render();
+</script>
+</body>
+</html>

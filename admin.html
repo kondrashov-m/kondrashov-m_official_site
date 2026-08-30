@@ -13,6 +13,15 @@
         background: #05070a;
         color: rgba(255, 255, 255, 0.9);
         padding: 2rem 1.5rem 6rem;
+        display: flex;
+        justify-content: center;
+    }
+    .page {
+        width: 100%;
+        max-width: 900px;
+    }
+    .page h1, .page .sub {
+        text-align: center;
     }
     h1 {
         font-size: 1.6rem;
@@ -94,6 +103,21 @@
     #status.ok { color: #00e676; }
     #status.err { color: #ff5252; }
     #fallbackInput { display: none; }
+
+    .global-settings {
+        max-width: 900px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 16px;
+        padding: 1.25rem;
+        margin-bottom: 1.25rem;
+    }
+    .global-settings label {
+        margin-bottom: 0.4rem;
+    }
+    .global-settings input {
+        max-width: 260px;
+    }
 
     #protocolsList {
         max-width: 900px;
@@ -266,30 +290,44 @@
 </head>
 <body>
 
+<div class="page">
+
 <h1>Берлога — Админка инструкций</h1>
 <p class="sub">Правка протоколов и инструкций для оверлеев на berloga.html — без правки кода.</p>
 
 <div class="warning">
-    ⚠️ Эта страница работает только локально, у тебя на компьютере. Она напрямую читает/пишет файл
-    <code>berloga/protocols.json</code> через File System Access API (Chrome/Edge) — открой этот файл
-    в браузере (двойным кликом или через Live Server) и нажми «Открыть protocols.json».<br><br>
+    ⚠️ Эта страница работает только локально, у тебя на компьютере. При запуске через локальный сервер
+    (Live Server и т.п.) она сама подгружает <code>berloga/protocols.json</code> для просмотра/правки —
+    ничего нажимать не нужно.<br><br>
+    Кнопка «Перезаписать файл» пишет правки сразу на диск. При первом нажатии (если файл ещё не был
+    открыт через «Открыть protocols.json») она попросит один раз указать сам файл — браузер (Chrome/Edge)
+    запомнит разрешение на запись именно в него, и при следующих визитах перезапись будет идти автоматически
+    (может появиться небольшая кнопка «Разрешить прямую запись» — это разовое подтверждение браузера).<br><br>
     Сайт лежит на GitHub Pages статически, поэтому эта страница ничего не меняет на живом сайте сама по себе.
-    После правок и сохранения — закоммить и запушь изменённый <code>berloga/protocols.json</code> в репозиторий,
+    После сохранения — закоммить и запушь изменённый <code>berloga/protocols.json</code> в репозиторий,
     только тогда изменения появятся на сайте.
 </div>
 
 <div class="toolbar">
     <button class="primary" id="openBtn">📂 Открыть protocols.json</button>
+    <button class="primary" id="grantBtn" style="display:none;">🔓 Разрешить прямую запись</button>
     <label class="file-btn" for="fallbackInput" id="fallbackLabel" style="display:none;">📄 Загрузить файл (без прямой записи)</label>
     <input type="file" id="fallbackInput" accept="application/json,.json">
-    <button id="saveBtn" disabled>💾 Сохранить</button>
+    <button id="overwriteBtn" disabled>🔁 Перезаписать файл</button>
     <button class="ghost" id="downloadBtn" disabled>⬇️ Скачать JSON</button>
     <span id="status"></span>
 </div>
 
+<div class="global-settings" id="globalSettings" style="display:none;">
+    <label for="updatedField">Дата «Обновлено» (бейдж на berloga.html)</label>
+    <input type="text" id="updatedField" placeholder="30.08.2026">
+</div>
+
 <div id="protocolsList"></div>
-<div class="empty-state" id="emptyState">Файл ещё не загружен. Нажми «Открыть protocols.json» выше.</div>
+<div class="empty-state" id="emptyState">Загружаю berloga/protocols.json автоматически…</div>
 <button class="add-protocol-btn" id="addProtocolBtn" style="display:none;">+ Добавить протокол</button>
+
+</div><!-- .page -->
 
 <script>
     let protocols = [];
@@ -357,7 +395,9 @@
     function loadData(data) {
         protocols = (data && data.protocols) || [];
         loaded = true;
-        document.getElementById('saveBtn').disabled = false;
+        document.getElementById('updatedField').value = (data && data.updated) || '';
+        document.getElementById('globalSettings').style.display = 'block';
+        document.getElementById('overwriteBtn').disabled = false;
         document.getElementById('downloadBtn').disabled = false;
         document.getElementById('addProtocolBtn').style.display = 'block';
         renderList();
@@ -365,7 +405,10 @@
     }
 
     function collectData() {
-        return { protocols: protocols };
+        return {
+            updated: document.getElementById('updatedField').value.trim(),
+            protocols: protocols
+        };
     }
 
     function renderList() {
@@ -615,6 +658,39 @@
         setStatus('Твой браузер не поддерживает прямую запись файлов — используй загрузку/скачивание вручную.', '');
     }
 
+    // ---- Запоминаем handle файла в IndexedDB, чтобы не спрашивать его заново при каждом визите ----
+    const HANDLE_DB = 'berloga-admin';
+    const HANDLE_STORE = 'handles';
+    const HANDLE_KEY = 'protocolsFileHandle';
+    let pendingHandle = null;
+
+    function idbOpen() {
+        return new Promise(function(resolve, reject) {
+            const req = indexedDB.open(HANDLE_DB, 1);
+            req.onupgradeneeded = function() { req.result.createObjectStore(HANDLE_STORE); };
+            req.onsuccess = function() { resolve(req.result); };
+            req.onerror = function() { reject(req.error); };
+        });
+    }
+    async function idbSet(key, value) {
+        const db = await idbOpen();
+        return new Promise(function(resolve, reject) {
+            const tx = db.transaction(HANDLE_STORE, 'readwrite');
+            tx.objectStore(HANDLE_STORE).put(value, key);
+            tx.oncomplete = function() { resolve(); };
+            tx.onerror = function() { reject(tx.error); };
+        });
+    }
+    async function idbGet(key) {
+        const db = await idbOpen();
+        return new Promise(function(resolve, reject) {
+            const tx = db.transaction(HANDLE_STORE, 'readonly');
+            const req = tx.objectStore(HANDLE_STORE).get(key);
+            req.onsuccess = function() { resolve(req.result); };
+            req.onerror = function() { reject(req.error); };
+        });
+    }
+
     document.getElementById('openBtn').addEventListener('click', async function() {
         try {
             const [handle] = await window.showOpenFilePicker({
@@ -624,8 +700,31 @@
             const file = await handle.getFile();
             const text = await file.text();
             loadData(JSON.parse(text));
+            document.getElementById('grantBtn').style.display = 'none';
+            try { await idbSet(HANDLE_KEY, handle); } catch (e) { /* IndexedDB недоступен — просто не запомним выбор */ }
+            setStatus('Файл открыт: ' + protocols.length + ' протокол(ов). «Перезаписать файл» теперь пишет сразу в него, и браузер запомнит это на будущее.', 'ok');
         } catch (e) {
             if (e.name !== 'AbortError') setStatus('Не удалось открыть файл: ' + e.message, 'err');
+        }
+    });
+
+    document.getElementById('grantBtn').addEventListener('click', async function() {
+        if (!pendingHandle) return;
+        try {
+            const perm = await pendingHandle.requestPermission({ mode: 'readwrite' });
+            if (perm === 'granted') {
+                fileHandle = pendingHandle;
+                document.getElementById('grantBtn').style.display = 'none';
+                if (!loaded) {
+                    const file = await fileHandle.getFile();
+                    loadData(JSON.parse(await file.text()));
+                }
+                setStatus('Прямая запись разрешена — «Перезаписать файл» теперь пишет сразу на диск.', 'ok');
+            } else {
+                setStatus('Разрешение на запись не выдано — используй «Скачать JSON» и замени файл вручную.', 'err');
+            }
+        } catch (e) {
+            setStatus('Не удалось получить разрешение: ' + e.message, 'err');
         }
     });
 
@@ -658,45 +757,91 @@
 
     document.getElementById('downloadBtn').addEventListener('click', downloadJson);
 
-    document.getElementById('saveBtn').addEventListener('click', async function() {
+    // «Перезаписать файл» — отдельная, единственная в своём роде кнопка: она либо напрямую
+    // перезаписывает protocols.json на диске, либо чётко говорит, что именно не получилось.
+    // Никаких скрытых fallback'ов на скачивание — для этого есть отдельная кнопка «Скачать JSON».
+    document.getElementById('overwriteBtn').addEventListener('click', async function() {
+        if (!loaded) return;
         const json = JSON.stringify(collectData(), null, 2);
 
-        if (fileHandle) {
-            try {
-                const perm = await fileHandle.requestPermission({ mode: 'readwrite' });
-                if (perm !== 'granted') throw new Error('нет разрешения на запись');
-                const writable = await fileHandle.createWritable();
-                await writable.write(json);
-                await writable.close();
-                setStatus('Сохранено в berloga/protocols.json — не забудь закоммитить и запушить.', 'ok');
-                return;
-            } catch (e) {
-                setStatus('Не удалось сохранить напрямую (' + e.message + '), скачиваю файл.', 'err');
-                downloadJson();
-                return;
-            }
+        if (!supportsFSA) {
+            setStatus('Этот браузер не поддерживает прямую запись файлов — используй «Скачать JSON» и замени файл вручную.', 'err');
+            return;
         }
 
-        if (window.showSaveFilePicker) {
+        // Если файл ещё не привязан (например, данные подтянулись автозагрузкой через fetch) —
+        // просим один раз указать именно существующий protocols.json.
+        if (!fileHandle) {
             try {
-                const handle = await window.showSaveFilePicker({
-                    suggestedName: 'protocols.json',
+                const [handle] = await window.showOpenFilePicker({
                     types: [{ description: 'JSON', accept: { 'application/json': ['.json'] } }]
                 });
-                const writable = await handle.createWritable();
-                await writable.write(json);
-                await writable.close();
                 fileHandle = handle;
-                setStatus('Сохранено — не забудь закоммитить и запушить.', 'ok');
-                return;
+                document.getElementById('grantBtn').style.display = 'none';
             } catch (e) {
-                if (e.name === 'AbortError') return;
+                if (e.name === 'AbortError') { setStatus('Перезапись отменена.', ''); return; }
+                console.error('showOpenFilePicker failed:', e);
+                setStatus('Не удалось открыть диалог выбора файла (' + e.name + ': ' + e.message + ').', 'err');
+                return;
             }
         }
 
-        downloadJson();
-        setStatus('Файл скачан — замени им berloga/protocols.json вручную, затем закоммить и запушь.', 'ok');
+        try {
+            const perm = await fileHandle.requestPermission({ mode: 'readwrite' });
+            if (perm !== 'granted') throw new Error('нет разрешения на запись (' + perm + ')');
+            const writable = await fileHandle.createWritable();
+            await writable.write(json);
+            await writable.close();
+            try { await idbSet(HANDLE_KEY, fileHandle); } catch (e) { /* IndexedDB недоступен — не критично */ }
+            setStatus('Файл перезаписан — не забудь закоммитить и запушить.', 'ok');
+        } catch (e) {
+            console.error('Direct write failed:', e);
+            setStatus('Не удалось перезаписать файл напрямую (' + e.name + ': ' + e.message + ').', 'err');
+        }
     });
+
+    // ===== Автозагрузка при открытии страницы =====
+    // 1) Сначала пробуем восстановить ранее запомненный (через IndexedDB) handle файла —
+    //    если разрешение на запись уже выдано браузером, читаем и включаем прямую перезапись сразу.
+    // 2) Если handle недоступен/не подтверждён — подгружаем berloga/protocols.json через fetch
+    //    (работает только при запуске через локальный сервер, не при file://), но это уже без
+    //    прямой записи — «Перезаписать файл» спросит выбрать файл при первом нажатии.
+    async function autoLoadProtocols() {
+        try {
+            const res = await fetch('berloga/protocols.json', { cache: 'no-store' });
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            const data = await res.json();
+            if (!loaded) {
+                loadData(data);
+                setStatus('Автозагрузка: berloga/protocols.json (' + protocols.length + ' протокол(ов)). При первом нажатии «Перезаписать файл» браузер один раз попросит указать этот файл, дальше будет сохранять само.', 'ok');
+            }
+        } catch (e) {
+            document.getElementById('emptyState').textContent = 'Файл ещё не загружен. Нажми «Открыть protocols.json» выше.';
+        }
+    }
+
+    (async function initFileHandle() {
+        if (supportsFSA) {
+            try {
+                const handle = await idbGet(HANDLE_KEY);
+                if (handle) {
+                    const perm = await handle.queryPermission({ mode: 'readwrite' });
+                    if (perm === 'granted') {
+                        fileHandle = handle;
+                        const file = await handle.getFile();
+                        loadData(JSON.parse(await file.text()));
+                        setStatus('Загружено напрямую из ранее открытого файла — «Перезаписать файл» пишет сразу на диск.', 'ok');
+                        return;
+                    }
+                    if (perm === 'prompt') {
+                        pendingHandle = handle;
+                        document.getElementById('grantBtn').style.display = 'inline-flex';
+                    }
+                }
+            } catch (e) { /* handle мог устареть (файл перемещён/удалён) — просто игнорируем */ }
+        }
+        await autoLoadProtocols();
+    })();
 </script>
 </body>
 </html>
