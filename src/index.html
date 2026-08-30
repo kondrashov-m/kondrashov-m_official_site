@@ -701,7 +701,7 @@
 // Загрузка header и footer
 document.addEventListener('DOMContentLoaded', function() {
     // Загрузка header
-    fetch('header.html')
+    fetch('header.html', { cache: 'no-store' })
         .then(response => response.text())
         .then(data => {
             const parser = new DOMParser();
@@ -714,7 +714,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .catch(error => console.error('Error loading header:', error));
 
     // Загрузка footer
-    fetch('footer.html')
+    fetch('footer.html', { cache: 'no-store' })
         .then(response => response.text())
         .then(data => {
             const parser = new DOMParser();

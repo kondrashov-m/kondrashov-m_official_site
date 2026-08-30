@@ -1010,7 +1010,7 @@
             offset: 100
         });
 
-        fetch('header.html')
+        fetch('header.html', { cache: 'no-store' })
             .then(response => response.text())
             .then(data => {
                 document.getElementById('header-placeholder').innerHTML = data;
@@ -1018,7 +1018,7 @@
             })
             .catch(error => console.error('Error loading header:', error));
 
-        fetch('footer.html')
+        fetch('footer.html', { cache: 'no-store' })
             .then(response => response.text())
             .then(data => {
                 document.getElementById('footer-placeholder').innerHTML = data;
@@ -1163,7 +1163,7 @@
     // Их можно править вручную или через admin.html (локальная админка).
     let PROTOCOLS = [];
 
-    fetch('berloga/protocols.json')
+    fetch('berloga/protocols.json', { cache: 'no-store' })
         .then(function(r) { return r.json(); })
         .then(function(data) {
             PROTOCOLS = data.protocols || [];
@@ -1504,7 +1504,7 @@
         resize();
         window.addEventListener('resize', resize);
 
-        fetch('berloga/berloga.txt')
+        fetch('berloga/berloga.txt', { cache: 'no-store' })
             .then(function(r) { return r.text(); })
             .then(function(t) {
                 const clean = t.replace(/\s+/g, '');
@@ -1545,7 +1545,7 @@
 
         // Пароли лежат в password.txt через запятую — свой список без правки этой страницы
         let validPasswords = [];
-        fetch('berloga/password.txt')
+        fetch('berloga/password.txt', { cache: 'no-store' })
             .then(function(r) { return r.text(); })
             .then(function(t) {
                 validPasswords = t.split(',').map(function(s) { return s.trim(); }).filter(Boolean);

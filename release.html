@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Берлога — Бамп версии</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+    * { box-sizing: border-box; }
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        background: #05070a;
+        color: rgba(255, 255, 255, 0.9);
+        padding: 2rem 1.5rem 4rem;
+    }
+    h1 {
+        font-size: 1.6rem;
+        margin: 0 0 0.25rem;
+    }
+    .sub {
+        color: rgba(255, 255, 255, 0.5);
+        margin: 0 0 1.5rem;
+        font-size: 0.9rem;
+    }
+    .warning {
+        border: 1px solid rgba(255, 193, 7, 0.4);
+        background: rgba(255, 193, 7, 0.08);
+        color: #ffc107;
+        border-radius: 12px;
+        padding: 1rem 1.25rem;
+        font-size: 0.85rem;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+        max-width: 700px;
+    }
+    .card {
+        max-width: 700px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 16px;
+        padding: 1.25rem;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-weight: 600;
+        font-size: 0.95rem;
+        margin: 0 0 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+    }
+    .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        flex-shrink: 0;
+    }
+    .status-dot.loaded { background: #00e676; }
+    .current {
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.45);
+        margin-bottom: 0.9rem;
+    }
+    .current code { color: rgba(255, 255, 255, 0.75); }
+    .toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        max-width: 700px;
+    }
+    button, .file-btn {
+        font-family: inherit;
+        font-size: 0.85rem;
+        font-weight: 600;
+        padding: 0.6rem 1.1rem;
+        border-radius: 10px;
+        border: 1px solid rgba(0, 230, 118, 0.35);
+        background: rgba(0, 230, 118, 0.1);
+        color: #00e676;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    button:hover, .file-btn:hover {
+        background: rgba(0, 230, 118, 0.25);
+    }
+    button.primary {
+        background: #00e676;
+        color: #06210f;
+        border-color: #00e676;
+    }
+    button.primary:hover {
+        background: #1dffa0;
+    }
+    button.ghost {
+        background: transparent;
+        border-color: rgba(255, 255, 255, 0.15);
+        color: rgba(255, 255, 255, 0.7);
+    }
+    button.ghost:hover {
+        border-color: rgba(255, 255, 255, 0.3);
+        background: rgba(255, 255, 255, 0.05);
+    }
+    button:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+    #fallbackFooterInput, #fallbackBerlogaInput { display: none; }
+    .field-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 0.75rem;
+        margin-bottom: 0.75rem;
+        max-width: 700px;
+    }
+    label {
+        display: block;
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        color: rgba(255, 255, 255, 0.45);
+        margin-bottom: 0.3rem;
+    }
+    input[type="text"] {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        color: white;
+        padding: 0.55rem 0.7rem;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-family: inherit;
+    }
+    input[type="text"]:focus {
+        outline: none;
+        border-color: rgba(0, 230, 118, 0.5);
+    }
+    #status {
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.5);
+        min-height: 1.2em;
+        margin-top: 0.75rem;
+        max-width: 700px;
+    }
+    #status.ok { color: #00e676; }
+    #status.err { color: #ff5252; }
+</style>
+</head>
+<body>
+
+<h1>Берлога — Бамп версии</h1>
+<p class="sub">Обновляет номер версии и коднейм разом в footer.html и berloga.html — без ручной правки кода.</p>
+
+<div class="warning">
+    ⚠️ Страница работает только локально через File System Access API (Chrome/Edge). Открой её файлом
+    рядом с проектом, выбери <code>footer.html</code> и <code>berloga.html</code> из корня репозитория —
+    и сохрани. Сайт лежит на GitHub Pages статически, эта страница ничего не меняет на живом сайте сама
+    по себе — после сохранения закоммить и запушь изменённые файлы, только тогда версия обновится у всех.
+</div>
+
+<div class="card">
+    <div class="card-title"><span class="status-dot" id="footerDot"></span> footer.html</div>
+    <div class="current" id="footerCurrent">Файл ещё не открыт.</div>
+    <div class="toolbar" style="margin-bottom: 0;">
+        <button class="primary" id="openFooterBtn">📂 Открыть footer.html</button>
+        <label class="file-btn" for="fallbackFooterInput" id="fallbackFooterLabel" style="display:none;">📄 Загрузить вручную</label>
+        <input type="file" id="fallbackFooterInput" accept=".html">
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-title"><span class="status-dot" id="berlogaDot"></span> berloga.html</div>
+    <div class="current" id="berlogaCurrent">Файл ещё не открыт.</div>
+    <div class="toolbar" style="margin-bottom: 0;">
+        <button class="primary" id="openBerlogaBtn">📂 Открыть berloga.html</button>
+        <label class="file-btn" for="fallbackBerlogaInput" id="fallbackBerlogaLabel" style="display:none;">📄 Загрузить вручную</label>
+        <input type="file" id="fallbackBerlogaInput" accept=".html">
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-title">Новые значения</div>
+    <div class="field-row">
+        <div class="field">
+            <label>Новая версия (напр. 0.3.5)</label>
+            <input type="text" id="newVersion" placeholder="0.3.5">
+        </div>
+        <div class="field">
+            <label>Новый коднейм (только footer.html)</label>
+            <input type="text" id="newCodename" placeholder="Nika">
+        </div>
+    </div>
+</div>
+
+<div class="toolbar">
+    <button id="saveBtn" disabled>💾 Обновить и сохранить</button>
+    <button class="ghost" id="downloadBtn" disabled>⬇️ Скачать оба файла</button>
+</div>
+<div id="status"></div>
+
+<script>
+    const FOOTER_RE = /(<span class="version-info" title="codename: )([^"]*)(">Версия )([^<]*)(<\/span>)/;
+    const BERLOGA_RE = /('> kondrashov-m \| berloga )([^']*)(',)/;
+
+    const supportsFSA = !!window.showOpenFilePicker;
+    if (!supportsFSA) {
+        document.getElementById('openFooterBtn').style.display = 'none';
+        document.getElementById('openBerlogaBtn').style.display = 'none';
+        document.getElementById('fallbackFooterLabel').style.display = 'inline-block';
+        document.getElementById('fallbackBerlogaLabel').style.display = 'inline-block';
+        setStatus('Твой браузер не поддерживает прямую запись файлов — используй загрузку/скачивание вручную.', '');
+    }
+
+    let footerHandle = null, footerText = null;
+    let berlogaHandle = null, berlogaText = null;
+
+    function setStatus(msg, cls) {
+        const el = document.getElementById('status');
+        el.textContent = msg;
+        el.className = cls || '';
+    }
+
+    function refreshSaveState() {
+        const ready = footerText !== null && berlogaText !== null;
+        document.getElementById('saveBtn').disabled = !ready;
+        document.getElementById('downloadBtn').disabled = !ready;
+    }
+
+    function loadFooter(text) {
+        footerText = text;
+        const m = text.match(FOOTER_RE);
+        if (!m) {
+            document.getElementById('footerCurrent').textContent = 'Не нашёл блок version-info в файле — проверь, тот ли это footer.html.';
+            return;
+        }
+        document.getElementById('footerCurrent').innerHTML =
+            'Сейчас: <code>codename ' + m[2] + '</code>, <code>версия ' + m[4] + '</code>';
+        document.getElementById('footerDot').classList.add('loaded');
+        if (!document.getElementById('newVersion').value) document.getElementById('newVersion').value = m[4];
+        if (!document.getElementById('newCodename').value) document.getElementById('newCodename').value = m[2];
+    }
+
+    function loadBerloga(text) {
+        berlogaText = text;
+        const m = text.match(BERLOGA_RE);
+        if (!m) {
+            document.getElementById('berlogaCurrent').textContent = 'Не нашёл строку "berloga X.Y.Z" в файле — проверь, тот ли это berloga.html.';
+            return;
+        }
+        document.getElementById('berlogaCurrent').innerHTML = 'Сейчас: <code>berloga ' + m[2] + '</code>';
+        document.getElementById('berlogaDot').classList.add('loaded');
+        if (!document.getElementById('newVersion').value) document.getElementById('newVersion').value = m[2];
+    }
+
+    document.getElementById('openFooterBtn').addEventListener('click', async function() {
+        try {
+            const [handle] = await window.showOpenFilePicker({
+                types: [{ description: 'HTML', accept: { 'text/html': ['.html'] } }]
+            });
+            footerHandle = handle;
+            const file = await handle.getFile();
+            loadFooter(await file.text());
+            refreshSaveState();
+        } catch (e) {
+            if (e.name !== 'AbortError') setStatus('Не удалось открыть footer.html: ' + e.message, 'err');
+        }
+    });
+
+    document.getElementById('openBerlogaBtn').addEventListener('click', async function() {
+        try {
+            const [handle] = await window.showOpenFilePicker({
+                types: [{ description: 'HTML', accept: { 'text/html': ['.html'] } }]
+            });
+            berlogaHandle = handle;
+            const file = await handle.getFile();
+            loadBerloga(await file.text());
+            refreshSaveState();
+        } catch (e) {
+            if (e.name !== 'AbortError') setStatus('Не удалось открыть berloga.html: ' + e.message, 'err');
+        }
+    });
+
+    document.getElementById('fallbackFooterInput').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function() { loadFooter(reader.result); refreshSaveState(); };
+        reader.readAsText(file);
+    });
+
+    document.getElementById('fallbackBerlogaInput').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function() { loadBerloga(reader.result); refreshSaveState(); };
+        reader.readAsText(file);
+    });
+
+    function buildOutputs() {
+        const newVersion = document.getElementById('newVersion').value.trim();
+        const newCodename = document.getElementById('newCodename').value.trim();
+        if (!newVersion) { setStatus('Укажи новую версию.', 'err'); return null; }
+        if (!newCodename) { setStatus('Укажи новый коднейм.', 'err'); return null; }
+
+        const newFooterText = footerText.replace(FOOTER_RE, function(_, p1, _codename, p3, _version, p5) {
+            return p1 + newCodename + p3 + newVersion + p5;
+        });
+        const newBerlogaText = berlogaText.replace(BERLOGA_RE, function(_, p1, _version, p3) {
+            return p1 + newVersion + p3;
+        });
+        return { newFooterText, newBerlogaText, newVersion, newCodename };
+    }
+
+    async function writeHandle(handle, text) {
+        const perm = await handle.requestPermission({ mode: 'readwrite' });
+        if (perm !== 'granted') throw new Error('нет разрешения на запись');
+        const writable = await handle.createWritable();
+        await writable.write(text);
+        await writable.close();
+    }
+
+    function downloadText(name, text) {
+        const blob = new Blob([text], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = name;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+    }
+
+    document.getElementById('saveBtn').addEventListener('click', async function() {
+        const out = buildOutputs();
+        if (!out) return;
+
+        if (footerHandle && berlogaHandle) {
+            try {
+                await writeHandle(footerHandle, out.newFooterText);
+                await writeHandle(berlogaHandle, out.newBerlogaText);
+                footerText = out.newFooterText;
+                berlogaText = out.newBerlogaText;
+                loadFooter(footerText);
+                loadBerloga(berlogaText);
+                setStatus('Сохранено: версия ' + out.newVersion + ', коднейм ' + out.newCodename + ' — не забудь закоммитить и запушить.', 'ok');
+                return;
+            } catch (e) {
+                setStatus('Не удалось сохранить напрямую (' + e.message + '), скачиваю файлы.', 'err');
+                downloadText('footer.html', out.newFooterText);
+                downloadText('berloga.html', out.newBerlogaText);
+                return;
+            }
+        }
+
+        downloadText('footer.html', out.newFooterText);
+        downloadText('berloga.html', out.newBerlogaText);
+        setStatus('Файлы скачаны — замени ими footer.html и berloga.html вручную, затем закоммить и запушь.', 'ok');
+    });
+
+    document.getElementById('downloadBtn').addEventListener('click', function() {
+        const out = buildOutputs();
+        if (!out) return;
+        downloadText('footer.html', out.newFooterText);
+        downloadText('berloga.html', out.newBerlogaText);
+    });
+</script>
+</body>
+</html>
