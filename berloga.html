@@ -44,6 +44,84 @@
 
     <style>
     /* Берлога — зелёная тема вместо стандартной синей */
+
+    /* Хранители берлоги — бесконечная лента плиток с прокруткой */
+    .supporters-marquee-wrap {
+        overflow: hidden;
+        -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+        mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+    }
+
+    .supporters-marquee {
+        display: flex;
+        width: max-content;
+        gap: 1.25rem;
+        animation: supporters-scroll 30s linear infinite;
+    }
+
+    .supporters-marquee-wrap:hover .supporters-marquee {
+        animation-play-state: paused;
+    }
+
+    .supporters-marquee.supporters-static {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+        animation: none;
+    }
+
+    .supporter-tile {
+        flex: 0 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.9rem;
+        min-width: 220px;
+        padding: 2rem 1.75rem;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        text-align: center;
+        color: inherit;
+        text-decoration: none;
+        transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    a.supporter-tile:hover {
+        border-color: rgba(0, 230, 118, 0.4);
+        background: rgba(0, 230, 118, 0.08);
+    }
+
+    .supporter-tile img,
+    .supporter-tile .supporter-fallback {
+        width: 96px;
+        height: 96px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid rgba(0, 230, 118, 0.4);
+    }
+
+    .supporter-tile .supporter-fallback {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 230, 118, 0.12);
+        color: #00e676;
+        font-weight: 700;
+        font-size: 1.9rem;
+    }
+
+    .supporter-tile .supporter-name {
+        margin: 0;
+        font-size: 1.05rem;
+        font-weight: 600;
+    }
+
+    @keyframes supporters-scroll {
+        from { transform: translateX(0); }
+        to { transform: translateX(-50%); }
+    }
+
     .protocol-card {
         background-color: rgba(255, 255, 255, 0.06);
         border: 1px solid rgba(255, 255, 255, 0.1);
@@ -1109,15 +1187,44 @@
 
                     <div class="row justify-content-center mt-5 text-center" data-aos="fade-up" data-aos-duration="1500">
                         <div class="col-lg-8 d-flex flex-wrap align-items-center justify-content-center gap-3">
-                            <button class="button support-button" id="supportBtn">
-                                <span>❤️ Поддержать проект</span>
-                            </button>
                             <span class="updated-badge">Обновлено: 30.08.2026</span>
                         </div>
                     </div>
                 </div>
             </section>
         </div>
+    </div>
+
+    <section  style="margin-top: 52px;">
+     </section>
+     <div class="container-fluid padding-side position-relative">
+     <div class="border border-light border-opacity-25 rounded-5"
+        style="background-color: rgba(255, 255, 255, 0.06); box-shadow: 0px 12px 90px rgba(0, 230, 118, 0.2);">
+        <section id="testimonial" class="padding-medium pt-0">
+            <div class="container position-relative" data-aos="fade-up" data-aos-duration="1500">
+                <section  style="margin-top: 144px;">
+     </section>
+                <div class="text-center">
+                    <h3 class="display-3">Хранители берлоги</h3>
+                    <p class="lead mt-2" style="color: rgba(255, 255, 255, 0.55);">Список тех, кто помог в создании данного проекта</p>
+                </div>
+
+                <div class="supporters-marquee-wrap mt-4">
+                    <div class="supporters-marquee" id="supportersMarquee"></div>
+                </div>
+                <p class="text-center mb-0" id="supportersEmpty" style="color: rgba(255, 255, 255, 0.4); display: none;">
+                    Пока никто не поддержал проект — стань первым! ❤️
+                </p>
+
+                <div class="row justify-content-center mt-5 text-center">
+                    <div class="col-lg-8 d-flex flex-wrap align-items-center justify-content-center gap-3">
+                        <button class="button support-button" id="supportBtn">
+                            <span>❤️ Поддержать проект</span>
+                        </button>
+                    </div>
+                </div>
+        </section>
+    </div>
     </div>
 
     <!-- Футер -->
@@ -1156,6 +1263,66 @@
 
     <script src="js/plugins.js"></script>
     <script src="js/script.js"></script>
+
+    <script>
+    // ===== Хранители берлоги =====
+    // Список тех, кто помог/поддержал проект. Добавляй сюда объекты вида
+    // { name: 'Имя Фамилия', photo: 'images/имя.jpg' } — photo необязателен,
+    // без фото плитка покажет кружок с первой буквой имени.
+    const SUPPORTERS = [
+        { name: 'Спартак Потогин', telegram: 'stabltabl', photo: 'images/supporter-spartak.jpg' },
+        { name: 'Николай', telegram: 'gndsq' },
+        { name: 'Александр Белов', telegram: 'TylerTheDstroyer', photo: 'images/supporter-alexander.jpg' },
+        { name: 'Михаил', telegram: 'Mishanya_2026' },
+        { name: 'Руслан', telegram: 'bossnb7', photo: 'images/supporter-ruslan.jpg' },
+        { name: 'Владимир Иванов', telegram: 'VladimirPuz' },
+        // { name: 'Имя Фамилия', photo: 'images/somebody.jpg' },
+    ];
+
+    (function renderSupporters() {
+        const track = document.getElementById('supportersMarquee');
+        const emptyMsg = document.getElementById('supportersEmpty');
+        if (!track) return;
+
+        if (!SUPPORTERS.length) {
+            track.parentElement.style.display = 'none';
+            if (emptyMsg) emptyMsg.style.display = 'block';
+            return;
+        }
+
+        function tileHtml(s) {
+            const avatar = s.photo
+                ? '<img src="' + s.photo + '" alt="' + s.name + '">'
+                : '<div class="supporter-fallback">' + s.name.trim().charAt(0).toUpperCase() + '</div>';
+            const inner = avatar + '<p class="supporter-name">' + s.name + '</p>';
+            if (s.telegram) {
+                const handle = s.telegram.replace(/^@/, '');
+                return '<a class="supporter-tile" href="https://t.me/' + handle + '" target="_blank" rel="noopener noreferrer">' + inner + '</a>';
+            }
+            return '<div class="supporter-tile">' + inner + '</div>';
+        }
+
+        // Мало людей — просто показываем их по центру, без прокрутки и повторов
+        const STATIC_LIMIT = 3;
+        if (SUPPORTERS.length <= STATIC_LIMIT) {
+            track.classList.add('supporters-static');
+            track.innerHTML = SUPPORTERS.map(tileHtml).join('');
+            return;
+        }
+
+        // Иначе — бегущая лента. Чтобы одна "половина" ленты (до -50% сдвига)
+        // всегда была шире контейнера, при небольшом числе людей список
+        // повторяется — иначе анимация сдвигает плитки лишь на пару десятков
+        // пикселей и лента выглядит сломанной вместо плавной прокрутки.
+        const MIN_TILES = 10;
+        let set = SUPPORTERS;
+        while (set.length < MIN_TILES) set = set.concat(SUPPORTERS);
+
+        // Сам список дублируется ещё раз, чтобы лента прокручивалась бесконечно без видимого шва
+        const tiles = set.map(tileHtml).join('');
+        track.innerHTML = tiles + tiles;
+    })();
+    </script>
 
     <script>
     // ===== Протоколы =====
