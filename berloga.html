@@ -538,7 +538,22 @@
         box-shadow: none;
     }
 
-    /* Кнопка поддержки — выделяется на фоне остальных */
+    /* Кнопка поддержки — выделяется на фоне остальных.
+       Свечение висит на обёртке .support-button-glow, а не на самой кнопке:
+       у .button есть overflow:hidden (нужен для ripple-эффекта), и в паре
+       с анимированным box-shadow это в Chromium иногда обрезает тень по
+       границе кнопки при нецелых уровнях масштаба страницы. */
+    .support-button-glow {
+        display: inline-block;
+        border-radius: 50px;
+        animation: supportPulse 2.4s ease-in-out infinite;
+    }
+
+    .support-button-glow:hover {
+        animation: none;
+        box-shadow: 0 10px 40px rgba(0, 230, 118, 0.55);
+    }
+
     .button.support-button {
         background: linear-gradient(135deg, #00e676, #00b85c);
         border: none;
@@ -546,14 +561,12 @@
         font-weight: 700;
         padding: 1rem 2rem;
         font-size: 1.05rem;
-        animation: supportPulse 2.4s ease-in-out infinite;
     }
 
     .button.support-button:hover {
         background: linear-gradient(135deg, #1dffa0, #00e676);
         color: #06210f;
         transform: translateY(-3px);
-        box-shadow: 0 10px 40px rgba(0, 230, 118, 0.55);
     }
 
     @keyframes supportPulse {
@@ -1117,7 +1130,7 @@
     <!-- Основной контент -->
     <div class="container-fluid padding-side position-relative" style="margin-top: 52px;">
         <div class="border border-light border-opacity-25 rounded-5"
-            style="background-color: rgba(255, 255, 255, 0.06); box-shadow: 0px 12px 90px rgba(0, 230, 118, 0.2);">
+            style="background-color: rgba(255, 255, 255, 0.06); box-shadow: 0px 8px 36px rgba(0, 230, 118, 0.25);">
 
             <section id="berloga-hero" class="padding-medium">
                 <div class="container">
@@ -1139,56 +1152,6 @@
                         </div>
                     </div> -->
 
-                    <!-- FAQ -->
-                    <div class="row justify-content-center mt-5 pt-4" data-aos="fade-up" data-aos-duration="1500">
-                        <div class="col-lg-10">
-                            <div class="text-center mb-5">
-                                <h3 class="display-6 mb-3">Часто задаваемые вопросы<span class="text-accent">.</span></h3>
-                                <p class="lead text-white-50">Здесь вы найдете ответы на самые популярные вопросы</p>
-                            </div>
-
-                            <div class="accordion" id="berlogaFaq">
-                                <div class="accordion-item border-0 mb-3">
-                                    <h2 class="accordion-header">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#bfaq1">
-                                            Неужели это законно?
-                                        </button>
-                                    </h2>
-                                    <div id="bfaq1" class="accordion-collapse collapse" data-bs-parent="#berlogaFaq">
-                                        <div class="accordion-body">
-                                            Незаконно это нихрена, но мы поднимаем столько бабла, что нам как-то похер.                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="accordion-item border-0 mb-3">
-                                    <h2 class="accordion-header">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#bfaq2">
-                                            Как подключиться?
-                                        </button>
-                                    </h2>
-                                    <div id="bfaq2" class="accordion-collapse collapse" data-bs-parent="#berlogaFaq">
-                                        <div class="accordion-body">
-                                            Для HTTP Injector скачай файл конфига из карточки и импортируй его в приложении. Для v2rayTun скопируй ссылку (или отсканируй QR-код) и вставь через «Импорт из буфера обмена».
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="accordion-item border-0 mb-3">
-                                    <h2 class="accordion-header">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#bfaq3">
-                                            Почему бесплатно?
-                                        </button>
-                                    </h2>
-                                    <div id="bfaq3" class="accordion-collapse collapse" data-bs-parent="#berlogaFaq">
-                                        <div class="accordion-body">
-                                            Это мои сервера и я могу делать всё, что захочу.
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                     <div class="row justify-content-center mt-5 text-center" data-aos="fade-up" data-aos-duration="1500">
                         <div class="col-lg-8 d-flex flex-wrap align-items-center justify-content-center gap-3">
                             <span class="updated-badge">Обновлено: 30.08.2026</span>
@@ -1202,8 +1165,6 @@
     <section  style="margin-top: 52px;">
      </section>
      <div class="container-fluid padding-side position-relative">
-     <div class="border border-light border-opacity-25 rounded-5"
-        style="background-color: rgba(255, 255, 255, 0.06); box-shadow: 0px 12px 90px rgba(0, 230, 118, 0.2);">
         <section id="testimonial" class="padding-medium pt-0">
             <div class="container position-relative" data-aos="fade-up" data-aos-duration="1500">
                 <section  style="margin-top: 144px;">
@@ -1222,13 +1183,14 @@
 
                 <div class="row justify-content-center mt-5 text-center">
                     <div class="col-lg-8 d-flex flex-wrap align-items-center justify-content-center gap-3">
-                        <button class="button support-button" id="supportBtn">
-                            <span>❤️ Поддержать проект</span>
-                        </button>
+                        <span class="support-button-glow">
+                            <button class="button support-button" id="supportBtn">
+                                <span>❤️ Поддержать проект</span>
+                            </button>
+                        </span>
                     </div>
                 </div>
         </section>
-    </div>
     </div>
 
     <!-- Футер -->
