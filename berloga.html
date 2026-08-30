@@ -84,12 +84,16 @@
         text-align: center;
         color: inherit;
         text-decoration: none;
+        font: inherit;
+        cursor: default;
         transition: border-color 0.2s ease, background 0.2s ease;
     }
 
-    a.supporter-tile:hover {
+    a.supporter-tile:hover,
+    button.supporter-tile:hover {
         border-color: rgba(0, 230, 118, 0.4);
         background: rgba(0, 230, 118, 0.08);
+        cursor: pointer;
     }
 
     .supporter-tile img,
@@ -1270,7 +1274,7 @@
     // { name: 'Имя Фамилия', photo: 'images/имя.jpg' } — photo необязателен,
     // без фото плитка покажет кружок с первой буквой имени.
     const SUPPORTERS = [
-        { name: 'Спартак Потогин', telegram: 'stabltabl', photo: 'images/supporter-spartak.jpg' },
+        { name: 'Аноним', photo: 'images/supporter-spartak.jpg', anonymous: true },
         { name: 'Николай', telegram: 'gndsq' },
         { name: 'Александр Белов', telegram: 'TylerTheDstroyer', photo: 'images/supporter-alexander.jpg' },
         { name: 'Михаил', telegram: 'Mishanya_2026' },
@@ -1295,12 +1299,29 @@
                 ? '<img src="' + s.photo + '" alt="' + s.name + '">'
                 : '<div class="supporter-fallback">' + s.name.trim().charAt(0).toUpperCase() + '</div>';
             const inner = avatar + '<p class="supporter-name">' + s.name + '</p>';
+            if (s.anonymous) {
+                return '<button type="button" class="supporter-tile" data-anonymous="true">' + inner + '</button>';
+            }
             if (s.telegram) {
                 const handle = s.telegram.replace(/^@/, '');
                 return '<a class="supporter-tile" href="https://t.me/' + handle + '" target="_blank" rel="noopener noreferrer">' + inner + '</a>';
             }
             return '<div class="supporter-tile">' + inner + '</div>';
         }
+
+        function openAnonymousModal() {
+            const modal = document.getElementById('protocolModal');
+            const body = document.getElementById('modalBody');
+            if (!modal || !body) return;
+            body.innerHTML =
+                '<h5 class="display-6">Инкогнито</h5>' +
+                '<p class="mb-0 opacity-75">Хранитель предпочёл остаться анонимным :(</p>';
+            modal.classList.add('active');
+        }
+
+        track.addEventListener('click', function(e) {
+            if (e.target.closest('[data-anonymous="true"]')) openAnonymousModal();
+        });
 
         // Мало людей — просто показываем их по центру, без прокрутки и повторов
         const STATIC_LIMIT = 3;
