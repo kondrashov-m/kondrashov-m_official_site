@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <!-- AOS CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <link rel="icon" href="favicon.ico">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>kondrashov-m | Automatics_v18</title>
+    <meta name="description" content="Automatics_v18 — архив лекций вуза, автоматически записанных и загруженных на YouTube. Выбери предмет и смотри актуальные записи.">
+    <link rel="canonical" href="https://kondrashov-m.ru/automatics.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ru_RU">
+    <meta property="og:site_name" content="kondrashov-m">
+    <meta property="og:title" content="kondrashov-m | Automatics_v18">
+    <meta property="og:description" content="Архив лекций, автоматически записанных и загруженных на YouTube.">
+    <meta property="og:url" content="https://kondrashov-m.ru/automatics.html">
+    <meta property="og:image" content="https://kondrashov-m.ru/images/project2.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="kondrashov-m | Automatics_v18">
+    <meta name="twitter:description" content="Архив лекций, автоматически записанных и загруженных на YouTube.">
+    <meta name="twitter:image" content="https://kondrashov-m.ru/images/project2.jpg">
+
+    <!-- Link Swiper's CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+
+    <!--Bootstrap ================================================== -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+
+    <!--vendor css ================================================== -->
+    <link rel="stylesheet" type="text/css" href="css/vendor.css">
+
+    <!-- Style Sheet -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+
+    <style>
+    /* Единый стиль для всех страниц */
+    .button {
+        background: linear-gradient(135deg, rgba(0, 163, 255, 0.2), rgba(255, 255, 255, 0.05));
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        border-radius: 50px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+    }
+
+    .button:hover {
+        background: linear-gradient(135deg, rgba(0, 163, 255, 0.3), rgba(255, 255, 255, 0.1));
+        border-color: rgba(0, 163, 255, 0.5);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 163, 255, 0.3);
+    }
+
+    .button::before {
+        --size: 0;
+        content: '';
+        position: absolute;
+        left: var(--x);
+        top: var(--y);
+        width: var(--size);
+        height: var(--size);
+        background: radial-gradient(circle closest-side, rgba(255,255,255,0.3), transparent);
+        transform: translate(-50%, -50%);
+        transition: width .3s ease, height .3s ease;
+        border-radius: 50%;
+        pointer-events: none;
+    }
+
+    .button:hover::before {
+        --size: 400px;
+    }
+
+    .button svg {
+        width: 20px;
+        height: 20px;
+        transition: transform 0.3s ease;
+    }
+
+    .button:hover svg:not(.no-animate) {
+        transform: translateX(3px);
+    }
+
+    .display-3 {
+        font-size: 2.5rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .display-6 {
+        font-size: 1.25rem;
+        font-weight: 500;
+        margin-bottom: 1rem;
+    }
+
+    .lead {
+        font-size: 1.1rem;
+        color: rgba(255, 255, 255, 0.8);
+        line-height: 1.6;
+    }
+
+    .text-primary {
+        color: #00a3ff !important;
+    }
+
+    .text-white-50 {
+        color: rgba(255, 255, 255, 0.5) !important;
+    }
+
+    /* Фильтр по предметам */
+    .subject-filter {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+        justify-content: center;
+    }
+
+    .subject-pill {
+        font-family: inherit;
+        font-size: 0.85rem;
+        font-weight: 600;
+        padding: 0.55rem 1.1rem;
+        border-radius: 50px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        background: rgba(255, 255, 255, 0.05);
+        color: rgba(255, 255, 255, 0.75);
+        cursor: pointer;
+        transition: all 0.25s ease;
+    }
+
+    .subject-pill:hover {
+        border-color: rgba(0, 163, 255, 0.4);
+        color: white;
+    }
+
+    .subject-pill.active {
+        border-color: rgba(0, 163, 255, 0.5);
+        background: rgba(0, 163, 255, 0.18);
+        color: #00a3ff;
+    }
+
+    /* Карточка лекции */
+    .lecture-card {
+        background-color: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .lecture-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0, 163, 255, 0.2);
+        border-color: rgba(0, 163, 255, 0.3);
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .lecture-thumb {
+        position: relative;
+        width: 100%;
+        padding-top: 56.25%;
+        background-color: #05070a;
+        overflow: hidden;
+    }
+
+    .lecture-thumb img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.4s ease;
+    }
+
+    .lecture-card:hover .lecture-thumb img {
+        transform: scale(1.05);
+    }
+
+    .lecture-play {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.15);
+        transition: background 0.3s ease;
+    }
+
+    .lecture-card:hover .lecture-play {
+        background: rgba(0, 0, 0, 0.35);
+    }
+
+    .lecture-play svg {
+        width: 56px;
+        height: 56px;
+        color: white;
+        filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5));
+        transition: transform 0.3s ease;
+    }
+
+    .lecture-card:hover .lecture-play svg {
+        transform: scale(1.1);
+    }
+
+    .lecture-body {
+        padding: 1.25rem 1.5rem 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+        flex-grow: 1;
+    }
+
+    .lecture-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .subject-badge {
+        font-size: 0.7rem;
+        font-weight: 600;
+        padding: 0.3rem 0.6rem;
+        border-radius: 50px;
+        border: 1px solid rgba(0, 163, 255, 0.35);
+        color: #00a3ff;
+        background: rgba(0, 163, 255, 0.1);
+        white-space: nowrap;
+    }
+
+    .lecture-date {
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.5);
+        white-space: nowrap;
+    }
+
+    .lecture-title {
+        margin: 0;
+        font-size: 1.05rem;
+        font-weight: 600;
+        line-height: 1.4;
+    }
+
+    .lectures-empty {
+        color: rgba(255, 255, 255, 0.4);
+        text-align: center;
+        padding: 2rem 1rem;
+    }
+
+    .lectures-empty-state {
+        text-align: center;
+        padding: 3.5rem 1.5rem;
+        background-color: rgba(255, 255, 255, 0.04);
+        border: 1px dashed rgba(255, 255, 255, 0.15);
+        border-radius: 20px;
+    }
+
+    .lectures-empty-icon {
+        font-size: 3rem;
+        line-height: 1;
+        margin-bottom: 1.25rem;
+    }
+
+    .lectures-empty-state h5 {
+        margin-bottom: 0.6rem;
+    }
+
+    .lectures-empty-state p {
+        max-width: 480px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .updated-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 1rem 1.75rem;
+        border-radius: 50px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        background: rgba(255, 255, 255, 0.05);
+        color: rgba(255, 255, 255, 0.85);
+        font-weight: 600;
+        font-size: 1.05rem;
+        white-space: nowrap;
+    }
+
+    /* Версия в шапке */
+    .version-info {
+        cursor: help;
+        border-bottom: 1px dashed #ffffff;
+        color: #ffffff;
+        transition: color 0.3s ease;
+    }
+
+    .version-info:hover {
+        color: #00a3ff;
+    }
+
+    /* Стрелка вверх */
+    .scroll-to-top {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 50px;
+        height: 50px;
+        background: rgba(0, 163, 255, 0.8);
+        backdrop-filter: blur(10px);
+        border: none;
+        border-radius: 50%;
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 20px rgba(0, 163, 255, 0.3);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .scroll-to-top:hover {
+        background: rgba(0, 163, 255, 1);
+        transform: translateY(-3px);
+        box-shadow: 0 6px 25px rgba(0, 163, 255, 0.4);
+    }
+
+    .scroll-to-top.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    /* Адаптивность */
+    @media (max-width: 992px) {
+        .display-3 {
+            font-size: 2.2rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .button {
+            width: 100%;
+        }
+
+        .updated-badge {
+            width: 100%;
+            justify-content: center;
+            box-sizing: border-box;
+        }
+
+        .display-3 {
+            font-size: 2rem;
+        }
+
+        .scroll-to-top {
+            bottom: 20px;
+            right: 20px;
+            width: 45px;
+            height: 45px;
+            font-size: 18px;
+        }
+    }
+
+    .padding-side {
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+
+    @media (max-width: 768px) {
+        .padding-side {
+            padding-left: 3%;
+            padding-right: 3%;
+        }
+    }
+
+    /* Навигация */
+    .navbar-nav .nav-link {
+        color: rgba(255, 255, 255, 0.8) !important;
+        transition: color 0.3s ease;
+    }
+
+    .navbar-nav .nav-link:hover,
+    .navbar-nav .nav-link.active {
+        color: #00a3ff !important;
+    }
+
+    .dropdown-menu {
+        background-color: rgba(10, 10, 10, 0.95);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .dropdown-item {
+        color: white;
+        transition: all 0.3s ease;
+    }
+
+    .dropdown-item:hover {
+        background-color: rgba(0, 163, 255, 0.2);
+        color: #00a3ff;
+    }
+
+    .badge.bg-dark {
+        background-color: rgba(0, 163, 255, 0.3) !important;
+        color: white !important;
+    }
+
+    /* Прелоадер */
+    .preloader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #000;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.5s ease;
+    }
+
+    .loader {
+        width: 50px;
+        height: 50px;
+        border: 3px solid rgba(255,255,255,0.1);
+        border-top-color: #00a3ff;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+    </style>
+</head>
+
+<body>
+
+    <!-- SVG спрайт -->
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <symbol id="arrow-right" viewBox="0 0 24 24">
+            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+        </symbol>
+        <symbol id="icon-play" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="11" fill="rgba(0,0,0,0.35)" />
+            <path fill="currentColor" d="M10 8.64v6.72a.6.6 0 0 0 .9.52l5.6-3.36a.6.6 0 0 0 0-1.04l-5.6-3.36a.6.6 0 0 0-.9.52Z" />
+        </symbol>
+        <symbol id="github" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5c.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34c-.46-1.16-1.11-1.47-1.11-1.47c-.91-.62.07-.6.07-.6c1 .07 1.53 1.03 1.53 1.03c.87 1.52 2.34 1.07 2.91.83c.09-.65.35-1.09.63-1.34c-2.22-.25-4.55-1.11-4.55-4.92c0-1.11.38-2 1.03-2.71c-.1-.25-.45-1.29.1-2.64c0 0 .84-.27 2.75 1.02c.79-.22 1.65-.33 2.5-.33c.85 0 1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02c.55 1.35.2 2.39.1 2.64c.65.71 1.03 1.6 1.03 2.71c0 3.82-2.34 4.66-4.57 4.91c.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2Z" />
+        </symbol>
+    </svg>
+
+    <div class="preloader">
+        <div class="loader"></div>
+    </div>
+<script>
+    // Функция для установки активной ссылки в навигации
+    function setActiveNavLink() {
+        const currentPath = window.location.pathname.split('/').pop() || 'automatics.html';
+        const navLinks = document.querySelectorAll('#header-nav .nav-link');
+
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            const href = link.getAttribute('href') || '';
+            if (href.split('/').pop() === currentPath) {
+                link.classList.add('active');
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        AOS.init({
+            duration: 1500,
+            once: true,
+            offset: 100
+        });
+
+        fetch('header.html', { cache: 'no-store' })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('header-placeholder').innerHTML = data;
+                setTimeout(setActiveNavLink, 100);
+            })
+            .catch(error => console.error('Error loading header:', error));
+
+        fetch('footer.html', { cache: 'no-store' })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('footer-placeholder').innerHTML = data;
+                setTimeout(function() {
+                    AOS.refresh();
+                }, 200);
+            })
+            .catch(error => console.error('Error loading footer:', error));
+    });
+</script>
+    <!-- Навигация -->
+    <div id="header-placeholder"></div>
+
+    <!-- Основной контент -->
+    <div class="container-fluid padding-side position-relative" style="margin-top: 52px;">
+        <div class="border border-light border-opacity-25 rounded-5"
+            style="background-color: rgba(255, 255, 255, 0.06); box-shadow: 0px 12px 90px rgba(0, 163, 255, 0.2);">
+
+            <section id="automatics-hero" class="padding-medium">
+                <div class="container">
+                    <div class="row justify-content-center text-center mb-5" data-aos="fade-up" data-aos-duration="1500">
+                        <div class="col-lg-8 d-flex flex-column align-items-center">
+                            <h3 class="display-3 mb-4">Automatics_v18<span class="text-primary">.</span></h3>
+                            <p class="lead">Automatics_v18 — мой скрипт для автоматической записи лекций в вузе. Он сам захватывает экран по расписанию и заливает запись на YouTube — здесь собраны все актуальные лекции. Выбери предмет и смотри.</p>
+                            <a href="https://github.com/kondrashov-m/automatics-v18" target="_blank" rel="noopener noreferrer" class="button mt-2" data-aos="fade-up" data-aos-duration="1600">
+                                <svg class="no-animate"><use xlink:href="#github"></use></svg>
+                                <span>Исходный код на GitHub</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Фильтр по предметам -->
+                    <div class="row justify-content-center mb-4" data-aos="fade-up" data-aos-duration="1500">
+                        <div class="col-lg-10">
+                            <div class="subject-filter" id="subjectFilter"></div>
+                        </div>
+                    </div>
+
+                    <!-- Карточки лекций -->
+                    <div class="row g-4 justify-content-center" id="lecturesGrid" data-aos="fade-up" data-aos-duration="1500">
+                        <!-- рендерится из LECTURES в скрипте внизу -->
+                    </div>
+
+                    <div class="row justify-content-center mt-5 text-center" data-aos="fade-up" data-aos-duration="1500">
+                        <div class="col-lg-8 d-flex flex-wrap align-items-center justify-content-center gap-3">
+                            <span class="updated-badge" id="updatedBadge">Обновлено: —</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Футер -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Стрелка вверх -->
+    <button id="scrollToTop" class="scroll-to-top" aria-label="Вернуться наверх">↑</button>
+
+    <!-- Scripts -->
+    <script src="js/jquery-1.11.0.min.js"></script>
+
+    <!-- AOS script -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <!-- Bootstrap script -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+        crossorigin="anonymous"></script>
+
+    <!-- Swiper script -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+
+    <script src="js/plugins.js"></script>
+    <script src="js/script.js"></script>
+
+    <script>
+    // ===== Лекции =====
+    // Данные лекций живут в automatics/lectures.json — добавляй туда новые записи
+    // вида { subject, title, date: "ГГГГ-ММ-ДД", youtube: "ссылка на видео" }.
+    let LECTURES = [];
+    let currentSubject = 'Все';
+
+    const MONTHS_RU = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+
+    function formatLectureDate(iso) {
+        const parts = (iso || '').split('-');
+        if (parts.length !== 3) return iso || '';
+        const [y, m, d] = parts;
+        const monthName = MONTHS_RU[Number(m) - 1];
+        if (!monthName) return iso;
+        return Number(d) + ' ' + monthName + ' ' + y;
+    }
+
+    function getYouTubeId(url) {
+        const m = (url || '').match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([A-Za-z0-9_-]{11})/);
+        return m ? m[1] : null;
+    }
+
+    function renderSubjectFilter() {
+        const filter = document.getElementById('subjectFilter');
+        if (!filter) return;
+
+        if (!LECTURES.length) {
+            filter.innerHTML = '';
+            filter.style.display = 'none';
+            return;
+        }
+        filter.style.display = '';
+
+        const subjects = Array.from(new Set(LECTURES.map(function(l) { return l.subject; }))).sort(function(a, b) {
+            return a.localeCompare(b, 'ru');
+        });
+        const options = ['Все'].concat(subjects);
+
+        filter.innerHTML = options.map(function(subject) {
+            const active = subject === currentSubject ? ' active' : '';
+            return '<button type="button" class="subject-pill' + active + '" data-subject="' + subject + '">' + subject + '</button>';
+        }).join('');
+
+        filter.querySelectorAll('.subject-pill').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                currentSubject = this.dataset.subject;
+                renderSubjectFilter();
+                renderLectures();
+            });
+        });
+    }
+
+    function renderLectures() {
+        const grid = document.getElementById('lecturesGrid');
+        if (!grid) return;
+
+        if (!LECTURES.length) {
+            grid.innerHTML = '<div class="col-12">' +
+                    '<div class="lectures-empty-state">' +
+                        '<div class="lectures-empty-icon">🎬</div>' +
+                        '<h5 class="display-6">Упс! На данный момент лекций нет</h5>' +
+                        '<p class="text-white-50 mb-0">Как только появится первая лекция — она сразу окажется здесь.</p>' +
+                    '</div>' +
+               '</div>';
+            return;
+        }
+
+        const filtered = LECTURES
+            .filter(function(l) { return currentSubject === 'Все' || l.subject === currentSubject; })
+            .sort(function(a, b) { return b.date.localeCompare(a.date); });
+
+        if (!filtered.length) {
+            grid.innerHTML = '<div class="col-12 lectures-empty">Лекций по этому предмету пока нет — загляни позже.</div>';
+            return;
+        }
+
+        grid.innerHTML = filtered.map(function(l) {
+            const videoId = getYouTubeId(l.youtube);
+            const thumb = videoId ? 'https://i.ytimg.com/vi/' + videoId + '/hqdefault.jpg' : '';
+            return '<div class="col-lg-4 col-md-6">' +
+                        '<a href="' + l.youtube + '" target="_blank" rel="noopener noreferrer" class="lecture-card">' +
+                            '<div class="lecture-thumb">' +
+                                (thumb ? '<img src="' + thumb + '" alt="' + l.title + '" loading="lazy">' : '') +
+                                '<span class="lecture-play"><svg><use xlink:href="#icon-play"></use></svg></span>' +
+                            '</div>' +
+                            '<div class="lecture-body">' +
+                                '<div class="lecture-top">' +
+                                    '<span class="subject-badge">' + l.subject + '</span>' +
+                                    '<span class="lecture-date">' + formatLectureDate(l.date) + '</span>' +
+                                '</div>' +
+                                '<h5 class="lecture-title">' + l.title + '</h5>' +
+                            '</div>' +
+                        '</a>' +
+                   '</div>';
+        }).join('');
+    }
+
+    fetch('automatics/lectures.json', { cache: 'no-store' })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            LECTURES = data.lectures || [];
+            renderSubjectFilter();
+            renderLectures();
+            const updatedBadge = document.getElementById('updatedBadge');
+            if (updatedBadge && data.updated) {
+                updatedBadge.textContent = 'Обновлено: ' + data.updated;
+            }
+        })
+        .catch(function(err) {
+            console.error('Не удалось загрузить automatics/lectures.json', err);
+            const grid = document.getElementById('lecturesGrid');
+            if (grid) grid.innerHTML = '<div class="col-12 lectures-empty">Не удалось загрузить список лекций.</div>';
+        });
+
+    // Эффект волны для кнопок
+    document.querySelectorAll('.button').forEach(btn => {
+        btn.addEventListener('mousemove', function(e) {
+            const rect = this.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            this.style.setProperty('--x', x + 'px');
+            this.style.setProperty('--y', y + 'px');
+        });
+
+        btn.addEventListener('mouseleave', function() {
+            this.style.setProperty('--size', '0');
+        });
+    });
+
+    // Стрелка вверх
+    const scrollToTopBtn = document.getElementById('scrollToTop');
+
+    window.addEventListener('scroll', function() {
+        if (window.pageYOffset > 300) {
+            scrollToTopBtn.classList.add('active');
+        } else {
+            scrollToTopBtn.classList.remove('active');
+        }
+    });
+
+    scrollToTopBtn.addEventListener('click', function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+
+    // Скрыть прелоадер после загрузки
+    window.addEventListener('load', function() {
+        document.querySelector('.preloader').style.opacity = '0';
+        setTimeout(() => {
+            document.querySelector('.preloader').style.display = 'none';
+        }, 500);
+    });
+    </script>
+</body>
+</html>
