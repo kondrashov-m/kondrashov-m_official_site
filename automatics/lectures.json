@@ -1,4 +1,11 @@
 {
   "updated": "05.09.2026",
-  "lectures": []
+  "lectures": [
+    {
+      "subject": "BackEnd-разработка",
+      "title": "Лекция от 05.09.2026",
+      "date": "2026-09-05",
+      "youtube": "https://youtu.be/kj3OGntE4cY"
+    }
+  ]
 }
