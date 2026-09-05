@@ -1,5 +1,5 @@
 {
-  "updated": "31.08.2026",
+  "updated": "05.09.2026",
   "protocols": [
     {
       "name": "SSH (DE)",
@@ -38,44 +38,6 @@
       ],
       "details": "<p>1. Скачайте и установите приложение <a href=\"https://play.google.com/store/apps/details?id=com.evozi.injector&pli=1\" target=\"_blank\" rel=\"noopener\">HTTP Injector</a> из Google Play.</p><p>2. Скачайте конфигурационный файл по кнопке выше.</p><p>3. Откройте конфигурационный файл android-httpinjector.ehi через HTTP Injector.</p><p>4. Нажмите кнопку «Запуск»</p><p>5. Переключитесь на вкладку «Журнал».</p><p>Вы должны увидеть надпись «[VPN] Подлючено» — после этого интернет будет идти через конфиг.</p>",
       "note": "Этот конфиг работает только с HTTP Injector на Android. Не гарантируется работа на всех сетях и устройствах. "
-    },
-    {
-      "name": "SSH (RU)",
-      "app": "HTTP Injector",
-      "platform": "Android",
-      "type": "file",
-      "file": "android-httpinjector.ehi",
-      "link": "",
-      "desc": "Конфиг на базе SSL/TLS с проксированием через SSH. Конфигурация для безлимитного интернета",
-      "status": "maintenance",
-      "steps": [
-        {
-          "icon": "download",
-          "title": "Скачайте конфиг",
-          "text": "Нажмите кнопку ниже, чтобы скачать конфигурационный файл.",
-          "buttonLabel": "Скачать конфиг",
-          "action": "download",
-          "url": ""
-        },
-        {
-          "icon": "import",
-          "title": "Подключитесь",
-          "text": "Импортируйте конфиг в HTTP injector и нажмите «Запуск».",
-          "buttonLabel": "Подробная инструкция",
-          "action": "details",
-          "url": ""
-        },
-        {
-          "icon": "shield",
-          "title": "Пользуйтесь",
-          "text": "После подключения интернет должен работать стабильно.",
-          "buttonLabel": "Нужна помощь?",
-          "action": "link",
-          "url": "contacts.html"
-        }
-      ],
-      "details": "<p>1. Скачайте и установите приложение <a href=\"https://play.google.com/store/apps/details?id=com.evozi.injector&pli=1\" target=\"_blank\" rel=\"noopener\">HTTP Injector</a> из Google Play.</p><p>2. Скачайте конфигурационный файл по кнопке выше.</p><p>3. Откройте конфигурационный файл android-httpinjector.ehi через HTTP Injector.</p><p>4. Нажмите кнопку «Запуск»</p><p>5. Переключитесь на вкладку «Журнал».</p><p>Вы должны увидеть надпись «[VPN] Подлючено» — после этого интернет будет идти через конфиг.</p>",
-      "note": "Этот конфиг работает только с HTTP Injector на Android. Не гарантируется работа на всех сетях и устройствах.  "
     },
     {
       "name": "VLESS",

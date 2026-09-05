@@ -1,0 +1,18 @@
+{
+  "projects": [
+    {
+      "url": "https://pagesmi-course-project-kzoc.vercel.app",
+      "image": "images/project1.jpg",
+      "label": "PAGESMI",
+      "title": "Конструктор сайтов на React",
+      "description": "Современный конструктор лендингов с drag-and-drop, адаптивностью и экспортом чистого HTML кода."
+    },
+    {
+      "url": "https://github.com/kondrashov-m/automatics-v18",
+      "image": "images/project2.jpg",
+      "label": "Automatics_v18",
+      "title": "Автоматическая запись онлайн-конференций",
+      "description": "Инструмент для автоматизированного захвата экрана по времени, с автоматическим поиском ссылок."
+    }
+  ]
+}

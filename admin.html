@@ -3,13 +3,39 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Админка сайта — Берлога и Automatics</title>
+<title>Админка сайта — Берлога, Automatics и Проекты</title>
 <meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="favicon.ico">
+
+<!-- Google fonts — те же, что на остальном сайте -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
+    rel="stylesheet">
+
 <style>
     * { box-sizing: border-box; }
+
+    /* Цвет акцента задаётся переменными и переопределяется внутри каждой
+       вкладки — зелёный для Берлоги, синий для Automatics — теми же
+       оттенками, что на самих страницах сайта. */
+    :root {
+        --accent: #00e676;
+        --accent-rgb: 0, 230, 118;
+        --accent-2: #1dffa0;
+        --accent-contrast: #06210f;
+    }
+    #paneAutomatics, #paneProjects {
+        --accent: #00a3ff;
+        --accent-rgb: 0, 163, 255;
+        --accent-2: #7b5cff;
+        --accent-contrast: #ffffff;
+    }
+
     body {
         margin: 0;
-        font-family: 'Segoe UI', Arial, sans-serif;
+        font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
         background: #05070a;
         color: rgba(255, 255, 255, 0.9);
         padding: 2rem 1.5rem 6rem;
@@ -24,8 +50,10 @@
         text-align: center;
     }
     h1 {
-        font-size: 1.6rem;
-        margin: 0 0 0.25rem;
+        font-family: 'Bebas Neue', sans-serif;
+        letter-spacing: 0.015em;
+        font-size: 2.2rem;
+        margin: 0 0 0.35rem;
     }
     .sub {
         color: rgba(255, 255, 255, 0.5);
@@ -44,8 +72,8 @@
         font-family: inherit;
         font-size: 0.9rem;
         font-weight: 600;
-        padding: 0.7rem 1.5rem;
-        border-radius: 12px;
+        padding: 0.7rem 1.6rem;
+        border-radius: 50px;
         border: 1px solid rgba(255, 255, 255, 0.15);
         background: rgba(255, 255, 255, 0.04);
         color: rgba(255, 255, 255, 0.65);
@@ -61,13 +89,18 @@
         background: rgba(0, 230, 118, 0.15);
         color: #00e676;
     }
+    #tabBtnAutomatics.active, #tabBtnProjects.active {
+        border-color: rgba(0, 163, 255, 0.5);
+        background: rgba(0, 163, 255, 0.15);
+        color: #00a3ff;
+    }
     .tab-pane[hidden] { display: none; }
 
     .warning {
         border: 1px solid rgba(255, 193, 7, 0.4);
         background: rgba(255, 193, 7, 0.08);
         color: #ffc107;
-        border-radius: 12px;
+        border-radius: 20px;
         padding: 1rem 1.25rem;
         font-size: 0.85rem;
         line-height: 1.6;
@@ -86,24 +119,24 @@
         font-family: inherit;
         font-size: 0.85rem;
         font-weight: 600;
-        padding: 0.6rem 1.1rem;
-        border-radius: 10px;
-        border: 1px solid rgba(0, 230, 118, 0.35);
-        background: rgba(0, 230, 118, 0.1);
-        color: #00e676;
+        padding: 0.6rem 1.2rem;
+        border-radius: 50px;
+        border: 1px solid rgba(var(--accent-rgb), 0.35);
+        background: rgba(var(--accent-rgb), 0.1);
+        color: var(--accent);
         cursor: pointer;
         transition: all 0.2s ease;
     }
     button:hover, .file-btn:hover {
-        background: rgba(0, 230, 118, 0.25);
+        background: rgba(var(--accent-rgb), 0.25);
     }
     button.primary {
-        background: #00e676;
-        color: #06210f;
-        border-color: #00e676;
+        background: var(--accent);
+        color: var(--accent-contrast);
+        border-color: var(--accent);
     }
     button.primary:hover {
-        background: #1dffa0;
+        background: var(--accent-2);
     }
     button.danger {
         border-color: rgba(255, 82, 82, 0.4);
@@ -131,7 +164,7 @@
         color: rgba(255, 255, 255, 0.5);
         min-height: 1.2em;
     }
-    .status.ok { color: #00e676; }
+    .status.ok { color: var(--accent); }
     .status.err { color: #ff5252; }
     .fallback-input { display: none; }
 
@@ -139,7 +172,7 @@
         max-width: 900px;
         border: 1px solid rgba(255, 255, 255, 0.1);
         background: rgba(255, 255, 255, 0.04);
-        border-radius: 16px;
+        border-radius: 20px;
         padding: 1.25rem;
         margin-bottom: 1.25rem;
     }
@@ -159,7 +192,7 @@
     .empty-state {
         max-width: 900px;
         border: 1px dashed rgba(255, 255, 255, 0.15);
-        border-radius: 14px;
+        border-radius: 20px;
         padding: 2.5rem;
         text-align: center;
         color: rgba(255, 255, 255, 0.5);
@@ -169,8 +202,12 @@
     .p-card {
         border: 1px solid rgba(255, 255, 255, 0.1);
         background: rgba(255, 255, 255, 0.04);
-        border-radius: 16px;
+        border-radius: 20px;
         overflow: hidden;
+        transition: border-color 0.2s ease;
+    }
+    .p-card:hover {
+        border-color: rgba(var(--accent-rgb), 0.3);
     }
     .p-card-head {
         display: flex;
@@ -204,7 +241,7 @@
         border-radius: 50%;
         flex-shrink: 0;
     }
-    .status-dot.ok { background: #00e676; }
+    .status-dot.ok { background: var(--accent); }
     .status-dot.maintenance { background: #ffc107; }
     .date-badge {
         flex-shrink: 0;
@@ -212,9 +249,9 @@
         font-weight: 600;
         padding: 0.2rem 0.6rem;
         border-radius: 50px;
-        border: 1px solid rgba(0, 230, 118, 0.35);
-        color: #00e676;
-        background: rgba(0, 230, 118, 0.1);
+        border: 1px solid rgba(var(--accent-rgb), 0.35);
+        color: var(--accent);
+        background: rgba(var(--accent-rgb), 0.1);
         white-space: nowrap;
     }
     .p-card-head .chevron {
@@ -256,7 +293,7 @@
     }
     input[type="text"]:focus, select:focus, textarea:focus {
         outline: none;
-        border-color: rgba(0, 230, 118, 0.5);
+        border-color: rgba(var(--accent-rgb), 0.5);
     }
     textarea {
         resize: vertical;
@@ -329,7 +366,7 @@
 <div class="page">
 
 <h1>Админка сайта</h1>
-<p class="sub">Правка данных для оверлеев на berloga.html и automatics.html — без правки кода.</p>
+<p class="sub">Правка данных для berloga.html, automatics.html и проектов на главной — без правки кода.</p>
 
 <div class="warning">
     ⚠️ Эта страница работает только локально, у тебя на компьютере. При запуске через локальный сервер
@@ -338,13 +375,15 @@
     указать сам файл и запомнит разрешение). Если браузер не поддерживает прямую запись — используй
     «Скачать JSON» и замени файл вручную.<br><br>
     Сайт лежит на GitHub Pages статически, поэтому эта страница ничего не меняет на живом сайте сама по себе.
-    После сохранения — закоммить и запушь изменённый файл (<code>berloga/protocols.json</code> или
-    <code>automatics/lectures.json</code>) в репозиторий, только тогда изменения появятся на сайте.
+    После сохранения — закоммить и запушь изменённый файл (<code>berloga/protocols.json</code>,
+    <code>automatics/lectures.json</code> или <code>projects/projects.json</code>) в репозиторий, только тогда
+    изменения появятся на сайте.
 </div>
 
 <div class="tabs">
     <button type="button" class="tab-btn active" id="tabBtnBerloga">🟢 Берлога</button>
     <button type="button" class="tab-btn" id="tabBtnAutomatics">🔵 Automatics</button>
+    <button type="button" class="tab-btn" id="tabBtnProjects">🗂️ Проекты</button>
 </div>
 
 <!-- ===== Вкладка: Берлога (протоколы) ===== -->
@@ -392,6 +431,25 @@
     <div class="items-list" id="lecturesList"></div>
     <div class="empty-state" id="emptyStateLec">Загружаю automatics/lectures.json автоматически…</div>
     <button class="add-item-btn" id="addLectureBtn" style="display:none;">+ Добавить лекцию</button>
+
+</div>
+
+<!-- ===== Вкладка: Проекты (карточки на главной) ===== -->
+<div class="tab-pane" id="paneProjects" hidden>
+
+    <div class="toolbar">
+        <button class="primary" id="openBtnProj">📂 Открыть projects.json</button>
+        <button class="primary" id="grantBtnProj" style="display:none;">🔓 Разрешить прямую запись</button>
+        <label class="file-btn" for="fallbackInputProj" id="fallbackLabelProj" style="display:none;">📄 Загрузить файл (без прямой записи)</label>
+        <input type="file" class="fallback-input" id="fallbackInputProj" accept="application/json,.json">
+        <button id="overwriteBtnProj" disabled>🔁 Перезаписать файл</button>
+        <button class="ghost" id="downloadBtnProj" disabled>⬇️ Скачать JSON</button>
+        <span class="status" id="statusProj"></span>
+    </div>
+
+    <div class="items-list" id="projectsList"></div>
+    <div class="empty-state" id="emptyStateProj">Загружаю projects/projects.json автоматически…</div>
+    <button class="add-item-btn" id="addProjectBtn" style="display:none;">+ Добавить проект</button>
 
 </div>
 
@@ -640,11 +698,14 @@
     function activateTab(name) {
         document.getElementById('paneBerloga').hidden = name !== 'berloga';
         document.getElementById('paneAutomatics').hidden = name !== 'automatics';
+        document.getElementById('paneProjects').hidden = name !== 'projects';
         document.getElementById('tabBtnBerloga').classList.toggle('active', name === 'berloga');
         document.getElementById('tabBtnAutomatics').classList.toggle('active', name === 'automatics');
+        document.getElementById('tabBtnProjects').classList.toggle('active', name === 'projects');
     }
     document.getElementById('tabBtnBerloga').addEventListener('click', function() { activateTab('berloga'); });
     document.getElementById('tabBtnAutomatics').addEventListener('click', function() { activateTab('automatics'); });
+    document.getElementById('tabBtnProjects').addEventListener('click', function() { activateTab('projects'); });
 </script>
 
 <script>
@@ -922,7 +983,8 @@
     // ===== Вкладка «Automatics»: лекции =====
     let lectures = [];
     let lecturesLoaded = false;
-
+    // Ручной выбор иконки по предмету — { "Название предмета": "icon-subj-..." }.
+    // Список иконок должен совпадать с id символов в SVG-спрайте automatics.html.
     function blankLecture() {
         return { subject: '', title: '', date: '', youtube: '' };
     }
@@ -1069,6 +1131,149 @@
         collect: collectLecturesData,
         onEmptyState: function() {
             document.getElementById('emptyStateLec').textContent = 'Файл ещё не загружен. Нажми «Открыть lectures.json» выше.';
+        }
+    });
+</script>
+
+<script>
+    // ===== Вкладка «Проекты»: карточки в разделе "Проекты" на главной =====
+    let projects = [];
+    let projectsLoaded = false;
+
+    function blankProject() {
+        return { url: '', image: '', label: '', title: '', description: '' };
+    }
+
+    function loadProjectsData(data) {
+        projects = (data && data.projects) || [];
+        projectsLoaded = true;
+        document.getElementById('overwriteBtnProj').disabled = false;
+        document.getElementById('downloadBtnProj').disabled = false;
+        document.getElementById('addProjectBtn').style.display = 'block';
+        renderProjectsList();
+    }
+
+    function collectProjectsData() {
+        return { projects: projects };
+    }
+
+    function renderProjectsList() {
+        const list = document.getElementById('projectsList');
+        const empty = document.getElementById('emptyStateProj');
+        if (!projectsLoaded) {
+            list.innerHTML = '';
+            empty.style.display = 'block';
+            return;
+        }
+        empty.style.display = projects.length ? 'none' : 'block';
+        list.innerHTML = '';
+        projects.forEach(function(p, i) {
+            list.appendChild(renderProjectCard(p, i));
+        });
+    }
+
+    function renderProjectCard(p, idx) {
+        const card = document.createElement('div');
+        card.className = 'p-card';
+
+        const head = document.createElement('div');
+        head.className = 'p-card-head';
+        head.addEventListener('click', function() {
+            card.classList.toggle('open');
+        });
+
+        const title = document.createElement('div');
+        title.className = 'p-card-title';
+        const nameSpan = document.createElement('span');
+        nameSpan.className = 'name-text';
+        nameSpan.textContent = p.title || '(без названия)';
+        title.appendChild(nameSpan);
+        head.appendChild(title);
+
+        const chevron = document.createElement('span');
+        chevron.className = 'chevron';
+        chevron.textContent = '▾';
+        head.appendChild(chevron);
+
+        card.appendChild(head);
+
+        const body = document.createElement('div');
+        body.className = 'p-card-body';
+
+        function refreshTitle() {
+            nameSpan.textContent = p.title || '(без названия)';
+        }
+
+        const row1 = document.createElement('div');
+        row1.className = 'field-row';
+        row1.appendChild(textField('Категория (метка над заголовком)', p.label, function(v) { p.label = v; }, false, 'PAGESMI'));
+        row1.appendChild(textField('Заголовок карточки', p.title, function(v) { p.title = v; refreshTitle(); }, false, 'Конструктор сайтов на React'));
+        body.appendChild(row1);
+
+        const row2 = document.createElement('div');
+        row2.className = 'field-row';
+        row2.appendChild(textField('Ссылка на проект', p.url, function(v) { p.url = v; }, false, 'https://...'));
+        row2.appendChild(textField('Путь к картинке', p.image, function(v) { p.image = v; }, false, 'images/project1.jpg'));
+        body.appendChild(row2);
+
+        body.appendChild(textField('Описание', p.description, function(v) { p.description = v; }, true));
+
+        const actions = document.createElement('div');
+        actions.className = 'card-actions';
+        const left = document.createElement('div');
+        left.className = 'left';
+
+        const dupBtn = document.createElement('button');
+        dupBtn.type = 'button';
+        dupBtn.textContent = 'Дублировать';
+        dupBtn.addEventListener('click', function() {
+            const copy = JSON.parse(JSON.stringify(p));
+            projects.splice(idx + 1, 0, copy);
+            renderProjectsList();
+        });
+        left.appendChild(dupBtn);
+        actions.appendChild(left);
+
+        const delBtn = document.createElement('button');
+        delBtn.className = 'danger';
+        delBtn.type = 'button';
+        delBtn.textContent = 'Удалить проект';
+        delBtn.addEventListener('click', function() {
+            if (confirm('Удалить проект «' + (p.title || '(без названия)') + '»?')) {
+                projects.splice(idx, 1);
+                renderProjectsList();
+            }
+        });
+        actions.appendChild(delBtn);
+
+        body.appendChild(actions);
+        card.appendChild(body);
+
+        if (idx === 0) card.classList.add('open');
+
+        return card;
+    }
+
+    document.getElementById('addProjectBtn').addEventListener('click', function() {
+        projects.push(blankProject());
+        renderProjectsList();
+        const cards = document.querySelectorAll('#projectsList .p-card');
+        cards.forEach(function(c) { c.classList.remove('open'); });
+        if (cards.length) cards[cards.length - 1].classList.add('open');
+    });
+
+    makeFileManager({
+        idbKey: 'projectsFileHandle',
+        fetchUrl: 'projects/projects.json',
+        downloadName: 'projects.json',
+        els: {
+            openBtn: 'openBtnProj', grantBtn: 'grantBtnProj', fallbackInput: 'fallbackInputProj',
+            fallbackLabel: 'fallbackLabelProj', overwriteBtn: 'overwriteBtnProj', downloadBtn: 'downloadBtnProj', status: 'statusProj'
+        },
+        onData: loadProjectsData,
+        collect: collectProjectsData,
+        onEmptyState: function() {
+            document.getElementById('emptyStateProj').textContent = 'Файл ещё не загружен. Нажми «Открыть projects.json» выше.';
         }
     });
 </script>

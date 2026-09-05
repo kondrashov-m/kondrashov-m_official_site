@@ -4,7 +4,7 @@
 
 
 <head>
-    
+
     <link rel="icon" href="favicon.ico">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,7 +29,7 @@
 
     <!-- Link Swiper's CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
-    
+
     <!--Bootstrap ================================================== -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
@@ -46,200 +46,645 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
         rel="stylesheet">
-    
+
     <style>
-    .social-links a {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 50px;
-        height: 50px;
-        background: rgba(255, 255, 255, 0.06);
-        border-radius: 50%;
-        margin-right: 10px;
-        transition: all 0.3s ease;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    .experience-block {
-        position: relative;
-        cursor: pointer;
+    /* ============================================================
+       kondrashov-m — главная страница, свежий дизайн
+       ============================================================ */
+
+    #page-index {
+        font-family: 'Poppins', sans-serif;
+        font-style: normal;
+        overflow-wrap: anywhere;
     }
 
-    .experience-block .expandable-trigger {
-        position: relative;
-        cursor: pointer;
-        transition: color 0.3s ease;
+    #page-index .row > * { min-width: 0; }
+
+    /* Такой же .padding-side, как на остальных страницах сайта (там он
+       переопределён локально с 10rem из styles.css на проценты) — иначе
+       хедер на главной ощутимо смещается относительно других страниц. */
+    #page-index .padding-side {
+        padding-left: 5%;
+        padding-right: 5%;
     }
 
-    .experience-block .expandable-trigger:hover {
+    @media (max-width: 768px) {
+        #page-index .padding-side {
+            padding-left: 3%;
+            padding-right: 3%;
+        }
+    }
+
+    /* Хедер и футер — общие для всех страниц (header.html/footer.html),
+       поэтому их шрифт/начертание не переопределяем — иначе на главной
+       они визуально расходятся с остальным сайтом. */
+    #page-index #header-placeholder,
+    #page-index #header-placeholder *,
+    #page-index #footer-placeholder,
+    #page-index #footer-placeholder * {
+        font-family: var(--body-font);
+        font-style: italic;
+    }
+
+    #page-index h1, #page-index h2, #page-index h3, #page-index h4, #page-index h5, #page-index h6,
+    #page-index .display-1, #page-index .display-2, #page-index .display-3,
+    #page-index .display-4, #page-index .display-5, #page-index .display-6 {
+        font-family: 'Bebas Neue', sans-serif;
+        letter-spacing: 0.015em;
+    }
+
+    #page-index .kx-grad-text {
+        background: linear-gradient(120deg, #00a3ff, #7b5cff 60%, #00e0c6);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    #page-index .text-primary {
         color: #00a3ff !important;
     }
 
-    .experience-block .experience-content {
+    /* Кнопки */
+    #page-index .button {
         position: relative;
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.6s ease-out;
-    }
-
-    .experience-block.active .experience-content {
-        max-height: 500px;
-    }
-    /* Анимация для мобильной кнопки и индикатора */
-    /* Стрелки убраны по запросу — используем только .mobile-expand-btn */
-
-    .mobile-expand-btn {
-        display: inline-block;
-        width: 34px;
-        height: 34px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, rgba(0,163,255,0.18), rgba(255,255,255,0.06));
-        border: 1px solid rgba(255,255,255,0.06);
-        box-shadow: 0 6px 18px rgba(0,163,255,0.08) inset;
-        vertical-align: middle;
-        margin-left: 8px;
-        position: relative;
-        transition: transform 0.28s ease, box-shadow 0.28s ease;
-    }
-
-    .mobile-expand-btn::before {
-        content: "";
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        width: 8px;
-        height: 8px;
-        background: #00a3ff;
-        border-radius: 50%;
-        box-shadow: -10px 0 0 0 #00a3ff, 10px 0 0 0 #00a3ff;
-        transition: transform 0.28s ease, box-shadow 0.28s ease, opacity 0.28s ease;
-        opacity: 0.95;
-    }
-
-    /* Пульсация */
-    @keyframes expandPulse {
-        0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0,163,255,0.18); }
-        60% { transform: scale(1.06); box-shadow: 0 0 0 10px rgba(0,163,255,0); }
-        100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0,163,255,0); }
-    }
-
-    .mobile-expand-btn.pulse {
-        animation: expandPulse 1.8s infinite cubic-bezier(.2,.8,.2,1);
-    }
-
-    /* Состояние "открыто" */
-    .mobile-expand-btn.open {
-        transform: rotate(180deg) scale(1.02);
-    }
-
-    /* На мобильных — чуть более заметная пульсация */
-    @media (max-width: 768px) {
-        .mobile-expand-btn { width: 30px; height: 30px; }
-        .mobile-expand-btn::before { width: 6px; height: 6px; box-shadow: -8px 0 0 0 #00a3ff, 8px 0 0 0 #00a3ff; }
-        .mobile-expand-btn.pulse { animation-duration: 1.6s; }
-    }
-
-    /* Стили для кнопок как в примере 404 - ПОЛНАЯ КОПИЯ */
-    .back-button {
-        position: relative;
-        padding-right: 2.5rem !important;
-        transition: all 0.3s ease;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-    
-    .back-button:hover {
-        transform: translateX(-5px);
-    }
-    
-    .back-button .arrow-left {
-        width: 20px;
-        height: 20px;
-        transition: transform 0.3s ease;
-    }
-    
-    .back-button:hover .arrow-left {
-        transform: translateX(-3px);
-    }
-
-    .button {
-        background: linear-gradient(135deg, rgba(0, 163, 255, 0.2), rgba(255, 255, 255, 0.05));
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        color: white;
-        padding: 0.75rem 1.5rem;
-        font-weight: 500;
-        transition: all 0.3s ease;
+        background: linear-gradient(135deg, #00a3ff, #7b5cff);
+        border: none;
+        color: #fff;
+        padding: 0.9rem 1.9rem;
+        font-weight: 600;
+        font-family: 'Poppins', sans-serif;
+        transition: all 0.35s ease;
         border-radius: 50px;
         text-decoration: none;
         display: inline-flex;
         align-items: center;
         justify-content: center;
+        gap: 10px;
+        overflow: hidden;
+        cursor: pointer;
+        box-shadow: 0 10px 30px rgba(0, 163, 255, 0.25);
+        /* Без этого при клике/тапе браузер на мгновение перекрывает кнопку
+           своей стандартной тёмной подсветкой нажатия ("вспышка чёрным") */
+        -webkit-tap-highlight-color: transparent;
     }
 
-    .button:hover {
-        background: linear-gradient(135deg, rgba(0, 163, 255, 0.3), rgba(255, 255, 255, 0.1));
+    #page-index .button:hover,
+    #page-index .button:focus,
+    #page-index .button:active {
+        color: #fff;
+    }
+
+    #page-index .button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 14px 34px rgba(123, 92, 255, 0.35);
+    }
+
+    #page-index .button:focus-visible {
+        outline: 2px solid rgba(0, 163, 255, 0.6);
+        outline-offset: 3px;
+    }
+
+    #page-index .button span { position: relative; pointer-events: none; }
+
+    #page-index .button::before {
+        --size: 0;
+        content: '';
+        position: absolute;
+        left: var(--x);
+        top: var(--y);
+        width: var(--size);
+        height: var(--size);
+        background: radial-gradient(circle closest-side, rgba(255, 255, 255, 0.35), transparent);
+        transform: translate(-50%, -50%);
+        transition: width .35s ease, height .35s ease;
+        border-radius: 50%;
+        pointer-events: none;
+    }
+
+    #page-index .button:hover::before { --size: 420px; }
+
+    #page-index .button.kx-btn-ghost {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        box-shadow: none;
+    }
+
+    #page-index .button.kx-btn-ghost:hover {
         border-color: rgba(0, 163, 255, 0.5);
-        color: white;
+        box-shadow: 0 8px 24px rgba(0, 163, 255, 0.15);
     }
 
-    .arrow-right {
-        transition: transform 0.3s ease;
-    }
+    #page-index .arrow-right { transition: transform 0.3s ease; }
+    #page-index .button:hover .arrow-right { transform: translateX(4px); }
 
-    .button:hover .arrow-right {
-        transform: translateX(3px);
-    }
-
-    .text-primary {
-        color: #00a3ff !important;
-    }
-
-
-
-        /* Прелоадер - затемненный фон на весь экран */
-    .preloader {
-        position: fixed;      /* Фиксированное позиционирование поверх всего */
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: #000;     /* Черный фон */
-        z-index: 9999;        /* Очень высокий z-index, чтобы быть поверх всего */
+    /* Прелоадер */
+    #page-index .preloader {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: #06070a;
+        z-index: 9999;
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: opacity 0.5s ease;  /* Плавное исчезновение */
+        transition: opacity 0.5s ease;
     }
 
-    /* Сам спиннер (вращающийся круг) */
-    .loader {
-        width: 50px;
-        height: 50px;
-        border: 3px solid rgba(255,255,255,0.1);           /* Светло-серая обводка */
-        border-top-color: #00a3ff;                          /* Верхняя часть - синяя */
-        border-radius: 50%;                                  /* Круглая форма */
-        animation: spin 1s linear infinite;                  /* Бесконечное вращение */
+    #page-index .loader {
+        width: 50px; height: 50px;
+        border: 3px solid rgba(255, 255, 255, 0.1);
+        border-top-color: #00a3ff;
+        border-radius: 50%;
+        animation: kxspin 1s linear infinite;
     }
 
-    /* Анимация вращения */
-    @keyframes spin {
-        to { transform: rotate(360deg); }                    /* Поворот на 360 градусов */
+    @keyframes kxspin { to { transform: rotate(360deg); } }
+
+    /* Чипы / бейджи */
+    #page-index .kx-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0.5rem 1.1rem;
+        border-radius: 50px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.85);
     }
 
+    #page-index .kx-chip .kx-dot {
+        width: 8px; height: 8px;
+        border-radius: 50%;
+        background: #29ffb0;
+        box-shadow: 0 0 10px #29ffb0;
+        animation: kxpulsedot 1.6s ease-in-out infinite;
+        flex-shrink: 0;
+    }
+
+    @keyframes kxpulsedot { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+    /* Eyebrow-лейбл над заголовком секции */
+    #page-index .kx-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        color: #00a3ff;
+        font-size: 0.85rem;
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        margin-bottom: 1rem;
+    }
+
+    #page-index .kx-eyebrow::before {
+        content: '';
+        width: 30px; height: 2px;
+        background: linear-gradient(90deg, #00a3ff, #7b5cff);
+        display: inline-block;
+    }
+
+    /* Hero */
+    #page-index .kx-hero {
+        position: relative;
+        padding-top: 7rem;
+        padding-bottom: 4rem;
+        overflow: hidden;
+    }
+
+    #page-index .kx-hero-glow {
+        position: absolute;
+        width: 640px; height: 640px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(0, 163, 255, 0.35), transparent 70%);
+        filter: blur(40px);
+        top: -220px; right: -180px;
+        z-index: -1;
+        pointer-events: none;
+    }
+
+    #page-index .kx-hero-title {
+        font-size: clamp(3rem, 6.5vw, 5.6rem);
+        line-height: 0.95;
+        margin-bottom: 1.25rem;
+    }
+
+    #page-index .kx-hero-lead {
+        font-size: 1.1rem;
+        color: rgba(255, 255, 255, 0.7);
+        max-width: 480px;
+        margin-bottom: 2rem;
+    }
+
+    #page-index .kx-hero-stats {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-top: 2.5rem;
+    }
+
+    #page-index .kx-hero-media { position: relative; }
+
+    #page-index .kx-hero-media img {
+        width: 100%;
+        filter: drop-shadow(0 30px 50px rgba(0, 0, 0, 0.5));
+        pointer-events: none;
+        user-select: none;
+        -webkit-user-drag: none;
+    }
+
+    #page-index .kx-float-badge {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 0.7rem 1.1rem;
+        background: rgba(10, 12, 16, 0.75);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 16px;
+        font-size: 0.85rem;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+        animation: kxfloat 4s ease-in-out infinite;
+        white-space: nowrap;
+    }
+
+    #page-index .kx-float-badge svg { width: 20px; height: 20px; color: #00a3ff; flex-shrink: 0; }
+    #page-index .kx-float-badge.kx-badge-1 { top: 8%; left: -6%; animation-delay: 0s; }
+    #page-index .kx-float-badge.kx-badge-2 { bottom: 8%; right: -6%; animation-delay: 1.2s; }
+
+    @keyframes kxfloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+
+    @media (max-width: 991px) {
+        #page-index .kx-float-badge { position: static; margin: 0.75rem 0.5rem 0 0; display: inline-flex; animation: none; white-space: normal; max-width: 100%; }
+        #page-index .kx-hero-media { margin-top: 2.5rem; }
+    }
+
+    /* Бегущая строка технологий */
+    #page-index .kx-marquee-wrap {
+        overflow: hidden;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.02);
+        padding: 1.4rem 0;
+        -webkit-mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+        mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+    }
+
+    #page-index .kx-marquee {
+        display: flex;
+        width: max-content;
+        gap: 3.5rem;
+        animation: kxmarqueescroll 100s linear infinite;
+    }
+
+    #page-index .kx-marquee span {
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 1.5rem;
+        letter-spacing: 0.06em;
+        color: rgba(255, 255, 255, 0.35);
+        white-space: nowrap;
+    }
+
+    #page-index .kx-marquee span.kx-accent { color: #00a3ff; }
+
+    @keyframes kxmarqueescroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* Общая карточка */
+    #page-index .kx-card {
+        background: rgba(255, 255, 255, 0.045);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 28px;
+        transition: all 0.35s ease;
+    }
+
+    #page-index .kx-section { padding: 5.5rem 0; }
+
+    @media (max-width: 768px) {
+        #page-index .kx-section { padding: 3.5rem 0; }
+        #page-index .kx-hero { padding-top: 4rem; }
+    }
+
+    /* Статистика */
+    #page-index .kx-stat-card {
+        padding: 2rem 1.25rem;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    #page-index .kx-stat-card:hover { transform: translateY(-6px); border-color: rgba(0, 163, 255, 0.4); }
+
+    #page-index .kx-stat-icon {
+        width: 46px; height: 46px;
+        display: flex; align-items: center; justify-content: center;
+        border-radius: 14px;
+        background: linear-gradient(135deg, rgba(0, 163, 255, 0.18), rgba(123, 92, 255, 0.12));
+        color: #00a3ff;
+        margin-bottom: 0.5rem;
+    }
+
+    #page-index .kx-stat-icon svg { width: 24px; height: 24px; }
+
+    #page-index .kx-stat-num { font-size: clamp(2.4rem, 5vw, 3.2rem); line-height: 1; margin: 0; }
+
+    #page-index .kx-stat-label {
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.6);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    /* Опыт — таймлайн */
+    #page-index .kx-timeline { position: relative; padding-left: 2rem; }
+
+    #page-index .kx-timeline::before {
+        content: '';
+        position: absolute;
+        left: 6px; top: 6px; bottom: 6px;
+        width: 2px;
+        background: linear-gradient(180deg, #00a3ff, rgba(123, 92, 255, 0.1));
+    }
+
+    #page-index .experience-block {
+        position: relative;
+        cursor: pointer;
+        padding: 0 0 1.75rem 0.75rem;
+    }
+
+    #page-index .kx-timeline .experience-block::before {
+        content: '';
+        position: absolute;
+        left: -2.06rem; top: 0.4rem;
+        width: 12px; height: 12px;
+        border-radius: 50%;
+        background: #0c0d11;
+        border: 2px solid #00a3ff;
+        box-shadow: 0 0 0 4px rgba(0, 163, 255, 0.12);
+        transition: all 0.3s ease;
+    }
+
+    #page-index .kx-timeline .experience-block.active::before {
+        background: #00a3ff;
+        box-shadow: 0 0 0 6px rgba(0, 163, 255, 0.22);
+    }
+
+    #page-index .experience-block .experience-content {
+        position: relative;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.6s ease-out;
+        color: rgba(255, 255, 255, 0.65);
+    }
+
+    #page-index .experience-block.active .experience-content { max-height: 600px; }
+
+    /* Подсказка "нажми/наведи, чтобы раскрыть" — на всех устройствах */
+    #page-index .kx-expand-hint {
+        display: block;
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        width: 16px;
+        height: 16px;
+        color: #00a3ff;
+        opacity: 0.55;
+        pointer-events: none;
+        animation: kxhintbounce 1.8s ease-in-out infinite;
+    }
+
+    #page-index .experience-block.active .kx-expand-hint {
+        opacity: 0.9;
+        transform: rotate(180deg);
+        animation: none;
+    }
+
+    /* У карточек навыков нет отдельной стрелки (мешала вёрстке в компактных
+       карточках) — вместо неё лёгкой пульсацией "приглашает нажать" сама иконка. */
+    #page-index .kx-skill-card .kx-skill-icon {
+        animation: kxiconpulse 1.6s ease-in-out infinite;
+    }
+
+    #page-index .kx-skill-card.active .kx-skill-icon {
+        animation: none;
+    }
+
+    @keyframes kxhintbounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(4px); }
+    }
+
+    @keyframes kxiconpulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.15); }
+    }
+
+    /* Навыки — карточки */
+    #page-index .kx-skill-card { padding: 1.5rem; cursor: pointer; margin-bottom: 1rem; }
+    #page-index .kx-skill-card:last-child { margin-bottom: 0; }
+    #page-index .kx-skill-card:hover { border-color: rgba(0, 163, 255, 0.35); background: rgba(0, 163, 255, 0.05); }
+
+    #page-index .kx-skill-head { display: flex; align-items: center; gap: 0.85rem; }
+
+    #page-index .kx-skill-icon {
+        width: 40px; height: 40px; flex-shrink: 0;
+        border-radius: 12px;
+        display: flex; align-items: center; justify-content: center;
+        background: linear-gradient(135deg, rgba(0, 163, 255, 0.18), rgba(123, 92, 255, 0.12));
+        color: #00a3ff;
+    }
+
+    #page-index .kx-skill-icon svg { width: 20px; height: 20px; }
+
+    /* Образование */
+    #page-index .kx-edu-card { padding: 1.75rem; margin-bottom: 1.25rem; }
+    #page-index .kx-edu-card:last-child { margin-bottom: 0; }
+
+    /* Проекты */
+    #page-index .kx-project-card { overflow: hidden; }
+
+    #page-index .kx-project-media {
+        position: relative;
+        overflow: hidden;
+        border-radius: 27px 27px 0 0;
+        aspect-ratio: 4 / 3;
+        background: #0c0d11;
+    }
+
+    #page-index .kx-project-media::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, rgba(12, 13, 17, 0) 45%, rgba(12, 13, 17, 0.55) 100%);
+        pointer-events: none;
+    }
+
+    #page-index .kx-project-media img {
+        transition: transform 0.5s ease;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        filter: saturate(0.85) brightness(0.94);
+    }
+
+    #page-index .kx-project-card:hover .kx-project-media img { transform: scale(1.06); }
+
+    #page-index .kx-project-arrow {
+        width: 46px; height: 46px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #00a3ff, #7b5cff);
+        display: flex; align-items: center; justify-content: center;
+        flex-shrink: 0;
+        transition: transform 0.3s ease;
+        cursor: pointer;
+    }
+
+    #page-index .kx-project-card:hover .kx-project-arrow { transform: rotate(45deg); }
+
+    #page-index .kx-project-arrow svg { width: 20px; height: 20px; color: #fff; }
+
+    /* Отзывы */
+    #page-index .kx-quote-card {
+        position: relative;
+        overflow: hidden;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        padding: 3rem 2.5rem 2.5rem;
+        text-align: left;
+    }
+
+    #page-index .kx-quote-card:hover { border-color: rgba(0, 163, 255, 0.35); }
+
+    #page-index .kx-testimonial-wrap { position: relative; }
+
+    #page-index .testimonial-swiper { overflow: hidden; }
+    #page-index .testimonial-swiper .swiper-slide { height: auto; }
+
+    /* Стрелки слайдера отзывов сбоку по центру карточки (десктоп) */
+    #page-index .kx-testimonial-side-arrow {
+        position: absolute;
+        top: 50%;
+        margin-top: -23px;
+        z-index: 2;
+    }
+
+    #page-index .kx-testimonial-side-prev { left: -76px; }
+    #page-index .kx-testimonial-side-next { right: -76px; }
+
+    @media (max-width: 1200px) {
+        #page-index .kx-testimonial-side-prev { left: -56px; }
+        #page-index .kx-testimonial-side-next { right: -56px; }
+    }
+
+    #page-index .kx-quote-bg {
+        position: absolute;
+        top: 1.25rem;
+        right: 1.5rem;
+        width: 64px;
+        height: 64px;
+        color: rgba(0, 163, 255, 0.14);
+        pointer-events: none;
+    }
+
+    #page-index .kx-quote-text {
+        position: relative;
+        font-size: 1.35rem;
+        line-height: 1.55;
+        max-width: 34rem;
+    }
+
+    #page-index .kx-quote-author {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding-top: 1.5rem;
+        margin-top: auto;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    #page-index .kx-quote-avatar {
+        width: 52px;
+        height: 52px;
+        flex-shrink: 0;
+        border-radius: 50%;
+        object-fit: cover;
+        box-sizing: border-box;
+        padding: 2px;
+        background: linear-gradient(135deg, #00a3ff, #7b5cff);
+    }
+
+    /* Пагинация слайдера отзывов — акцентные «таблетки» вместо тусклых точек */
+    #page-index #testimonial .swiper-pagination-bullet {
+        width: 8px;
+        height: 8px;
+        margin: 0 5px !important;
+        background: rgba(255, 255, 255, 0.22);
+        opacity: 1;
+        border-radius: 5px;
+        transition: all 0.3s ease;
+    }
+
+    #page-index #testimonial .swiper-pagination-bullet-active {
+        width: 26px;
+        background: linear-gradient(135deg, #00a3ff, #7b5cff);
+    }
+
+    /* CTA-баннер */
+    #page-index .kx-cta {
+        position: relative;
+        border-radius: 32px;
+        padding: 4rem 1.5rem;
+        text-align: center;
+        overflow: hidden;
+        background: linear-gradient(120deg, rgba(0, 163, 255, 0.16), rgba(123, 92, 255, 0.14));
+        border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    /* Стрелка вверх */
+    #page-index .scroll-to-top {
+        position: fixed;
+        bottom: 30px; right: 30px;
+        width: 52px; height: 52px;
+        background: linear-gradient(135deg, #00a3ff, #7b5cff);
+        border: none;
+        border-radius: 50%;
+        color: #fff;
+        font-size: 20px;
+        font-weight: bold;
+        cursor: pointer;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        box-shadow: 0 10px 26px rgba(0, 163, 255, 0.35);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #page-index .scroll-to-top:hover { transform: translateY(-3px); box-shadow: 0 14px 30px rgba(123, 92, 255, 0.4); }
+    #page-index .scroll-to-top.active { opacity: 1; visibility: visible; }
+    #page-index .scroll-to-top:active { transform: translateY(0); }
+
+    @media (max-width: 768px) {
+        #page-index .scroll-to-top { bottom: 20px; right: 20px; width: 45px; height: 45px; font-size: 18px; }
+    }
     </style>
 </head>
 
-<body>
+<body id="page-index">
 
-<!-- Новый прелоадер -->
+<!-- Прелоадер -->
 <div class="preloader">
     <div class="loader"></div>
 </div>
 
-
-    <!-- SVG спрайт -->
+<!-- SVG спрайт -->
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
     <symbol id="arrow-left" viewBox="0 0 24 24">
         <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
@@ -249,10 +694,54 @@
         <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
             d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
     </symbol>
-    <!-- остальные символы если нужны -->
+    <symbol id="icon-clock" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.5" />
+        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 7v5l3.5 2" />
+    </symbol>
+    <symbol id="icon-badge-check" viewBox="0 0 24 24">
+        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3l2.2 1.3 2.5-.3 1.1 2.3 2.3 1.1-.3 2.5L21 12l-1.3 2.2.3 2.5-2.3 1.1-1.1 2.3-2.5-.3L12 21l-2.2-1.3-2.5.3-1.1-2.3-2.3-1.1.3-2.5L3 12l1.3-2.2-.3-2.5 2.3-1.1 1.1-2.3 2.5.3z" />
+        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12.5l2 2 4-4.5" />
+    </symbol>
+    <symbol id="icon-grid" viewBox="0 0 24 24">
+        <rect x="3.5" y="3.5" width="7" height="7" rx="1.2" fill="none" stroke="currentColor" stroke-width="1.5" />
+        <rect x="13.5" y="3.5" width="7" height="7" rx="1.2" fill="none" stroke="currentColor" stroke-width="1.5" />
+        <rect x="3.5" y="13.5" width="7" height="7" rx="1.2" fill="none" stroke="currentColor" stroke-width="1.5" />
+        <rect x="13.5" y="13.5" width="7" height="7" rx="1.2" fill="none" stroke="currentColor" stroke-width="1.5" />
+    </symbol>
+    <symbol id="icon-folder" viewBox="0 0 24 24">
+        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 6.5a1.5 1.5 0 0 1 1.5-1.5h4l2 2h9a1.5 1.5 0 0 1 1.5 1.5v9A1.5 1.5 0 0 1 19.5 19h-15A1.5 1.5 0 0 1 3 17.5v-11z" />
+    </symbol>
+    <symbol id="icon-server" viewBox="0 0 24 24">
+        <rect x="3.5" y="4" width="17" height="6" rx="1.3" fill="none" stroke="currentColor" stroke-width="1.5" />
+        <rect x="3.5" y="14" width="17" height="6" rx="1.3" fill="none" stroke="currentColor" stroke-width="1.5" />
+        <circle cx="7" cy="7" r="0.9" fill="currentColor" stroke="none" />
+        <circle cx="7" cy="17" r="0.9" fill="currentColor" stroke="none" />
+    </symbol>
+    <symbol id="icon-code" viewBox="0 0 24 24">
+        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8.5 8L4 12l4.5 4M15.5 8L20 12l-4.5 4M13.5 5.5l-3 13" />
+    </symbol>
+    <symbol id="icon-palette" viewBox="0 0 24 24">
+        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3a9 9 0 1 0 0 18c1.1 0 1.8-.9 1.8-1.8 0-.5-.2-.9-.5-1.2-.3-.3-.5-.7-.5-1.2 0-.9.7-1.6 1.6-1.6H16a4 4 0 0 0 4-4c0-4.4-3.6-8.2-8-8.2z" />
+        <circle cx="7.5" cy="11" r="1.1" fill="currentColor" stroke="none" />
+        <circle cx="9.5" cy="7" r="1.1" fill="currentColor" stroke="none" />
+        <circle cx="14.5" cy="7.2" r="1.1" fill="currentColor" stroke="none" />
+    </symbol>
+    <symbol id="icon-cloud" viewBox="0 0 24 24">
+        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 18h10a3.5 3.5 0 0 0 .5-6.96A5 5 0 0 0 8 9.2 4 4 0 0 0 7 18z" />
+    </symbol>
+    <symbol id="icon-check-circle" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.5" />
+        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8.5 12.5l2.3 2.3 4.7-5.1" />
+    </symbol>
+    <symbol id="quote-left" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M9.5 6C6.5 6 4 8.5 4 11.7c0 2.7 1.9 4.7 4.3 4.7.4 0 .8-.1 1.1-.2-.5 1.7-1.9 3-3.9 3.4l.6 1.9c3.4-.7 5.9-3.4 5.9-7.4V11.7C12 8.5 11 6 9.5 6zm9 0c-3 0-5.5 2.5-5.5 5.7 0 2.7 1.9 4.7 4.3 4.7.4 0 .8-.1 1.1-.2-.5 1.7-1.9 3-3.9 3.4l.6 1.9c3.4-.7 5.9-3.4 5.9-7.4V11.7C21 8.5 20 6 18.5 6z" />
+    </symbol>
+    <symbol id="icon-chevron-down" viewBox="0 0 24 24">
+        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 9l6 6 6-6" />
+    </symbol>
 </svg>
-<!-- Второй прелоадер временно убран -->
-    <div id="header-placeholder"><nav id="header-nav" class="navbar navbar-expand-lg py-4" data-bs-theme="dark">
+
+<div id="header-placeholder"><nav id="header-nav" class="navbar navbar-expand-lg py-4" data-bs-theme="dark">
     <div class="container-fluid padding-side">
         <a class="navbar-brand" href="/index.html"><img src="/images/logo.png" alt="logo"></a>
 
@@ -321,388 +810,404 @@
 </svg>
 </div>
 
-
-    <section id="hero" class="padding-medium">
-        <div class="container text-white"> 
-
-            <div class="row justify-content-center text-center">
-                <div class="col-xl-8">
-                    <p class="text-primary" data-aos="fade-up" data-aos-duration="1400">
-                        Привет! Меня зовут Миша Кондрашов. Добро пожаловать на мой сайт!
-                    </p>
-                     <p data-aos="fade-up" data-aos-duration="1400">
-                        Здесь ты найдешь всё, от моих собственных проектов до готовых шаблонов проектирования.
-                    </p>
-
-                   
-                    <div data-aos="fade-up" data-aos-duration="1800">
-                        <div style="position: absolute;top: 0;left: 0;right: 0;bottom: 0;background: radial-gradient(circle at center, rgba(0,163,255,0.4) 0%, transparent 70%);filter: blur(20px);border-radius: 12px;z-index: -1;opacity: 0.7;"></div>
-                        <img style="background-color: rgba(255, 255, 255, 0.06);box-shadow: 0px 8px 40px rgba(0, 163, 255, 0.25),0px 0px 0px 1px rgba(255, 255, 255, 0.1);border-radius: 80px;filter: brightness(1.08) saturate(1.1);transition: all 0.5s ease;pointer-events: none;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;-webkit-user-drag: none;-khtml-user-drag: none;-moz-user-drag: none;-o-user-drag: none;user-drag: none;" src="images/berloga.png" oncontextmenu="return false" ondragstart="return false" onselectstart="return false">
+<!-- ===================== HERO ===================== -->
+<section id="hero" class="kx-hero">
+    <div class="kx-hero-glow"></div>
+    <div class="container">
+        <div class="row align-items-center gy-5">
+            <div class="col-12 col-lg-6" data-aos="fade-up" data-aos-duration="1200">
+                <h1 class="kx-hero-title">Привет, я <span class="kx-grad-text">Миша Кондрашов.</span></h1>
+                <p class="kx-hero-lead">Делаю сайты, сервисы и личные проекты — от идеи до продакшена. Здесь собраны мои проекты, опыт и всё, чем я занимаюсь.</p>
+                <div class="d-flex flex-wrap gap-3">
+                    <a href="#portfolio" class="btn button rounded-pill">
+                        <span>Смотреть проекты</span>
+                        <svg class="arrow-right" width="18" height="18"><use xlink:href="#arrow-right"></use></svg>
+                    </a>
+                    <a href="/berloga.html" class="btn button kx-btn-ghost rounded-pill">
+                        <span>Перейти в берлогу</span>
+                    </a>
+                </div>
+               
+            </div>
+            <div class="col-12 col-lg-6" data-aos="fade-up" data-aos-duration="1500">
+                <div class="kx-hero-media">
+                    <img src="images/author-photo.png" alt="kondrashov-m" oncontextmenu="return false" ondragstart="return false" onselectstart="return false">
+                    <div class="kx-float-badge kx-badge-1">
+                        <svg><use xlink:href="#icon-badge-check"></use></svg>
+                        <span>Качественная работа</span>
                     </div>
-
-
-                    <a href="/berloga.html" class="btn button rounded-pill mt-4"
-    data-aos="fade-up" data-aos-duration="1600"><span>Перейти в берлогу</span>
-    <svg class="arrow-right" width="20" height="20" style="margin-left: 8px;">
-        <use xlink:href="#arrow-right"></use>
-    </svg>
-</a>
-                
-
+                    <div class="kx-float-badge kx-badge-2">
+                        <svg><use xlink:href="#icon-clock"></use></svg>
+                        <span>8+ лет в разработке</span>
+                    </div>
                 </div>
             </div>
         </div>
-    </section>
-
-    <div class="container-fluid padding-side position-relative">
-       
-       
-        <div class="border border-light border-opacity-25 rounded-5"
-            style="background-color: rgba(255, 255, 255, 0.06); box-shadow: 0px 12px 90px rgba(0, 163, 255, 0.2);">
-             <div class="text-center">
-                    <h3 class="display-3">____________<span class="text-primary"></span></h3>
-                    <p class="display-6" data-aos="fade-up" data-aos-duration="1400">
-                        Факты о kondrashov-m
-                    </p>
-             </div>
-            <section id="achievements" class="padding-medium">
-                <div class="process-content container" data-aos="fade-up">
-                    <div id="counter" class="row justify-content-center text-center">
-                        <div class="col-lg-3 col-6 text-center">
-                            <div class="d-flex justify-content-center align-items-center">
-                                <h4 class="counter-value display-1 banner-size" data-count="8">8</h4><span
-                                    class="text-primary display-1 fw-lighter">+</span>
-                            </div> 
-                            <p class="text-capitalize mb-0">лет опыта</p>
-                        </div>
-                        <div class="col-lg-3 col-6 text-center">
-                            <div class="d-flex justify-content-center align-items-center">
-                                <h4 class="counter-value display-1 banner-size" data-count="300">300</h4><span
-                                    class="text-primary display-1 fw-lighter">+</span>
-                            </div>
-                            <p class="text-capitalize mb-0">выполненных заказов</p>
-                        </div>
-                        <div class="col-lg-3 col-6 text-center">
-                            <div class="d-flex justify-content-center align-items-center">
-                                <h4 class="counter-value display-1 banner-size" data-count="20">20</h4><span
-                                    class="text-primary display-1 fw-lighter">+</span>
-                            </div>
-                            <p class="text-capitalize mb-0">личных шаблонов проектирования</p>
-                        </div>
-                        <div class="col-lg-3 col-6 text-center">
-                            <h4 class="counter-value display-1 banner-size" data-count="19">19</h4>
-                            <p class="text-capitalize mb-0">личных проектов</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="experiences">
-                <div class="container">
-                    <div class="row" data-aos="fade-up" data-aos-duration="1500">
-                        <div class="col-lg-6 mb-5 mb-lg-0">
-                            <h3 class="display-3 mb-4">Опыт<span class="text-primary">.</span></h3>
-                            <div class="border-start border-primary ps-3 border-opacity-50 mb-5 experience-block">
-                                <div class="experience-header">
-                                    <p class="text-primary fw-semibold">2018 - 2019</p>
-                                    <h5 class="display-6">Создание видеоигры на Unity</h5>
-                                    <p class="text-primary fw-semibold expandable-trigger">
-                                        <div class="mobile-expand-btn"></div>
-                                    </p>
-                                </div>
-                                <div class="experience-content" style="max-height: 0; overflow: hidden; transition: max-height 0.6s ease-out;">
-                                    <p>Первый в жизни проект по созданию полноценной видеоигры получил название #AUTODRIFT.</p>
-                                    <p>Игра представляла собой однопользовательские гонки. В дальнейшем она была загружена на релиз-платформу GameJolt.</p>
-                                    <p>Вся игра была написана на языке C# с использованием стандартных ассетов Unity!</p>
-                                </div>
-                            </div>
-                            <div class="border-start border-primary ps-3 border-opacity-50 mb-5 experience-block">
-                                <div class="experience-header">
-                                    <p class="text-primary fw-semibold">2020 - 2022</p>
-                                    <h5 class="display-6">Разработка социальной сети</h5>
-                                    <p class="text-primary fw-semibold expandable-trigger"><div class="mobile-expand-btn"></div></p>
-                                </div>
-                                <div class="experience-content" style="max-height: 0; overflow: hidden; transition: max-height 0.6s ease-out;">
-                                    <p>В 2020 году мной была предпринята попытка создания социальной сети Коннект на базе языка программирования php.</p>
-                                    <p>Проект представлял собой клондайк всего, что есть в интернете. На базе JavaScript и различных API были добавлены такие функции как: радио, чат для обмена сообщениями и фотографиями, встроенные видеоигры и многое другое!</p>
-                                    <p>В 2022 году «Коннект» был оценен на городских соревнованиях первым местом, а также грантом в размере 10.000 рублей в технической секции!</p>
-                                </div>
-                            </div>
-                            <div class="border-start border-primary ps-3 border-opacity-50 mb-5 experience-block">
-                                <div class="experience-header">
-                                    <p class="text-primary fw-semibold">2022 - 2024</p>
-                                    <h5 class="display-6">Компьютерный мастер</h5>
-                                    <p class="text-primary fw-semibold expandable-trigger"><div class="mobile-expand-btn"></div></p>
-                                </div>
-                                <div class="experience-content" style="max-height: 0; overflow: hidden; transition: max-height 0.6s ease-out;">
-                                    <p>В 2022 году я начал работать компьютерным мастером, что позволило мне развить навыки в области аппаратного обеспечения и обслуживания компьютеров.</p>
-                                    <p>За это время мне удалось научиться поднимать с колен самые "мёртвые" системы, исправлять ошибки в конфигурации и обеспечивать стабильную работу оборудования.</p>
-                                    <p>Без труда я могу диагностировать и устранять проблемы с оборудованием, а также проводить профилактическое обслуживание компьютеров.</p>
-                                </div>
-                            </div>
-                            <div class="border-start border-primary ps-3 border-opacity-50 mb-5 experience-block">
-                                <div class="experience-header">
-                                    <p class="text-primary fw-semibold">2023 - н.в.</p>
-                                    <h5 class="display-6">Командная работа</h5>
-                                    <p class="text-primary fw-semibold expandable-trigger"><div class="mobile-expand-btn"></div></p>
-                                </div>
-                                <div class="experience-content" style="max-height: 0; overflow: hidden; transition: max-height 0.6s ease-out;">
-                                    <p>В 2023 году был поставлен на должность преподователя дополнительных занятий по робототехнике, где обучал школьников в возрасте 10-14 лет базовым аспектамм программирования микроконтроллеров.</p>
-                                    <p>Благодаря этому в моей жизни появился большой опыт в области командной работы.</p>
-                                    <p>С сентября 2024 года по настоящее время я продолжаю развивать свои навыки в работе с командой, учавствуя в «Проектной Деятельности», чаще всего в роли лидера.</p>
-                                </div>
-                            </div>
-                            
-                        </div>
-                        <div class="col-lg-6">
-                            <h3 class="display-3 mb-4">Навыки<span class="text-primary">.</span></h3>
-                            <div class="border-start border-primary ps-3 border-opacity-50 mb-5 experience-block">
-                                <div class="experience-header">
-                                    
-                                    <h5 class="display-6">Backend</h5>
-                                    <p class="text-primary fw-semibold expandable-trigger"><div class="mobile-expand-btn"></div></p>
-                                </div>
-                                <div class="experience-content" style="max-height: 0; overflow: hidden; transition: max-height 0.1s ease-out;">
-                                    <p>Node.js | Python | C# | Wordpress</p>
-                                                                    </div>
-                            </div>
-                            <div class="border-start border-primary ps-3 border-opacity-50 mb-5 experience-block">
-                                <div class="experience-header">
-                                    
-                                    <h5 class="display-6">Frontend</h5>
-                                    <p class="text-primary fw-semibold expandable-trigger"><div class="mobile-expand-btn"></div></p>
-                                </div>
-                                <div class="experience-content" style="max-height: 0; overflow: hidden; transition: max-height 0.1s ease-out;">
-                                    <p>HTML | CSS | JavaScript</p>
-                                                                    </div>
-                            </div>
-                            <div class="border-start border-primary ps-3 border-opacity-50 mb-5 experience-block">
-                                <div class="experience-header">
-                                    
-                                    <h5 class="display-6">Design</h5>
-                                    <p class="text-primary fw-semibold expandable-trigger"><div class="mobile-expand-btn"></div></p>
-                                </div>
-                                <div class="experience-content" style="max-height: 0; overflow: hidden; transition: max-height 0.1s ease-out;">
-                                    <p>Figma (UI/UX) | Photoshop | Topaz Gigpixel AI | Blender</p>
-                                                                    </div>
-                            </div>
-                            <div class="border-start border-primary ps-3 border-opacity-50 mb-5 experience-block">
-                                <div class="experience-header">
-                                    
-                                    <h5 class="display-6">DevOps</h5>
-                                    <p class="text-primary fw-semibold expandable-trigger"><div class="mobile-expand-btn"></div></p>
-                                </div>
-                                <div class="experience-content" style="max-height: 0; overflow: hidden; transition: max-height 0.1s ease-out;">
-                                    <p>Git | Cloudflare | DNS | Linux | Netlify | CI/CD</p>
-                                                                    </div>
-                            </div>
-                            <div class="border-start border-primary ps-3 border-opacity-50 mb-5 experience-block">
-                                <div class="experience-header">
-                                    
-                                    <h5 class="display-6">QA & Testing</h5>
-                                    <p class="text-primary fw-semibold expandable-trigger"><div class="mobile-expand-btn"></div></p>
-                                </div>
-                                <div class="experience-content" style="max-height: 0; overflow: hidden; transition: max-height 0.1s ease-out;">
-                                    <p>Работа на проекте Amazon MTurk Experience</p>
-                                                                    </div>
-                            </div>
-                            
-
-                        </div>
-                    </div>
-                    <div class="row mt-5" data-aos="fade-up">
-                        
-                        <center><div class="col-lg-6">
-                            <h3 class="display-3 mb-4">Образование<span class="text-primary">.</span></h3>
-                            <div class="border-start border-primary ps-3 border-opacity-50 mb-5">
-                                <p class="text-primary fw-semibold">2018 - н.в.</p>
-                                <h5 class="display-6">Самостоятельное обучение</h5>
-                                <p>С 10 лет развиваю свои навыки, работая над личными проектами и выполняя заказы на фрилансе.</p>
-                                <p>Огромный опыт принесла работа над краудсорсинговами проектами Amazon MTurk Experience и Яндекс.Толока</p>
-                            </div>
-                            <div class="border-start border-primary ps-3 border-opacity-50">
-                                <p class="text-primary fw-semibold">2024 - н.в.</p>
-                                <h5 class="display-6">Московский политехнический университет</h5>
-                                <p>Наш университет сотрудничает с большим количеством индустриальных партнёров.</p>
-                                <p>На данный момент мне удалось поучавствовать в проектах таких компаний, как: 2ГИС, 1С, ИЦ "КамАз" и другие</p>
-                            </div>
-                        </div></center>
-                    </div>
-                </div>
-            </section>
-            
-            <section id="portfolio" class="padding-medium container" data-aos="fade-up">
-    <div class="text-center">
-        <h3 class="display-3">Проекты<span class="text-primary">.</span></h3>
-        <p>Здесь продемонстированы некоторые из моих любимых проектов.</p><p>Больше проектов доступны на моём <a href="https://github.com/kondrashov-m" target="_blank" rel="noopener noreferrer" class="text-primary">GitHub</a></p>
     </div>
-
-    <div class="isotope-container row mt-5">
-        
-        <!-- Проект 1 - PAGESMI -->
-        <div class="item web col-md-6 p-3">
-            <a href="https://pagesmi-course-project-kzoc.vercel.app" 
-               target="_blank" rel="noopener noreferrer"
-               class="portfolio-card-link text-decoration-none text-white d-block h-100">
-                <div class="blog-post h-100 d-flex flex-column">
-                    <div class="image-zoom rounded-3 overflow-hidden">
-                        <img src="images/project1.jpg"
-                             alt="PAGESMI — конструктор сайтов на React"
-                             class="img-fluid w-100"
-                             style="pointer-events: none; user-select: none; -webkit-user-drag: none;">
-                    </div>
-                    <div class="p-3 pt-4 flex-grow-1 d-flex flex-column">
-                        <p class="text-uppercase text-primary fw-semibold mb-2">PAGESMI</p>
-                        <h5 class="display-6 mb-3">Конструктор сайтов на React</h5>
-                        <p class="opacity-75 mb-0 flex-grow-1">
-                            Современный конструктор лендингов с drag-and-drop, адаптивностью и экспортом чистого HTML кода.
-                        </p>
-                    </div>
-                </div>
-            </a>
-        </div>
-
-        <!-- Проект 2 - Automatics_v18 -->
-        <div class="item logo col-md-6 p-3">
-            <a href="https://github.com/kondrashov-m/automatics-v18" 
-               target="_blank" rel="noopener noreferrer"
-               class="portfolio-card-link text-decoration-none text-white d-block h-100">
-                <div class="blog-post h-100 d-flex flex-column">
-                    <div class="image-zoom rounded-3 overflow-hidden">
-                        <img src="images/project2.jpg"
-                             alt="Automatics v18 — автоматическая запись конференций"
-                             class="img-fluid w-100"
-                             style="pointer-events: none; user-select: none; -webkit-user-drag: none;">
-                    </div>
-                    <div class="p-3 pt-4 flex-grow-1 d-flex flex-column">
-                        <p class="text-uppercase text-primary fw-semibold mb-2">Automatics_v18</p>
-                        <h5 class="display-6 mb-3">Автоматическая запись онлайн-конференций</h5>
-                        <p class="opacity-75 mb-0 flex-grow-1">
-                            Инструмент для автоматизированного захвата экрана по времени, с автоматическим поиском ссылок.
-                        </p>
-                    </div>
-                </div>
-            </a>
-        </div>
-
-       
-
-    </div>
-
- <div class="text-center mt-5">
-    <a href="https://github.com/kondrashov-m" 
-       target="_blank" rel="noopener noreferrer"
-       class="btn button rounded-pill">
-        <span>Перейти на GitHub</span>
-        <svg class="arrow-right" width="20" height="20" style="margin-left: 8px;">
-            <use xlink:href="#arrow-right"></use>
-        </svg>
-    </a>
-</div>
 </section>
-        </div>
-        <section  style="margin-top: 52px;">
-         </section>
-         <div class="border border-light border-opacity-25 rounded-5"
-            style="background-color: rgba(255, 255, 255, 0.06); box-shadow: 0px 12px 90px rgba(0, 163, 255, 0.2);">
-            <section id="testimonial" class="padding-medium pt-0">
-                <div class="container position-relative" data-aos="fade-up" data-aos-duration="1500">
-                    <section  style="margin-top: 144px;">
-         </section>
-                    <div class="text-center">
-                        <h3 class="display-3">Народное мнение<span class="text-primary"> :)</span></h3>
-                    </div>
 
-                    <div class="row justify-content-center mt-4">
-                        <div class="col-md-7">
-                            <div class="swiper testimonial-swiper">
-                                <div class="swiper-wrapper">
-                                    <div class="swiper-slide text-center">
-                                        <div class="testimonial-details">
-                                            <svg class="text-primary" width="80" height="80">
-                                                <use xlink:href="#quote-left"></use>
-                                            </svg>
-                                            <p class="fs-2 lh-base fst-italic fw-light">
-                                                Он пишет сайты в тетрадке.<br>Сам видел. Клянусь
-                                            </p>
-                                            <div class="text-center mt-4">
-                                                <img src="images/commentor3.jpg" alt="img"
-                                                    class="img-fluid rounded-circle">
-                                                <div class="mt-2">
-                                                    <p class="m-0 fw-bold">Руслан Халимов</p>
-                                                    <p class="m-0 fw-light">Сотрудник МФЦ Московского Политеха</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide text-center">
-                                        <div class="testimonial-details">
-                                            <svg class="text-primary" width="80" height="80">
-                                                <use xlink:href="#quote-left"></use>
-                                            </svg>
-                                            <p class="fs-2 lh-base fst-italic fw-light">
-                                                Лучший DevOps на свете!
-                                            </p>
-                                            <div class="text-center mt-4">
-                                                <img src="images/commentor2.jpg" alt="img"
-                                                    class="img-fluid rounded-circle">
-                                                <div class="mt-2">
-                                                    <p class="m-0 fw-bold">Аноним</p>
-                                                    <p class="m-0 fw-light">Информация засекречена</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide text-center">
-                                        <div class="testimonial-details">
-                                            <svg class="text-primary" width="80" height="80">
-                                                <use xlink:href="#quote-left"></use>
-                                            </svg>
-                                            <p class="fs-2 lh-base fst-italic fw-light">
-                                                Миша мне компьютер починил. Синего экрана больше нет! Компьютера тоже! Обращайтесь к нему, не пожалеете!
-                                            </p>
-                                            <div class="text-center mt-4">
-                                                <img src="images/commentor1.jpg" alt="img"
-                                                    class="img-fluid rounded-circle">
-                                                <div class="mt-2">
-                                                    <p class="m-0 fw-bold">Иван Ермошкин</p>
-                                                    <p class="m-0 fw-light">Тимлид проекта "Новелла"</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="swiper-pagination position-static mt-4 d-lg-none d-block"></div>
+<!-- ===================== ЛЕНТА ТЕХНОЛОГИЙ ===================== -->
+<div class="kx-marquee-wrap">
+    <div class="kx-marquee" aria-hidden="true">
+        <span class="kx-accent">Node.js</span><span>Python</span><span class="kx-accent">React</span><span>JavaScript</span><span class="kx-accent">Figma</span><span>C#</span><span class="kx-accent">Docker</span><span>Git</span><span class="kx-accent">Linux</span><span>Cloudflare</span>
+        <span class="kx-accent">Node.js</span><span>Python</span><span class="kx-accent">React</span><span>JavaScript</span><span class="kx-accent">Figma</span><span>C#</span><span class="kx-accent">Docker</span><span>Git</span><span class="kx-accent">Linux</span><span>Cloudflare</span>
+        <span class="kx-accent">Node.js</span><span>Python</span><span class="kx-accent">React</span><span>JavaScript</span><span class="kx-accent">Figma</span><span>C#</span><span class="kx-accent">Docker</span><span>Git</span><span class="kx-accent">Linux</span><span>Cloudflare</span>
+        <span class="kx-accent">Node.js</span><span>Python</span><span class="kx-accent">React</span><span>JavaScript</span><span class="kx-accent">Figma</span><span>C#</span><span class="kx-accent">Docker</span><span>Git</span><span class="kx-accent">Linux</span><span>Cloudflare</span>
+        <span class="kx-accent">Node.js</span><span>Python</span><span class="kx-accent">React</span><span>JavaScript</span><span class="kx-accent">Figma</span><span>C#</span><span class="kx-accent">Docker</span><span>Git</span><span class="kx-accent">Linux</span><span>Cloudflare</span>
+        <span class="kx-accent">Node.js</span><span>Python</span><span class="kx-accent">React</span><span>JavaScript</span><span class="kx-accent">Figma</span><span>C#</span><span class="kx-accent">Docker</span><span>Git</span><span class="kx-accent">Linux</span><span>Cloudflare</span>
+        <span class="kx-accent">Node.js</span><span>Python</span><span class="kx-accent">React</span><span>JavaScript</span><span class="kx-accent">Figma</span><span>C#</span><span class="kx-accent">Docker</span><span>Git</span><span class="kx-accent">Linux</span><span>Cloudflare</span>
+        <span class="kx-accent">Node.js</span><span>Python</span><span class="kx-accent">React</span><span>JavaScript</span><span class="kx-accent">Figma</span><span>C#</span><span class="kx-accent">Docker</span><span>Git</span><span class="kx-accent">Linux</span><span>Cloudflare</span>
+    </div>
+</div>
+
+<!-- ===================== ФАКТЫ ===================== -->
+<section id="achievements" class="kx-section">
+    <div class="container">
+        <div class="text-center mb-5" data-aos="fade-up">
+            <span class="kx-eyebrow">Немного цифр</span>
+            <h2 class="display-3 mb-0">Факты о <span class="kx-grad-text">kondrashov-m</span></h2>
+        </div>
+        <div id="counter" class="row g-4 justify-content-center" data-aos="fade-up" data-aos-duration="1200">
+            <div class="col-lg-3 col-6">
+                <div class="kx-card kx-stat-card h-100">
+                    <div class="kx-stat-icon"><svg><use xlink:href="#icon-clock"></use></svg></div>
+                    <div class="d-flex align-items-end gap-1">
+                        <h3 class="counter-value kx-stat-num" data-count="8">8</h3><span class="kx-stat-num kx-grad-text">+</span>
+                    </div>
+                    <p class="kx-stat-label mb-0">лет опыта</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6">
+                <div class="kx-card kx-stat-card h-100">
+                    <div class="kx-stat-icon"><svg><use xlink:href="#icon-badge-check"></use></svg></div>
+                    <div class="d-flex align-items-end gap-1">
+                        <h3 class="counter-value kx-stat-num" data-count="350">350</h3><span class="kx-stat-num kx-grad-text">+</span>
+                    </div>
+                    <p class="kx-stat-label mb-0">выполненных заказов</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6">
+                <div class="kx-card kx-stat-card h-100">
+                    <div class="kx-stat-icon"><svg><use xlink:href="#icon-grid"></use></svg></div>
+                    <div class="d-flex align-items-end gap-1">
+                        <h3 class="counter-value kx-stat-num" data-count="20">20</h3><span class="kx-stat-num kx-grad-text">+</span>
+                    </div>
+                    <p class="kx-stat-label mb-0">личных шаблонов</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6">
+                <div class="kx-card kx-stat-card h-100">
+                    <div class="kx-stat-icon"><svg><use xlink:href="#icon-folder"></use></svg></div>
+                    <div class="d-flex align-items-end gap-1">
+                        <h3 class="counter-value kx-stat-num" data-count="22">22</h3><span class="kx-stat-num kx-grad-text">+</span>
+                    </div>
+                    <p class="kx-stat-label mb-0">личных проектов</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== ОПЫТ И НАВЫКИ ===================== -->
+<section id="experiences" class="kx-section">
+    <div class="container">
+        <div class="text-center mb-5" data-aos="fade-up">
+            <span class="kx-eyebrow">Экспертиза</span>
+            <h2 class="display-3 mb-0">Опыт и <span class="kx-grad-text">навыки.</span></h2>
+        </div>
+        <div class="row g-4">
+            <div class="col-12 col-lg-6" data-aos="fade-up" data-aos-duration="1200">
+                <div class="kx-card p-4 p-lg-5 h-100">
+                    <h3 class="display-5 mb-4">Опыт<span class="text-primary">.</span></h3>
+                    <div class="kx-timeline">
+                        <div class="experience-block">
+                            <svg class="kx-expand-hint"><use xlink:href="#icon-chevron-down"></use></svg>
+                            <div class="experience-header">
+                                <p class="text-primary fw-semibold mb-1">2018 — 2019</p>
+                                <h5 class="display-6 mb-1">Создание видеоигры на Unity</h5>
+                            </div>
+                            <div class="experience-content">
+                                <p>Первый в жизни проект по созданию полноценной видеоигры получил название #AUTODRIFT.</p>
+                                <p>Игра представляла собой однопользовательские гонки. В дальнейшем она была загружена на релиз-платформу GameJolt.</p>
+                                <p>Вся игра была написана на языке C# с использованием стандартных ассетов Unity!</p>
+                            </div>
+                        </div>
+                        <div class="experience-block">
+                            <svg class="kx-expand-hint"><use xlink:href="#icon-chevron-down"></use></svg>
+                            <div class="experience-header">
+                                <p class="text-primary fw-semibold mb-1">2020 — 2022</p>
+                                <h5 class="display-6 mb-1">Разработка социальной сети</h5>
+                            </div>
+                            <div class="experience-content">
+                                <p>В 2020 году мной была предпринята попытка создания социальной сети Коннект на базе языка программирования php.</p>
+                                <p>Проект представлял собой клондайк всего, что есть в интернете. На базе JavaScript и различных API были добавлены такие функции как: радио, чат для обмена сообщениями и фотографиями, встроенные видеоигры и многое другое!</p>
+                                <p>В 2022 году «Коннект» был оценен на городских соревнованиях первым местом, а также грантом в размере 10.000 рублей в технической секции!</p>
+                            </div>
+                        </div>
+                        <div class="experience-block">
+                            <svg class="kx-expand-hint"><use xlink:href="#icon-chevron-down"></use></svg>
+                            <div class="experience-header">
+                                <p class="text-primary fw-semibold mb-1">2022 — 2024</p>
+                                <h5 class="display-6 mb-1">Компьютерный мастер</h5>
+                            </div>
+                            <div class="experience-content">
+                                <p>В 2022 году я начал работать компьютерным мастером, что позволило мне развить навыки в области аппаратного обеспечения и обслуживания компьютеров.</p>
+                                <p>За это время мне удалось научиться поднимать с колен самые "мёртвые" системы, исправлять ошибки в конфигурации и обеспечивать стабильную работу оборудования.</p>
+                                <p>Без труда я могу диагностировать и устранять проблемы с оборудованием, а также проводить профилактическое обслуживание компьютеров.</p>
+                            </div>
+                        </div>
+                        <div class="experience-block">
+                            <svg class="kx-expand-hint"><use xlink:href="#icon-chevron-down"></use></svg>
+                            <div class="experience-header">
+                                <p class="text-primary fw-semibold mb-1">2023 — 2026</p>
+                                <h5 class="display-6 mb-1">Проектная деятельность</h5>
+                            </div>
+                            <div class="experience-content">
+                                <p>В 2023 году был поставлен на должность преподователя дополнительных занятий по робототехнике, где обучал школьников в возрасте 10-14 лет базовым аспектамм программирования микроконтроллеров.</p>
+                                <p>Благодаря этому в моей жизни появился большой опыт в области командной работы.</p>
+                                <p>С сентября 2024 года по настоящее время я продолжаю развивать свои навыки в работе с командой, учавствуя в «Проектной Деятельности», чаще всего в роли лидера.</p>
+                            </div>
+                        </div>
+                        <div class="experience-block">
+                            <svg class="kx-expand-hint"><use xlink:href="#icon-chevron-down"></use></svg>
+                            <div class="experience-header">
+                                <p class="text-primary fw-semibold mb-1">2026 — н.в.</p>
+                                <h5 class="display-6 mb-1">Специалист технической поддержки</h5>
+                            </div>
+                            <div class="experience-content">
+                                <p>С июля 2026 года работаю в акредитованной IT-компании, помогая пользователям в тяжелых ситуациях.</p>
+                                <p>Принимаю и регистрирую обращения, разбираю сложные случаи связанные с нагрузкой на сеть, техническими сбоями и другими проблемами.</p>
                             </div>
                         </div>
                     </div>
-                    <div
-                        class="position-absolute top-50 end-0 translate-middle-y me-5 mt-5 pt-5 main-slider-button-next d-lg-block d-none">
-                        <svg class="arrow border border-light border-opacity-25 rounded-circle p-3" width="80"
-                            height="80">
-                            <use xlink:href="#arrow-right"></use>
-                        </svg>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-6" data-aos="fade-up" data-aos-duration="1200">
+                <h3 class="display-5 mb-4">Навыки<span class="text-primary">.</span></h3>
+
+                <div class="kx-card kx-skill-card experience-block">
+                    <div class="kx-skill-head">
+                        <div class="kx-skill-icon"><svg><use xlink:href="#icon-server"></use></svg></div>
+                        <h5 class="display-6 mb-0 flex-grow-1">Backend</h5>
                     </div>
-                    <div
-                        class="position-absolute top-50 start-0 translate-middle-y ms-5 mt-5 pt-5 main-slider-button-prev d-lg-block d-none">
-                        <svg class="arrow border border-light border-opacity-25 rounded-circle p-3" width="80"
-                            height="80">
-                            <use xlink:href="#arrow-left"></use>
-                        </svg>
+                    <div class="experience-content"><p class="mt-3 mb-0 opacity-75">Node.js | Python | C# | Wordpress</p></div>
+                </div>
+
+                <div class="kx-card kx-skill-card experience-block">
+                    <div class="kx-skill-head">
+                        <div class="kx-skill-icon"><svg><use xlink:href="#icon-code"></use></svg></div>
+                        <h5 class="display-6 mb-0 flex-grow-1">Frontend</h5>
                     </div>
-            </section>
+                    <div class="experience-content"><p class="mt-3 mb-0 opacity-75">HTML | CSS | JavaScript</p></div>
+                </div>
+
+                <div class="kx-card kx-skill-card experience-block">
+                    <div class="kx-skill-head">
+                        <div class="kx-skill-icon"><svg><use xlink:href="#icon-palette"></use></svg></div>
+                        <h5 class="display-6 mb-0 flex-grow-1">Design</h5>
+                    </div>
+                    <div class="experience-content"><p class="mt-3 mb-0 opacity-75">Figma (UI/UX) | Photoshop | Topaz Gigapixel AI | Blender</p></div>
+                </div>
+
+                <div class="kx-card kx-skill-card experience-block">
+                    <div class="kx-skill-head">
+                        <div class="kx-skill-icon"><svg><use xlink:href="#icon-cloud"></use></svg></div>
+                        <h5 class="display-6 mb-0 flex-grow-1">DevOps</h5>
+                    </div>
+                    <div class="experience-content"><p class="mt-3 mb-0 opacity-75">Git | Cloudflare | DNS | Linux | Netlify | CI/CD</p></div>
+                </div>
+
+                <div class="kx-card kx-skill-card experience-block">
+                    <div class="kx-skill-head">
+                        <div class="kx-skill-icon"><svg><use xlink:href="#icon-check-circle"></use></svg></div>
+                        <h5 class="display-6 mb-0 flex-grow-1">QA &amp; Testing</h5>
+                    </div>
+                    <div class="experience-content"><p class="mt-3 mb-0 opacity-75">Работа на проекте Amazon MTurk Experience</p></div>
+                </div>
+            </div>
         </div>
-    
 
-    <section  style="margin-top: 52px;">
-        
-        
-    </section>
+        <!-- <div class="row mt-5" data-aos="fade-up">
+            <div class="col-12 col-lg-8 mx-lg-auto">
+                <h3 class="display-5 mb-4 text-center">Образование<span class="text-primary">.</span></h3>
+                <div class="kx-card kx-edu-card">
+                    <p class="text-primary fw-semibold mb-1">2018 — н.в.</p>
+                    <h5 class="display-6">Самостоятельное обучение</h5>
+                    <p class="opacity-75 mb-2">С 10 лет развиваю свои навыки, работая над личными проектами и выполняя заказы на фрилансе.</p>
+                    <p class="opacity-75 mb-0">Огромный опыт принесла работа над краудсорсинговами проектами Amazon MTurk Experience и Яндекс.Толока</p>
+                </div>
+                <div class="kx-card kx-edu-card">
+                    <p class="text-primary fw-semibold mb-1">2024 — н.в.</p>
+                    <h5 class="display-6">Московский политехнический университет</h5>
+                    <p class="opacity-75 mb-2">Наш университет сотрудничает с большим количеством индустриальных партнёров.</p>
+                    <p class="opacity-75 mb-0">На данный момент мне удалось поучавствовать в проектах таких компаний, как: 2ГИС, 1С, ИЦ "КамАз" и другие</p>
+                </div>
+            </div>
+        </div> -->
+    </div>
+</section>
 
+<!-- ===================== ПРОЕКТЫ ===================== -->
+<section id="portfolio" class="kx-section">
+    <div class="container">
+        <div class="text-center mb-5" data-aos="fade-up">
+            <span class="kx-eyebrow">Мои работы</span>
+            <h2 class="display-3 mb-2">Проекты<span class="text-primary">.</span></h2>
+            <p class="opacity-75 mb-0">Здесь продемонстированы некоторые из моих любимых работ. Больше проектов доступны на моём <a href="https://github.com/kondrashov-m" target="_blank" rel="noopener noreferrer" class="text-primary">GitHub</a></p>
+        </div>
 
+        <div class="row g-4" id="portfolio-grid" data-aos="fade-up" data-aos-duration="1200">
+            <!-- рендерится из projects/projects.json в скрипте внизу секции —
+                 правится вручную или через admin.html (вкладка «Проекты») -->
+        </div>
 
+        <div class="text-center mt-5" data-aos="fade-up" data-aos-anchor="#portfolio-grid" data-aos-duration="1200">
+            <a href="https://github.com/kondrashov-m"
+               target="_blank" rel="noopener noreferrer"
+               class="btn button kx-btn-ghost rounded-pill">
+                <span>Перейти на GitHub</span>
+                <svg class="arrow-right" width="18" height="18">
+                    <use xlink:href="#arrow-right"></use>
+                </svg>
+            </a>
+        </div>
+    </div>
+</section>
 
-    <div id="footer-placeholder"><section  style="margin-top: 52px;"></section>
+<script>
+// ===== Проекты =====
+// Данные карточек живут в projects/projects.json — правь вручную
+// или через admin.html (вкладка «Проекты»).
+(function() {
+    function renderProjects(projects) {
+        var grid = document.getElementById('portfolio-grid');
+        if (!grid) return;
+
+        grid.innerHTML = projects.map(function(p) {
+            return '<div class="col-12 col-md-6">' +
+                        '<a href="' + p.url + '" target="_blank" rel="noopener noreferrer" class="text-decoration-none text-white d-block h-100">' +
+                            '<div class="kx-card kx-project-card h-100 d-flex flex-column">' +
+                                '<div class="kx-project-media">' +
+                                    '<img src="' + p.image + '" alt="' + p.title + '" style="pointer-events: none; user-select: none; -webkit-user-drag: none;">' +
+                                '</div>' +
+                                '<div class="p-4 flex-grow-1 d-flex flex-column">' +
+                                    '<div class="d-flex align-items-start justify-content-between gap-3 mb-2">' +
+                                        '<div>' +
+                                            '<p class="text-uppercase text-primary fw-semibold mb-1" style="font-size:.75rem;letter-spacing:.08em;">' + p.label + '</p>' +
+                                            '<h5 class="display-6 mb-0">' + p.title + '</h5>' +
+                                        '</div>' +
+                                        '<div class="kx-project-arrow"><svg><use xlink:href="#arrow-right"></use></svg></div>' +
+                                    '</div>' +
+                                    '<p class="opacity-75 mb-0 flex-grow-1">' + p.description + '</p>' +
+                                '</div>' +
+                            '</div>' +
+                        '</a>' +
+                   '</div>';
+        }).join('');
+
+        // Карточки добавлены после AOS.init() — без refresh они останутся невидимыми
+        if (window.AOS) AOS.refresh();
+
+        if (window.playCardThud) {
+            document.querySelectorAll('.kx-project-card').forEach(function(el) {
+                if (el.dataset.hoverSoundBound) return;
+                el.dataset.hoverSoundBound = '1';
+                el.addEventListener('mouseenter', window.playCardThud);
+            });
+        }
+    }
+
+    fetch('projects/projects.json', { cache: 'no-store' })
+        .then(function(r) { return r.json(); })
+        .then(function(data) { renderProjects(data.projects || []); })
+        .catch(function(err) { console.error('Не удалось загрузить projects/projects.json', err); });
+})();
+</script>
+
+<!-- ===================== ОТЗЫВЫ ===================== -->
+<section id="testimonial" class="kx-section">
+    <div class="container">
+        <div class="text-center mb-5" data-aos="fade-up">
+            <span class="kx-eyebrow">Отзывы</span>
+            <h2 class="display-3 mb-0">Народное мнение<span class="text-primary"> :)</span></h2>
+        </div>
+
+        <div class="row justify-content-center" data-aos="fade-up" data-aos-duration="1200">
+            <div class="col-12 col-lg-8">
+                <div class="kx-testimonial-wrap">
+                <div class="swiper testimonial-swiper">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <div class="kx-card kx-quote-card">
+                                <svg class="kx-quote-bg" aria-hidden="true"><use xlink:href="#quote-left"></use></svg>
+                                <p class="kx-quote-text fst-italic fw-light">Он пишет сайты в тетрадке.<br>Сам видел. Клянусь</p>
+                                <div class="kx-quote-author">
+                                    <img src="images/commentor3.jpg" alt="Руслан Халимов" class="kx-quote-avatar">
+                                    <div>
+                                        <p class="m-0 fw-bold">Руслан Халимов</p>
+                                        <p class="m-0 fw-light opacity-75">Сотрудник МФЦ Московского Политеха</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="kx-card kx-quote-card">
+                                <svg class="kx-quote-bg" aria-hidden="true"><use xlink:href="#quote-left"></use></svg>
+                                <p class="kx-quote-text fst-italic fw-light">Лучший DevOps на свете!</p>
+                                <div class="kx-quote-author">
+                                    <img src="images/commentor2.jpg" alt="Аноним" class="kx-quote-avatar">
+                                    <div>
+                                        <p class="m-0 fw-bold">Аноним</p>
+                                        <p class="m-0 fw-light opacity-75">Информация засекречена</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="kx-card kx-quote-card">
+                                <svg class="kx-quote-bg" aria-hidden="true"><use xlink:href="#quote-left"></use></svg>
+                                <p class="kx-quote-text fst-italic fw-light">Миша мне компьютер починил. Синего экрана больше нет! Компьютера тоже! Обращайтесь к нему, не пожалеете!</p>
+                                <div class="kx-quote-author">
+                                    <img src="images/commentor1.jpg" alt="Иван Ермошкин" class="kx-quote-avatar">
+                                    <div>
+                                        <p class="m-0 fw-bold">Иван Ермошкин</p>
+                                        <p class="m-0 fw-light opacity-75">Тимлид проекта "Новелла"</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="kx-project-arrow kx-testimonial-side-arrow kx-testimonial-side-prev main-slider-button-prev d-none d-lg-flex" style="transform: rotate(180deg);"><svg><use xlink:href="#arrow-right"></use></svg></div>
+                <div class="kx-project-arrow kx-testimonial-side-arrow kx-testimonial-side-next main-slider-button-next d-none d-lg-flex"><svg><use xlink:href="#arrow-right"></use></svg></div>
+                </div>
+                <div class="d-flex justify-content-center align-items-center gap-3 mt-4">
+                    <div class="kx-project-arrow main-slider-button-prev d-lg-none" style="transform: rotate(180deg);"><svg><use xlink:href="#arrow-right"></use></svg></div>
+                    <div class="swiper-pagination position-static"></div>
+                    <div class="kx-project-arrow main-slider-button-next d-lg-none"><svg><use xlink:href="#arrow-right"></use></svg></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== CTA ===================== -->
+<section class="kx-section pt-0">
+    <div class="container">
+        <div class="kx-cta" data-aos="fade-up">
+            <span class="kx-eyebrow" style="justify-content: center;">Есть идея?</span>
+            <h2 class="display-3 mb-3">Давай реализуем её <span class="kx-grad-text">вместе!</span></h2>
+            <p class="opacity-75 mb-4">Пиши в Telegram — обсудим задачу и сроки.</p>
+            <a href="https://t.me/mikondra" target="_blank" rel="noopener noreferrer" class="btn button rounded-pill">
+                <span>Написать в Telegram</span>
+                <svg class="arrow-right" width="18" height="18"><use xlink:href="#arrow-right"></use></svg>
+            </a>
+        </div>
+    </div>
+</section>
+
+<div id="footer-placeholder">
 
 <div class="container padding-medium pt-0" data-aos="fade-up">
     <div class="text-center">
@@ -742,8 +1247,6 @@
 
 </div>
 
-<script></script>
-
     <!-- Прелоадер - встроенный скрипт (самый надежный способ) -->
     <script>
       (function() {
@@ -756,9 +1259,7 @@
             }, 500);
           }
         }
-        // Первый вызов через 1.5 сек
         setTimeout(hidePreloader, 1500);
-        // Второй вызов через 2 сек (страховка)
         setTimeout(hidePreloader, 2000);
       })();
     </script>
@@ -782,8 +1283,8 @@
 
 
     <script src="js/plugins.js"></script>
-    <script src="js/script.js"></script>
-    
+    <script src="js/script.js?v=20260905"></script>
+
     <script>
     // Инициализация AOS
     AOS.init({
@@ -792,52 +1293,87 @@
         offset: 100
     });
 
-    // Анимация для раскрывающегося контента в секции опыта
+    // Раскрытие блоков опыта/навыков по наведению (десктоп) и по тапу на карточку (мобильные)
     document.addEventListener('DOMContentLoaded', function() {
         const experienceBlocks = document.querySelectorAll('.experience-block');
-        
+        // Наведение мышью и тап на телефоне — разная логика, иначе на тач-устройствах
+        // синтетический mouseenter от тапа конфликтует с click и ломает закрытие.
+        const canHover = window.matchMedia('(hover: hover)').matches;
+
         experienceBlocks.forEach(block => {
-            const trigger = block.querySelector('.expandable-trigger');
             const content = block.querySelector('.experience-content');
-            const mobileBtn = block.querySelector('.mobile-expand-btn');
-            
-            // Наведение на весь блок
-            block.addEventListener('mouseenter', () => {
+
+            const expand = () => {
                 block.classList.add('active');
                 content.style.maxHeight = content.scrollHeight + 'px';
-                if (mobileBtn) mobileBtn.classList.add('pulse');
-            });
-
-            // Уход курсора с блока
-            block.addEventListener('mouseleave', () => {
+            };
+            const collapse = () => {
                 block.classList.remove('active');
                 content.style.maxHeight = '0';
-                if (mobileBtn) {
-                    mobileBtn.classList.remove('pulse');
-                    mobileBtn.classList.remove('open');
-                }
-            });
+            };
 
-            // Дополнительно обработка клика для мобильных устройств
-            trigger.addEventListener('click', (e) => {
-                e.preventDefault();
-                const isActive = block.classList.contains('active');
-                
-                if (!isActive) {
-                    block.classList.add('active');
-                    content.style.maxHeight = content.scrollHeight + 'px';
-                    if (mobileBtn) mobileBtn.classList.add('open');
-                } else {
-                    block.classList.remove('active');
-                    content.style.maxHeight = '0';
-                    if (mobileBtn) mobileBtn.classList.remove('open');
-                }
-            });
+            if (canHover) {
+                block.addEventListener('mouseenter', expand);
+                block.addEventListener('mouseleave', collapse);
+            } else {
+                block.addEventListener('click', () => {
+                    if (block.classList.contains('active')) {
+                        collapse();
+                    } else {
+                        expand();
+                    }
+                });
+            }
         });
     });
+    </script>
 
+    <script>
+    // Звук при наведении на карточки — тот же синтезированный "тудум", что и в berloga.html
+    // (attachCardHoverSound), один в один: обычный mouseenter без фильтров по устройству.
+    (function() {
+        let thudAudioCtx = null;
+        function getThudAudioContext() {
+            if (!thudAudioCtx) {
+                thudAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            return thudAudioCtx;
+        }
 
-    
+        function playCardThud() {
+            try {
+                const ctx = getThudAudioContext();
+                if (ctx.state === 'suspended') ctx.resume();
+                const now = ctx.currentTime;
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(180, now);
+                osc.frequency.exponentialRampToValueAtTime(55, now + 0.18);
+
+                gain.gain.setValueAtTime(0.0001, now);
+                gain.gain.exponentialRampToValueAtTime(0.3, now + 0.02);
+                gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.22);
+
+                osc.connect(gain).connect(ctx.destination);
+                osc.start(now);
+                osc.stop(now + 0.25);
+            } catch (e) { /* Web Audio недоступен */ }
+        }
+
+        // Проекты дорисовываются позже, из fetch — их обработчик наведения
+        // вешается отдельно (см. скрипт рядом с #portfolio-grid), поэтому
+        // playCardThud нужно достать наружу из этого IIFE.
+        window.playCardThud = playCardThud;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.kx-stat-card, .experience-block, .kx-project-card, .kx-edu-card').forEach(function(el) {
+                if (el.dataset.hoverSoundBound) return;
+                el.dataset.hoverSoundBound = '1';
+                el.addEventListener('mouseenter', playCardThud);
+            });
+        });
+    })();
     </script>
 
 <script>
@@ -889,107 +1425,10 @@ function setActiveNavLink() {
 </button>
 
 <script>
-// Обработка анимации для секции опыта
-document.addEventListener('DOMContentLoaded', function() {
-    const experienceBlocks = document.querySelectorAll('.experience-block');
-    
-    experienceBlocks.forEach(block => {
-        const trigger = block.querySelector('.expandable-trigger');
-        let isExpanding = false;
-        
-        block.addEventListener('mouseenter', () => {
-            if (!isExpanding) {
-                isExpanding = true;
-                block.classList.add('active');
-            }
-        });
+// Стрелка вверх
 
-        block.addEventListener('mouseleave', () => {
-            isExpanding = false;
-            block.classList.remove('active');
-        });
-    });
-});
-</script>
-<style>
-.experience-block {
-    position: relative;
-    cursor: pointer;
-}
-
-.experience-block .expandable-trigger {
-    position: relative;
-    cursor: pointer;
-    transition: color 0.3s ease;
-}
-
-.experience-block .expandable-trigger:hover {
-    color: #00a3ff !important;
-}
-
-.experience-block .experience-content {
-    position: relative;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.6s ease-out;
-}
-
-.experience-block.active .experience-content {
-    max-height: 500px; /* Достаточно большое значение для любого контента */
-}
-
-.scroll-to-top {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    width: 50px;
-    height: 50px;
-    background: rgba(0, 163, 255, 0.8);
-    backdrop-filter: blur(10px);
-    border: none;
-    border-radius: 50%;
-    color: white;
-    font-size: 20px;
-    font-weight: bold;
-    cursor: pointer;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 20px rgba(0, 163, 255, 0.3);
-    z-index: 1000;
-}
-
-.scroll-to-top:hover {
-    background: rgba(0, 163, 255, 1);
-    transform: translateY(-3px);
-    box-shadow: 0 6px 25px rgba(0, 163, 255, 0.4);
-}
-
-.scroll-to-top.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-.scroll-to-top:active {
-    transform: translateY(0);
-}
-
-/* Адаптивность */
-@media (max-width: 768px) {
-    .scroll-to-top {
-        bottom: 20px;
-        right: 20px;
-        width: 45px;
-        height: 45px;
-        font-size: 18px;
-    }
-}
-</style>
-<script>
-// Функция для стрелки вверх
 const scrollToTopBtn = document.getElementById('scrollToTop');
 
-// Показываем/скрываем стрелку при скролле
 window.addEventListener('scroll', function() {
     if (window.pageYOffset > 300) {
         scrollToTopBtn.classList.add('active');
@@ -998,23 +1437,12 @@ window.addEventListener('scroll', function() {
     }
 });
 
-// Плавная прокрутка вверх при клике
 scrollToTopBtn.addEventListener('click', function() {
     window.scrollTo({
         top: 0,
         behavior: 'smooth'
     });
 });
-
-// Альтернативный вариант с более плавной анимацией
-function smoothScrollToTop() {
-    const currentPosition = window.pageYOffset;
-    if (currentPosition > 0) {
-        window.requestAnimationFrame(smoothScrollToTop);
-        window.scrollTo(0, currentPosition - currentPosition / 8);
-    }
-}
-
 </script>
 
 </body>

@@ -107,6 +107,7 @@ $(document).ready(function () {
     if ($('.testimonial-swiper').length) {
       new Swiper('.testimonial-swiper', {
         slidesPerView: 1,
+        spaceBetween: 24,
         loop: true,
         autoplay: {
           delay: 15000,
