@@ -8,11 +8,25 @@
       "description": "Современный конструктор лендингов с drag-and-drop, адаптивностью и экспортом чистого HTML кода."
     },
     {
-      "url": "https://github.com/kondrashov-m/automatics-v18",
+      "url": "https://kondrashov-m.ru/automatics",
       "image": "images/project2.jpg",
       "label": "Automatics_v18",
       "title": "Автоматическая запись онлайн-конференций",
       "description": "Инструмент для автоматизированного захвата экрана по времени, с автоматическим поиском ссылок."
+    },
+    {
+      "url": "https://github.com/kondrashov-m/yandex_tasks_scripts",
+      "image": "images/project3.jpg",
+      "label": "Yandex.Tasks-scripts",
+      "title": "Парсеры для автоматизации",
+      "description": "Разрабатывались под конкретные проекты Яндекс.Заданий."
+    },
+    {
+      "url": "https://www.figma.com/design/WWyNGrMwm7IrOaJkiXIzHn/Дизайн-Портал-A-Plague-Tale-%7C-kondrashov-m?node-id=0-1&p=f",
+      "image": "images/project4.jpg",
+      "label": "FIGMA",
+      "title": "Портал A Plague Tale",
+      "description": "Дизайн сайта, разработанный для демонстрации навыков работы в Figma."
     }
   ]
 }
