@@ -267,6 +267,50 @@
     }
     .p-card.open .p-card-body { display: block; }
 
+    .subject-group {
+        border: 1px solid rgba(var(--accent-rgb), 0.25);
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 20px;
+        overflow: hidden;
+    }
+    .subject-group-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 1.1rem 1.25rem;
+        cursor: pointer;
+        background: rgba(var(--accent-rgb), 0.08);
+    }
+    .subject-group-head:hover {
+        background: rgba(var(--accent-rgb), 0.13);
+    }
+    .subject-group-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-shrink: 0;
+    }
+    .subject-group-actions button {
+        padding: 0.3rem 0.7rem;
+        font-size: 0.72rem;
+    }
+    .subject-group.open > .subject-group-head .chevron { transform: rotate(180deg); }
+    .subject-group-body {
+        display: none;
+        padding: 1.25rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        flex-direction: column;
+        gap: 1rem;
+    }
+    .subject-group.open > .subject-group-body { display: flex; }
+    .add-item-btn.small {
+        max-width: none;
+        width: auto;
+        padding: 0.6rem 1rem;
+        margin-top: 0;
+    }
+
     .field-row {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -359,6 +403,54 @@
         color: rgba(255, 255, 255, 0.4);
         margin-top: 0.2rem;
     }
+
+    .error-overlay[hidden] {
+        display: none;
+    }
+    .error-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.65);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+    }
+    .error-overlay-box {
+        max-width: 420px;
+        width: calc(100% - 2.5rem);
+        background: #141821;
+        border: 1px solid rgba(255, 99, 99, 0.4);
+        border-radius: 16px;
+        padding: 1.5rem;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    }
+    .error-overlay-title {
+        font-weight: 700;
+        font-size: 1.05rem;
+        color: #ff6b6b;
+        margin-bottom: 0.6rem;
+    }
+    .error-overlay-message {
+        font-size: 0.88rem;
+        color: rgba(255, 255, 255, 0.85);
+        line-height: 1.5;
+        margin-bottom: 1.25rem;
+    }
+    .error-overlay-box button {
+        width: 100%;
+        padding: 0.6rem;
+        background: rgba(255, 99, 99, 0.15);
+        border: 1px solid rgba(255, 99, 99, 0.4);
+        color: #ff6b6b;
+        font-weight: 600;
+    }
+    .error-overlay-box button:hover {
+        background: rgba(255, 99, 99, 0.25);
+    }
+    input.field-invalid {
+        border-color: #ff6b6b !important;
+    }
 </style>
 </head>
 <body>
@@ -430,7 +522,7 @@
 
     <div class="items-list" id="lecturesList"></div>
     <div class="empty-state" id="emptyStateLec">Загружаю automatics/lectures.json автоматически…</div>
-    <button class="add-item-btn" id="addLectureBtn" style="display:none;">+ Добавить лекцию</button>
+    <button class="add-item-btn" id="addSubjectBtn" style="display:none;">+ Добавить предмет</button>
 
 </div>
 
@@ -455,6 +547,14 @@
 
 </div><!-- .page -->
 
+<div class="error-overlay" id="errorOverlay" hidden>
+    <div class="error-overlay-box">
+        <div class="error-overlay-title">⚠️ Ошибка</div>
+        <div class="error-overlay-message" id="errorOverlayMessage"></div>
+        <button type="button" id="errorOverlayCloseBtn">Понятно</button>
+    </div>
+</div>
+
 <script>
     // ===== Общие мелкие помощники (используются обеими вкладками) =====
     function setStatus(elId, text, cls) {
@@ -462,6 +562,18 @@
         el.textContent = text;
         el.className = 'status' + (cls ? ' ' + cls : '');
     }
+
+    function showErrorOverlay(message) {
+        document.getElementById('errorOverlayMessage').textContent = message;
+        document.getElementById('errorOverlay').hidden = false;
+    }
+    function hideErrorOverlay() {
+        document.getElementById('errorOverlay').hidden = true;
+    }
+    document.getElementById('errorOverlayCloseBtn').addEventListener('click', hideErrorOverlay);
+    document.getElementById('errorOverlay').addEventListener('click', function(e) {
+        if (e.target === e.currentTarget) hideErrorOverlay();
+    });
 
     function textField(labelText, value, onChange, multiline, placeholder) {
         const wrap = document.createElement('div');
@@ -983,10 +1095,54 @@
     // ===== Вкладка «Automatics»: лекции =====
     let lectures = [];
     let lecturesLoaded = false;
-    // Ручной выбор иконки по предмету — { "Название предмета": "icon-subj-..." }.
-    // Список иконок должен совпадать с id символов в SVG-спрайте automatics.html.
+    // Открытые предметы/лекции храним отдельно, чтобы при добавлении/удалении
+    // лекции список не сворачивался целиком — это единственная причина, почему
+    // здесь не просто пересобирается DOM с состоянием "всё закрыто".
+    const openSubjects = new Set();
+    const openLectures = new WeakSet();
+
     function blankLecture() {
         return { subject: '', title: '', date: '', youtube: '' };
+    }
+
+    function pluralizeLectures(n) {
+        const mod10 = n % 10;
+        const mod100 = n % 100;
+        if (mod10 === 1 && mod100 !== 11) return 'лекция';
+        if ([2, 3, 4].indexOf(mod10) !== -1 && [12, 13, 14].indexOf(mod100) === -1) return 'лекции';
+        return 'лекций';
+    }
+
+    function subjectsSorted() {
+        return Array.from(new Set(lectures.map(function(l) { return l.subject; }).filter(Boolean)))
+            .sort(function(a, b) { return a.localeCompare(b, 'ru'); });
+    }
+
+    // Превращает набранные цифры в маску ГГГГ-ММ-ДД по мере ввода — можно
+    // печатать просто "20260905", тире расставятся сами.
+    function formatDateInput(raw) {
+        const digits = (raw || '').replace(/\D/g, '').slice(0, 8);
+        let out = digits.slice(0, 4);
+        if (digits.length > 4) out += '-' + digits.slice(4, 6);
+        if (digits.length > 6) out += '-' + digits.slice(6, 8);
+        return out;
+    }
+
+    // Из даты ГГГГ-ММ-ДД собирает стандартное название "Лекция от ДД.ММ.ГГГГ".
+    function dateToLectureTitle(dateStr) {
+        const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateStr || '');
+        if (!m) return null;
+        return 'Лекция от ' + m[3] + '.' + m[2] + '.' + m[1];
+    }
+
+    // Проверяет, что дата реально существует в календаре (не 31 апреля, не 30 февраля и т.д.).
+    function isValidCalendarDate(dateStr) {
+        const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateStr || '');
+        if (!m) return false;
+        const year = Number(m[1]), month = Number(m[2]), day = Number(m[3]);
+        if (month < 1 || month > 12 || day < 1 || day > 31) return false;
+        const d = new Date(year, month - 1, day);
+        return d.getFullYear() === year && d.getMonth() === month - 1 && d.getDate() === day;
     }
 
     function loadLecturesData(data) {
@@ -996,7 +1152,7 @@
         document.getElementById('globalSettingsLec').style.display = 'block';
         document.getElementById('overwriteBtnLec').disabled = false;
         document.getElementById('downloadBtnLec').disabled = false;
-        document.getElementById('addLectureBtn').style.display = 'block';
+        document.getElementById('addSubjectBtn').style.display = 'block';
         renderLecturesList();
     }
 
@@ -1024,26 +1180,121 @@
         }
         empty.style.display = lectures.length ? 'none' : 'block';
         list.innerHTML = '';
-        lectures.forEach(function(l, i) {
-            list.appendChild(renderLectureCard(l, i));
+        subjectsSorted().forEach(function(subject) {
+            list.appendChild(renderSubjectGroup(subject));
         });
     }
 
-    function renderLectureCard(l, idx) {
-        const card = document.createElement('div');
-        card.className = 'p-card';
+    function renderSubjectGroup(subject) {
+        const items = lectures.filter(function(l) { return l.subject === subject; });
+
+        const group = document.createElement('div');
+        group.className = 'subject-group';
+        if (openSubjects.has(subject)) group.classList.add('open');
 
         const head = document.createElement('div');
-        head.className = 'p-card-head';
+        head.className = 'subject-group-head';
         head.addEventListener('click', function() {
-            card.classList.toggle('open');
+            group.classList.toggle('open');
+            if (group.classList.contains('open')) openSubjects.add(subject);
+            else openSubjects.delete(subject);
         });
 
         const title = document.createElement('div');
         title.className = 'p-card-title';
         const nameSpan = document.createElement('span');
         nameSpan.className = 'name-text';
-        nameSpan.textContent = (l.subject ? l.subject + ' — ' : '') + (l.title || '(без названия)');
+        nameSpan.textContent = subject;
+        const countBadge = document.createElement('span');
+        countBadge.className = 'date-badge';
+        countBadge.textContent = items.length + ' ' + pluralizeLectures(items.length);
+        title.appendChild(nameSpan);
+        title.appendChild(countBadge);
+        head.appendChild(title);
+
+        const headActions = document.createElement('div');
+        headActions.className = 'subject-group-actions';
+
+        const renameBtn = document.createElement('button');
+        renameBtn.type = 'button';
+        renameBtn.textContent = 'Переименовать';
+        renameBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const next = prompt('Новое название предмета', subject);
+            if (next === null) return;
+            const trimmed = next.trim();
+            if (!trimmed || trimmed === subject) return;
+            lectures.forEach(function(l) { if (l.subject === subject) l.subject = trimmed; });
+            if (openSubjects.has(subject)) { openSubjects.delete(subject); openSubjects.add(trimmed); }
+            renderLecturesList();
+        });
+        headActions.appendChild(renameBtn);
+
+        const delSubjectBtn = document.createElement('button');
+        delSubjectBtn.className = 'danger';
+        delSubjectBtn.type = 'button';
+        delSubjectBtn.textContent = 'Удалить предмет';
+        delSubjectBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            if (confirm('Удалить предмет «' + subject + '» и все его лекции (' + items.length + ')?')) {
+                lectures = lectures.filter(function(l) { return l.subject !== subject; });
+                openSubjects.delete(subject);
+                renderLecturesList();
+            }
+        });
+        headActions.appendChild(delSubjectBtn);
+
+        const chevron = document.createElement('span');
+        chevron.className = 'chevron';
+        chevron.textContent = '▾';
+        headActions.appendChild(chevron);
+
+        head.appendChild(headActions);
+        group.appendChild(head);
+
+        const body = document.createElement('div');
+        body.className = 'subject-group-body';
+
+        items.forEach(function(l) {
+            body.appendChild(renderLectureCard(l));
+        });
+
+        const addLectureBtn = document.createElement('button');
+        addLectureBtn.className = 'add-item-btn small';
+        addLectureBtn.type = 'button';
+        addLectureBtn.textContent = '+ Добавить лекцию';
+        addLectureBtn.addEventListener('click', function() {
+            const blank = blankLecture();
+            blank.subject = subject;
+            lectures.push(blank);
+            openSubjects.add(subject);
+            openLectures.add(blank);
+            renderLecturesList();
+        });
+        body.appendChild(addLectureBtn);
+
+        group.appendChild(body);
+        return group;
+    }
+
+    function renderLectureCard(l) {
+        const card = document.createElement('div');
+        card.className = 'p-card';
+        if (openLectures.has(l)) card.classList.add('open');
+
+        const head = document.createElement('div');
+        head.className = 'p-card-head';
+        head.addEventListener('click', function() {
+            card.classList.toggle('open');
+            if (card.classList.contains('open')) openLectures.add(l);
+            else openLectures.delete(l);
+        });
+
+        const title = document.createElement('div');
+        title.className = 'p-card-title';
+        const nameSpan = document.createElement('span');
+        nameSpan.className = 'name-text';
+        nameSpan.textContent = l.title || '(без названия)';
         const dateBadge = document.createElement('span');
         dateBadge.className = 'date-badge';
         dateBadge.textContent = l.date || '—';
@@ -1062,17 +1313,45 @@
         body.className = 'p-card-body';
 
         function refreshTitle() {
-            nameSpan.textContent = (l.subject ? l.subject + ' — ' : '') + (l.title || '(без названия)');
+            nameSpan.textContent = l.title || '(без названия)';
             dateBadge.textContent = l.date || '—';
         }
 
-        const row1 = document.createElement('div');
-        row1.className = 'field-row';
-        row1.appendChild(textField('Предмет', l.subject, function(v) { l.subject = v; refreshTitle(); }, false, 'Например: BackEnd-разработка'));
-        row1.appendChild(textField('Дата (ГГГГ-ММ-ДД)', l.date, function(v) { l.date = v; refreshTitle(); }, false, '2026-09-05'));
-        body.appendChild(row1);
+        // Пока название не тронуто руками, оно держится в синхроне с датой:
+        // "Лекция от ДД.ММ.ГГГГ" пересобирается заново при каждом изменении даты.
+        let titleAuto = !l.title || l.title === dateToLectureTitle(l.date);
 
-        body.appendChild(textField('Название лекции', l.title, function(v) { l.title = v; refreshTitle(); }, false, 'Лекция от 05.09.2026'));
+        const dateField = textField('Дата (ГГГГ-ММ-ДД)', l.date, function(v) {
+            l.date = formatDateInput(v);
+            dateInput.value = l.date;
+
+            const isComplete = l.date.replace(/\D/g, '').length === 8;
+            const isValid = !isComplete || isValidCalendarDate(l.date);
+            dateInput.classList.toggle('field-invalid', isComplete && !isValid);
+            if (isComplete && !isValid) {
+                showErrorOverlay('Такой даты не существует: «' + l.date + '». Проверь номер месяца (01–12) и дня.');
+            }
+
+            if (titleAuto && isValid) {
+                const auto = dateToLectureTitle(l.date);
+                if (auto) {
+                    l.title = auto;
+                    titleInput.value = auto;
+                }
+            }
+            refreshTitle();
+        }, false, '2026-09-05');
+        const dateInput = dateField.querySelector('input');
+        body.appendChild(dateField);
+
+        const titleField = textField('Название лекции', l.title, function(v) {
+            titleAuto = false;
+            l.title = v;
+            refreshTitle();
+        }, false, 'Лекция от 05.09.2026');
+        const titleInput = titleField.querySelector('input');
+        body.appendChild(titleField);
+
         body.appendChild(textField('Ссылка на YouTube', l.youtube, function(v) { l.youtube = v; }, false, 'https://youtu.be/...'));
 
         const actions = document.createElement('div');
@@ -1085,7 +1364,8 @@
         dupBtn.textContent = 'Дублировать';
         dupBtn.addEventListener('click', function() {
             const copy = JSON.parse(JSON.stringify(l));
-            lectures.splice(idx + 1, 0, copy);
+            lectures.splice(lectures.indexOf(l) + 1, 0, copy);
+            openLectures.add(copy);
             renderLecturesList();
         });
         left.appendChild(dupBtn);
@@ -1097,7 +1377,7 @@
         delBtn.textContent = 'Удалить лекцию';
         delBtn.addEventListener('click', function() {
             if (confirm('Удалить лекцию «' + (l.title || '(без названия)') + '»?')) {
-                lectures.splice(idx, 1);
+                lectures.splice(lectures.indexOf(l), 1);
                 renderLecturesList();
             }
         });
@@ -1106,17 +1386,20 @@
         body.appendChild(actions);
         card.appendChild(body);
 
-        if (idx === 0) card.classList.add('open');
-
         return card;
     }
 
-    document.getElementById('addLectureBtn').addEventListener('click', function() {
-        lectures.push(blankLecture());
+    document.getElementById('addSubjectBtn').addEventListener('click', function() {
+        const name = prompt('Название нового предмета');
+        if (name === null) return;
+        const trimmed = name.trim();
+        if (!trimmed) return;
+        const blank = blankLecture();
+        blank.subject = trimmed;
+        lectures.push(blank);
+        openSubjects.add(trimmed);
+        openLectures.add(blank);
         renderLecturesList();
-        const cards = document.querySelectorAll('#lecturesList .p-card');
-        cards.forEach(function(c) { c.classList.remove('open'); });
-        if (cards.length) cards[cards.length - 1].classList.add('open');
     });
 
     makeFileManager({
