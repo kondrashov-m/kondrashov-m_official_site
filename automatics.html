@@ -325,6 +325,78 @@
         padding: 2rem 1rem;
     }
 
+    /* Карточка "Последние лекции" — самые свежие записи по дате, все предметы вместе. */
+    .latest-lectures-card {
+        background: rgba(255, 255, 255, 0.045);
+        border: 1px solid rgba(0, 163, 255, 0.25);
+        border-radius: 28px;
+        padding: 1.75rem;
+        align-self: start;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        min-width: 0;
+    }
+    .latest-lectures-card:empty {
+        display: none;
+    }
+    .latest-lectures-eyebrow {
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: #00a3ff;
+    }
+    .latest-lectures-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+        min-width: 0;
+    }
+    .latest-lecture-item {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.15rem;
+        width: 100%;
+        min-width: 0;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
+        padding: 0.7rem 0.9rem;
+        color: #fff;
+        text-align: left;
+        cursor: pointer;
+        transition: all 0.25s ease;
+        font-family: inherit;
+    }
+    .latest-lecture-item:hover {
+        border-color: rgba(0, 163, 255, 0.4);
+        background: rgba(0, 163, 255, 0.08);
+        transform: translateX(2px);
+    }
+    .latest-lecture-subject,
+    .latest-lecture-title {
+        max-width: 100%;
+        overflow-wrap: anywhere;
+    }
+    .latest-lecture-subject {
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: #00a3ff;
+    }
+    .latest-lecture-title {
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.85);
+    }
+
+    @media (max-width: 991px) {
+        .latest-lectures-card { grid-column: span 2; }
+    }
+    @media (max-width: 576px) {
+        .latest-lectures-card { grid-column: span 1; }
+    }
+
     .subjects-empty-state {
         grid-column: 1 / -1;
         text-align: center;
@@ -767,6 +839,9 @@
                     <p class="kx-hero-lead">Automatics_v18 — мой скрипт для автоматической записи лекций в вузе. Он сам захватывает экран по расписанию и заливает запись на YouTube — здесь собраны все актуальные лекции. Выбери предмет, а затем — дату лекции.</p>
                     <span class="updated-badge" id="updatedBadge">Обновлено: —</span>
                 </div>
+                <!-- Последние лекции — занимает третью колонку первой строки, рядом
+                     с текстом intro (тот растянут на 2 колонки). Рендерится из LECTURES. -->
+                <div class="latest-lectures-card" id="latestLecturesCard"></div>
                 <!-- Карточки предметов — рендерятся из LECTURES в скрипте внизу.
                      display:contents делает этот div невидимым для сетки, так что
                      карточки внутри становятся её обычными ячейками. -->
@@ -951,6 +1026,43 @@
         attachButtonRipple();
     }
 
+    // ===== Карточка "Последние лекции" =====
+    // Свежими считаются все лекции с самой недавней датой в LECTURES — если в
+    // один день выгрузили несколько предметов, покажутся они все подряд.
+    function renderLatestLectures() {
+        const card = document.getElementById('latestLecturesCard');
+        if (!card) return;
+
+        if (!LECTURES.length) {
+            card.innerHTML = '';
+            return;
+        }
+
+        const maxDate = LECTURES.reduce(function(max, l) { return l.date > max ? l.date : max; }, LECTURES[0].date);
+        const latest = LECTURES
+            .filter(function(l) { return l.date === maxDate; })
+            .sort(function(a, b) { return a.subject.localeCompare(b.subject, 'ru'); });
+
+        card.innerHTML =
+            '<span class="latest-lectures-eyebrow">Последние лекции</span>' +
+            '<div class="latest-lectures-list">' +
+                latest.map(function(l, idx) {
+                    return '<button type="button" class="latest-lecture-item" data-idx="' + idx + '">' +
+                                '<span class="latest-lecture-subject">' + l.subject + '</span>' +
+                                '<span class="latest-lecture-title">' + (l.title || ('Лекция от ' + formatLectureDate(l.date))) + '</span>' +
+                           '</button>';
+                }).join('') +
+            '</div>';
+
+        card.querySelectorAll('.latest-lecture-item').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                const l = latest[Number(this.dataset.idx)];
+                document.getElementById('lectureModal').classList.add('active');
+                showLectureVideo(l, l.subject);
+            });
+        });
+    }
+
     function openSubjectModal(subject) {
         currentSubject = subject;
         renderLectureListBody(subject);
@@ -982,6 +1094,7 @@
                 });
             });
             renderSubjects();
+            renderLatestLectures();
             const updatedBadge = document.getElementById('updatedBadge');
             if (updatedBadge && data.updated) {
                 updatedBadge.textContent = 'Обновлено: ' + data.updated;
