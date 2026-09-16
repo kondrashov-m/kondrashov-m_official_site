@@ -1,5 +1,5 @@
 {
-  "updated": "09.09.2026",
+  "updated": "16.09.2026",
   "lectures": [
     {
       "subject": "BackEnd-разработка",
@@ -36,6 +36,12 @@
       "title": "Лекция от 09.09.2026",
       "date": "2026-09-09",
       "youtube": "https://youtu.be/-SxsNvuDtA8?si=0YOqKuIKj7hLLuYS"
+    },
+    {
+      "subject": "Сети и телекоммуникации",
+      "title": "Лекция от 16.09.2026",
+      "date": "2026-09-16",
+      "youtube": "https://youtu.be/09udgZsxkCo"
     },
     {
       "subject": "Системы искусственного интеллекта",
