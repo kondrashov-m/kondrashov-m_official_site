@@ -1,5 +1,5 @@
 {
-  "updated": "16.09.2026",
+  "updated": "19.09.2026",
   "lectures": [
     {
       "subject": "BackEnd-разработка",
@@ -60,6 +60,30 @@
       "title": "Лекция от 16.09.2026",
       "date": "2026-09-16",
       "youtube": "https://youtu.be/trimV3cpOkA"
+    },
+    {
+      "subject": "Теория принятия решений",
+      "title": "Лекция от 19.09.2026",
+      "date": "2026-09-19",
+      "youtube": "https://youtu.be/DAZJZNhuXtk"
+    },
+    {
+      "subject": "BackEnd-разработка",
+      "title": "Лекция от 19.09.2026 (часть 2)",
+      "date": "2026-09-19",
+      "youtube": "https://youtu.be/JQzem2AyJEU"
+    },
+    {
+      "subject": "BackEnd-разработка",
+      "title": "Лекция от 19.09.2026",
+      "date": "2026-09-19",
+      "youtube": "https://youtu.be/CeZupx152b8"
+    },
+    {
+      "subject": "Цифровые методы обработки информации",
+      "title": "Лекция от 19.09.2026",
+      "date": "2026-09-19",
+      "youtube": "https://youtu.be/ugdo-VFczhM"
     }
   ]
 }
