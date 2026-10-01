@@ -1,5 +1,5 @@
 {
-  "updated": "10.09.2026",
+  "updated": "01.10.2026",
   "protocols": [
     {
       "name": "SSH (DE)",
@@ -9,7 +9,7 @@
       "file": "android-httpinjector.ehi",
       "link": "",
       "desc": "Конфиг на базе SSL/TLS с проксированием через SSH. Помогает обходить ограничения трафика оператора — работает, даже если интернет по тарифу закончился.",
-      "status": "ok",
+      "status": "maintenance",
       "steps": [
         {
           "icon": "download",
