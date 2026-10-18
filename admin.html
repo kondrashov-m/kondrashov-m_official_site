@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Админка сайта — Берлога, Automatics и Проекты</title>
+<title>Админка сайта — Берлога, Automatics, Проекты и Версия</title>
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" href="favicon.ico">
 
@@ -95,6 +95,117 @@
         color: #00a3ff;
     }
     .tab-pane[hidden] { display: none; }
+
+    /* ===== Вкладка «Версия» ===== */
+    #paneVersion {
+        --accent: #b388ff;
+        --accent-rgb: 179, 136, 255;
+        --accent-2: #d1b3ff;
+        --accent-contrast: #1a0b33;
+    }
+    #tabBtnVersion.active {
+        border-color: rgba(179, 136, 255, 0.5);
+        background: rgba(179, 136, 255, 0.15);
+        color: #b388ff;
+    }
+    .ver-card {
+        max-width: 900px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 20px;
+        padding: 1.25rem 1.4rem;
+        margin-bottom: 1.25rem;
+    }
+    .ver-card-title {
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: rgba(255, 255, 255, 0.45);
+        margin: 0 0 0.9rem;
+        font-weight: 600;
+    }
+    .ver-now {
+        display: flex;
+        align-items: baseline;
+        flex-wrap: wrap;
+        gap: 0.4rem 1rem;
+    }
+    .ver-now-num {
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 3.4rem;
+        line-height: 1;
+        letter-spacing: 0.02em;
+        color: var(--accent);
+    }
+    .ver-now-code {
+        font-size: 1rem;
+        color: rgba(255, 255, 255, 0.7);
+    }
+    .ver-now-code b { color: white; font-weight: 600; }
+    .ver-bumps {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+        margin-bottom: 1rem;
+    }
+    .ver-bumps button { display: inline-flex; flex-direction: column; align-items: flex-start; gap: 0.1rem; border-radius: 16px; padding: 0.6rem 1.1rem; }
+    .ver-bumps button small { font-weight: 400; font-size: 0.7rem; opacity: 0.7; }
+    .ver-bumps button.picked { background: var(--accent); color: var(--accent-contrast); border-color: var(--accent); }
+    .ver-preview {
+        margin-top: 0.4rem;
+        border: 1px dashed rgba(255, 255, 255, 0.15);
+        border-radius: 14px;
+        padding: 0.8rem 1rem;
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.6);
+    }
+    .ver-preview .arrow { color: var(--accent); margin: 0 0.4rem; }
+    .ver-preview .new { color: white; font-weight: 600; }
+    .ver-files { display: flex; flex-direction: column; gap: 0.5rem; }
+    .ver-file {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.65rem 0.9rem;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        font-size: 0.85rem;
+    }
+    .ver-file code { color: white; }
+    .ver-file .what { color: rgba(255, 255, 255, 0.45); font-size: 0.78rem; }
+    .ver-file .state { margin-left: auto; font-size: 0.78rem; color: rgba(255, 255, 255, 0.5); white-space: nowrap; }
+    .ver-file .state.ok { color: var(--accent); }
+    .ver-file .state.warn { color: #ffc107; }
+    .ver-file .state.err { color: #ff5252; }
+    .git-head { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; font-size: 0.85rem; color: rgba(255, 255, 255, 0.6); margin-bottom: 0.9rem; }
+    .git-dot { width: 9px; height: 9px; border-radius: 50%; background: rgba(255, 255, 255, 0.25); flex-shrink: 0; }
+    .git-dot.on { background: #00e676; box-shadow: 0 0 0 4px rgba(0, 230, 118, 0.15); }
+    .git-dot.off { background: #ff5252; }
+    .git-head code { color: white; }
+    .git-head .refresh { margin-left: auto; padding: 0.35rem 0.8rem; font-size: 0.75rem; }
+    .git-files { display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 1rem; max-height: 260px; overflow: auto; }
+    .git-file { text-transform: none; letter-spacing: normal; margin: 0; color: inherit; display: flex; align-items: center; gap: 0.65rem; font-size: 0.82rem; padding: 0.4rem 0.6rem; border-radius: 10px; background: rgba(255, 255, 255, 0.03); cursor: pointer; }
+    .git-file:hover { background: rgba(255, 255, 255, 0.06); }
+    .git-file input { accent-color: var(--accent); width: 16px; height: 16px; margin: 0; }
+    .git-file code { color: rgba(255, 255, 255, 0.9); word-break: break-all; }
+    .git-file .code { font-family: monospace; font-size: 0.72rem; width: 1.6rem; text-align: center; border-radius: 6px; padding: 0.1rem 0; background: rgba(var(--accent-rgb), 0.15); color: var(--accent); flex-shrink: 0; }
+    .git-file .code.new { background: rgba(0, 230, 118, 0.15); color: #00e676; }
+    .git-file .code.del { background: rgba(255, 82, 82, 0.15); color: #ff5252; }
+    .git-help { font-size: 0.82rem; line-height: 1.6; color: rgba(255, 255, 255, 0.6); }
+    .git-help code { color: white; }
+    .git-log { white-space: pre-wrap; font-family: monospace; font-size: 0.75rem; color: rgba(255, 255, 255, 0.65); background: rgba(0, 0, 0, 0.35); border-radius: 12px; padding: 0.8rem 1rem; margin-top: 1rem; max-height: 260px; overflow: auto; }
+    .git-log[hidden] { display: none; }
+    button.big { padding: 0.8rem 1.6rem; font-size: 0.95rem; }
+    .git-modes { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.1rem; }
+    .git-mode { background: transparent; border-color: rgba(255, 255, 255, 0.15); color: rgba(255, 255, 255, 0.65); }
+    .git-mode.active { background: rgba(var(--accent-rgb), 0.15); border-color: rgba(var(--accent-rgb), 0.5); color: var(--accent); }
+    .git-help a { color: var(--accent); }
+    .git-changes { margin-top: 1rem; font-size: 0.8rem; color: rgba(255, 255, 255, 0.55); }
+    .git-changes summary { cursor: pointer; user-select: none; }
+    .git-changes .git-files { margin: 0.6rem 0 0; }
+    .git-file.ro { cursor: default; }
+    .git-file .code.mod { background: rgba(var(--accent-rgb), 0.15); color: var(--accent); }
 
     .warning {
         border: 1px solid rgba(255, 193, 7, 0.4);
@@ -458,7 +569,7 @@
 <div class="page">
 
 <h1>Админка сайта</h1>
-<p class="sub">Правка данных для berloga.html, automatics.html и проектов на главной — без правки кода.</p>
+<p class="sub">Правка данных для berloga.html, automatics.html, проектов на главной и версии сайта — без правки кода.</p>
 
 <div class="warning">
     ⚠️ Эта страница работает только локально, у тебя на компьютере. При запуске через локальный сервер
@@ -468,7 +579,7 @@
     «Скачать JSON» и замени файл вручную.<br><br>
     Сайт лежит на GitHub Pages статически, поэтому эта страница ничего не меняет на живом сайте сама по себе.
     После сохранения — закоммить и запушь изменённый файл (<code>berloga/protocols.json</code>,
-    <code>automatics/lectures.json</code> или <code>projects/projects.json</code>) в репозиторий, только тогда
+    <code>automatics/lectures.json</code>, <code>projects/projects.json</code>, а для версии — <code>footer.html</code>, <code>index.html</code>, <code>berloga.html</code>) в репозиторий, только тогда
     изменения появятся на сайте.
 </div>
 
@@ -476,6 +587,7 @@
     <button type="button" class="tab-btn active" id="tabBtnBerloga">🟢 Берлога</button>
     <button type="button" class="tab-btn" id="tabBtnAutomatics">🔵 Automatics</button>
     <button type="button" class="tab-btn" id="tabBtnProjects">🗂️ Проекты</button>
+    <button type="button" class="tab-btn" id="tabBtnVersion">🏷️ Версия</button>
 </div>
 
 <!-- ===== Вкладка: Берлога (протоколы) ===== -->
@@ -542,6 +654,83 @@
     <div class="items-list" id="projectsList"></div>
     <div class="empty-state" id="emptyStateProj">Загружаю projects/projects.json автоматически…</div>
     <button class="add-item-btn" id="addProjectBtn" style="display:none;">+ Добавить проект</button>
+
+</div>
+
+<!-- ===== Вкладка: Версия сайта (footer.html, index.html, berloga.html) ===== -->
+<div class="tab-pane" id="paneVersion" hidden>
+
+    <div class="toolbar">
+        <button class="primary" id="pickDirBtnVer">📂 Выбрать папку сайта</button>
+        <button class="primary" id="grantBtnVer" style="display:none;">🔓 Разрешить доступ к папке</button>
+        <span class="status" id="statusVer"></span>
+    </div>
+
+    <div class="ver-card">
+        <div class="ver-card-title">Сейчас на сайте</div>
+        <div class="ver-now">
+            <span class="ver-now-num" id="verNowNum">—</span>
+            <span class="ver-now-code">коднейм <b id="verNowCode">—</b></span>
+        </div>
+    </div>
+
+    <div class="ver-card">
+        <div class="ver-card-title">Новая версия</div>
+        <div class="ver-bumps">
+            <button type="button" id="bumpPatch">Патч<small id="bumpPatchVal">—</small></button>
+            <button type="button" id="bumpMinor">Минор<small id="bumpMinorVal">—</small></button>
+            <button type="button" id="bumpMajor">Мажор<small id="bumpMajorVal">—</small></button>
+        </div>
+        <div class="field-row">
+            <div class="field">
+                <label for="verNewNum">Номер версии</label>
+                <input type="text" id="verNewNum" placeholder="0.4.3" autocomplete="off">
+                <div class="hint">Цифры через точку: 0.4.3, 1.0</div>
+            </div>
+            <div class="field">
+                <label for="verNewCode">Коднейм</label>
+                <input type="text" id="verNewCode" placeholder="Avrora" autocomplete="off">
+                <div class="hint">Виден при наведении на версию в футере</div>
+            </div>
+        </div>
+        <div class="ver-preview" id="verPreview">Загружаю текущую версию…</div>
+    </div>
+
+    <div class="ver-card">
+        <div class="ver-card-title">Что поменяется</div>
+        <div class="ver-files" id="verFiles"></div>
+    </div>
+
+    <div class="toolbar">
+        <button class="primary" id="applyBtnVer" disabled>💾 Сохранить новую версию</button>
+        <button class="ghost" id="downloadBtnVer" disabled>⬇️ Скачать изменённые файлы</button>
+    </div>
+
+    <div class="ver-card" id="gitCard">
+        <div class="ver-card-title">Опубликовать на сайте (git push)</div>
+        <div class="git-head">
+            <span class="git-dot" id="gitDot"></span>
+            <span id="gitHeadText" style="flex:1;min-width:0">Проверяю помощника…</span>
+            <button type="button" class="ghost refresh" id="gitRefreshBtn">↻</button>
+        </div>
+        <div class="git-help" id="gitHelp" hidden></div>
+        <div id="gitBody" hidden>
+            <div class="field" style="margin-bottom:1rem">
+                <label for="gitMsg">Текст коммита</label>
+                <input type="text" id="gitMsg" autocomplete="off" placeholder="что поменял">
+            </div>
+            <div class="toolbar" style="margin-bottom:0">
+                <button class="primary big" id="gitPushBtn" disabled>🚀 Запушить</button>
+                <span class="status" id="statusGit"></span>
+            </div>
+            <details class="git-changes" id="gitChanges">
+                <summary id="gitChangesSummary">Изменённые файлы</summary>
+                <div class="git-files" id="gitFiles"></div>
+            </details>
+        </div>
+        <div class="git-log" id="gitLog" hidden></div>
+    </div>
+
 
 </div>
 
@@ -807,17 +996,21 @@
     }
 
     // ===== Переключение вкладок =====
+    window.activateTab = activateTab;
     function activateTab(name) {
         document.getElementById('paneBerloga').hidden = name !== 'berloga';
         document.getElementById('paneAutomatics').hidden = name !== 'automatics';
         document.getElementById('paneProjects').hidden = name !== 'projects';
+        document.getElementById('paneVersion').hidden = name !== 'version';
         document.getElementById('tabBtnBerloga').classList.toggle('active', name === 'berloga');
         document.getElementById('tabBtnAutomatics').classList.toggle('active', name === 'automatics');
         document.getElementById('tabBtnProjects').classList.toggle('active', name === 'projects');
+        document.getElementById('tabBtnVersion').classList.toggle('active', name === 'version');
     }
     document.getElementById('tabBtnBerloga').addEventListener('click', function() { activateTab('berloga'); });
     document.getElementById('tabBtnAutomatics').addEventListener('click', function() { activateTab('automatics'); });
     document.getElementById('tabBtnProjects').addEventListener('click', function() { activateTab('projects'); });
+    document.getElementById('tabBtnVersion').addEventListener('click', function() { activateTab('version'); });
 </script>
 
 <script>
@@ -1559,6 +1752,433 @@
             document.getElementById('emptyStateProj').textContent = 'Файл ещё не загружен. Нажми «Открыть projects.json» выше.';
         }
     });
+</script>
+<script>
+    // ===== Вкладка «Версия»: номер версии и коднейм сайта =====
+    // Версия хранится в трёх местах — все правятся разом:
+    //   footer.html  — главный источник (подгружается на все страницы, оттуда же её берёт берлога);
+    //   index.html   — запасной футер внутри #footer-placeholder (виден, пока footer.html не загрузился);
+    //   berloga.html — запасная строка загрузчика «berloga X.Y» на случай, если footer.html не загрузится.
+    (function() {
+        const SPAN_RE = /(<span class="version-info" title="codename: )([^"]*)(">Версия )([^<]*)(<\/span>)/g;
+        const BERLOGA_RE = /('> kondrashov-m \| berloga )([^']*)(',)/;
+        const TARGETS = [
+            { name: 'footer.html',  what: 'футер всех страниц — версия и коднейм', kind: 'span', required: true },
+            { name: 'index.html',   what: 'запасной футер на главной',            kind: 'span' },
+            { name: 'berloga.html', what: 'строка загрузчика берлоги',            kind: 'berloga' }
+        ];
+        const VERSION_OK = /^\d+(\.\d+){1,2}$/;
+        const supportsDir = !!window.showDirectoryPicker;
+
+        let dirHandle = null, pendingDir = null;
+        let texts = {};          // имя файла -> текущий текст
+        let current = null;      // { version, codename }
+
+        const $ = function(id) { return document.getElementById(id); };
+        const st = function(t, c) { setStatus('statusVer', t, c); };
+
+        function readCurrent(text, kind) {
+            if (kind === 'berloga') {
+                const m = text.match(BERLOGA_RE);
+                return m ? { version: m[2] } : null;
+            }
+            SPAN_RE.lastIndex = 0;
+            const m = SPAN_RE.exec(text);
+            return m ? { version: m[4].trim(), codename: m[2] } : null;
+        }
+
+        function applyTo(text, kind, version, codename) {
+            if (kind === 'berloga') {
+                return text.replace(BERLOGA_RE, function(_, a, _v, c) { return a + version + c; });
+            }
+            return text.replace(SPAN_RE, function(_, a, _c, b, _v, e) { return a + codename + b + version + e; });
+        }
+
+        function bump(v, part) {
+            const n = (v || '0.0.0').split('.').map(function(x) { return parseInt(x, 10) || 0; });
+            while (n.length < 3) n.push(0);
+            if (part === 'major') return (n[0] + 1) + '.0.0';
+            if (part === 'minor') return n[0] + '.' + (n[1] + 1) + '.0';
+            return n[0] + '.' + n[1] + '.' + (n[2] + 1);
+        }
+
+        function escapeHtml(s) {
+            return String(s).replace(/[&<>"]/g, function(ch) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]; });
+        }
+
+        function newValues() {
+            return { version: $('verNewNum').value.trim(), codename: $('verNewCode').value.trim() };
+        }
+
+        function validate(v) {
+            if (!v.version) return 'Укажи номер версии.';
+            if (!VERSION_OK.test(v.version)) return 'Номер версии — только цифры через точку, например 0.4.3.';
+            if (!v.codename) return 'Укажи коднейм.';
+            if (/["<>']/.test(v.codename)) return 'В коднейме нельзя использовать кавычки и угловые скобки.';
+            return null;
+        }
+
+        function render() {
+            if (current) {
+                $('verNowNum').textContent = current.version;
+                $('verNowCode').textContent = current.codename || '—';
+                $('bumpPatchVal').textContent = bump(current.version, 'patch');
+                $('bumpMinorVal').textContent = bump(current.version, 'minor');
+                $('bumpMajorVal').textContent = bump(current.version, 'major');
+            }
+            const v = newValues();
+            const err = validate(v);
+            ['Patch', 'Minor', 'Major'].forEach(function(p) {
+                $('bump' + p).classList.toggle('picked', !!current && v.version === bump(current.version, p.toLowerCase()));
+            });
+
+            const changed = current && (v.version !== current.version || v.codename !== current.codename);
+            if (!current) {
+                $('verPreview').textContent = 'Не удалось прочитать footer.html — выбери папку сайта кнопкой выше.';
+            } else if (err) {
+                $('verPreview').innerHTML = '<span style="color:#ff5252">' + escapeHtml(err) + '</span>';
+            } else if (!changed) {
+                $('verPreview').textContent = 'Выбери новую версию кнопками выше или впиши вручную.';
+            } else {
+                $('verPreview').innerHTML = 'Версия ' + escapeHtml(current.version) + ' «' + escapeHtml(current.codename) + '»' +
+                    '<span class="arrow">→</span><span class="new">Версия ' + escapeHtml(v.version) + ' «' + escapeHtml(v.codename) + '»</span>';
+            }
+
+            $('verFiles').innerHTML = TARGETS.map(function(t) {
+                const text = texts[t.name];
+                let state, cls;
+                if (text == null) { state = 'не прочитан'; cls = 'warn'; }
+                else {
+                    const cur = readCurrent(text, t.kind);
+                    if (!cur) { state = t.required ? 'метка версии не найдена' : 'нечего менять'; cls = t.required ? 'err' : ''; }
+                    else if (!changed || err) { state = 'сейчас ' + cur.version; cls = ''; }
+                    else { state = cur.version + ' → ' + v.version; cls = 'ok'; }
+                }
+                return '<div class="ver-file"><div><code>' + t.name + '</code><div class="what">' + t.what + '</div></div>' +
+                    '<span class="state ' + cls + '">' + escapeHtml(state) + '</span></div>';
+            }).join('');
+
+            const ready = !!current && !err && changed;
+            $('applyBtnVer').disabled = !ready;
+            $('downloadBtnVer').disabled = !ready;
+        }
+
+        function loadTexts(map) {
+            texts = map;
+            current = texts['footer.html'] != null ? readCurrent(texts['footer.html'], 'span') : null;
+            if (current) {
+                if (!$('verNewNum').value) $('verNewNum').value = current.version;
+                if (!$('verNewCode').value) $('verNewCode').value = current.codename;
+            }
+            render();
+        }
+
+        async function readFromDir(dir) {
+            const map = {};
+            for (const t of TARGETS) {
+                try {
+                    const fh = await dir.getFileHandle(t.name);
+                    map[t.name] = await (await fh.getFile()).text();
+                } catch (e) { /* файла нет в этой папке */ }
+            }
+            if (map['footer.html'] == null) throw new Error('в выбранной папке нет footer.html — нужна корневая папка сайта');
+            return map;
+        }
+
+        async function readFromServer() {
+            const map = {};
+            await Promise.all(TARGETS.map(async function(t) {
+                try {
+                    const r = await fetch(t.name, { cache: 'no-store' });
+                    if (r.ok) map[t.name] = await r.text();
+                } catch (e) { /* открыто как file:// или файла нет */ }
+            }));
+            return map;
+        }
+
+        async function useDir(dir) {
+            loadTexts(await readFromDir(dir));
+            dirHandle = dir;
+            $('grantBtnVer').style.display = 'none';
+            if (window.refreshGhList) window.refreshGhList();
+            try { await idbSet('siteDirHandle', dir); } catch (e) { /* не запомним — не страшно */ }
+        }
+
+        $('pickDirBtnVer').addEventListener('click', async function() {
+            if (!supportsDir) {
+                st('Этот браузер не умеет работать с папками — открой админку в Chrome или Edge, либо используй «Скачать изменённые файлы».', 'err');
+                return;
+            }
+            try {
+                const dir = await window.showDirectoryPicker({ id: 'site-root', mode: 'readwrite' });
+                await useDir(dir);
+                st('Папка «' + dir.name + '» подключена — сохранение пишет прямо в файлы.', 'ok');
+            } catch (e) {
+                if (e.name !== 'AbortError') st('Не получилось открыть папку: ' + e.message, 'err');
+            }
+        });
+
+        $('grantBtnVer').addEventListener('click', async function() {
+            if (!pendingDir) return;
+            try {
+                if (await pendingDir.requestPermission({ mode: 'readwrite' }) !== 'granted') throw new Error('доступ не выдан');
+                await useDir(pendingDir);
+                st('Доступ к папке «' + pendingDir.name + '» получен.', 'ok');
+            } catch (e) {
+                st('Не получилось: ' + e.message, 'err');
+            }
+        });
+
+        window.siteVersionInfo = function() { return newValues(); };
+        window.getSiteDir = function() { return dirHandle; };
+        // После отправки на GitHub без папки: считаем отправленные тексты текущими
+        window.applyPublishedTexts = function(map) {
+            loadTexts(Object.assign({}, texts, map));
+        };
+        // Готовые тексты файлов с новой версией — для отправки на GitHub без выбранной папки
+        window.siteVersionOutputs = function() {
+            const v = newValues();
+            if (!current || validate(v) || (v.version === current.version && v.codename === current.codename)) return null;
+            return buildOutputs().out;
+        };
+
+        $('verNewNum').addEventListener('input', render);
+        $('verNewCode').addEventListener('input', render);
+        [['bumpPatch', 'patch'], ['bumpMinor', 'minor'], ['bumpMajor', 'major']].forEach(function(b) {
+            $(b[0]).addEventListener('click', function() {
+                if (!current) return;
+                $('verNewNum').value = bump(current.version, b[1]);
+                render();
+                $('verNewCode').focus();
+            });
+        });
+
+        function buildOutputs() {
+            const v = newValues();
+            const out = {};
+            TARGETS.forEach(function(t) {
+                const text = texts[t.name];
+                if (text == null || !readCurrent(text, t.kind)) return;
+                out[t.name] = applyTo(text, t.kind, v.version, v.codename);
+            });
+            return { v: v, out: out };
+        }
+
+        $('applyBtnVer').addEventListener('click', async function() {
+            const err = validate(newValues());
+            if (err) { st(err, 'err'); return; }
+
+            if (!dirHandle) {
+                if (!supportsDir) { st('Прямая запись недоступна в этом браузере — используй «Скачать изменённые файлы».', 'err'); return; }
+                try {
+                    const dir = await window.showDirectoryPicker({ id: 'site-root', mode: 'readwrite' });
+                    await useDir(dir);
+                } catch (e) {
+                    if (e.name === 'AbortError') { st('Сохранение отменено.', ''); return; }
+                    st('Не получилось открыть папку: ' + e.message, 'err'); return;
+                }
+            }
+
+            try {
+                if (await dirHandle.requestPermission({ mode: 'readwrite' }) !== 'granted') throw new Error('нет разрешения на запись');
+                // Перечитываем файлы прямо перед записью, чтобы не затереть свежие правки
+                texts = await readFromDir(dirHandle);
+                const res = buildOutputs();
+                const written = [];
+                for (const name of Object.keys(res.out)) {
+                    const fh = await dirHandle.getFileHandle(name);
+                    const w = await fh.createWritable();
+                    await w.write(res.out[name]);
+                    await w.close();
+                    written.push(name);
+                }
+                loadTexts(await readFromDir(dirHandle));
+                if (window.refreshGitStatus) window.refreshGitStatus();
+                if (window.refreshGhList) window.refreshGhList();
+                st('Готово: версия ' + res.v.version + ' «' + res.v.codename + '» записана в ' + written.join(', ') + '. Осталось нажать «Закоммитить и запушить» ниже.', 'ok');
+            } catch (e) {
+                st('Не удалось сохранить: ' + e.message, 'err');
+            }
+        });
+
+        $('downloadBtnVer').addEventListener('click', function() {
+            const err = validate(newValues());
+            if (err) { st(err, 'err'); return; }
+            const res = buildOutputs();
+            Object.keys(res.out).forEach(function(name, i) {
+                setTimeout(function() {
+                    const url = URL.createObjectURL(new Blob([res.out[name]], { type: 'text/html' }));
+                    const a = document.createElement('a');
+                    a.href = url; a.download = name;
+                    document.body.appendChild(a); a.click(); a.remove();
+                    URL.revokeObjectURL(url);
+                }, i * 300);
+            });
+            st('Скачал ' + Object.keys(res.out).join(', ') + ' — замени ими файлы в корне сайта.', 'ok');
+        });
+
+        (async function init() {
+            if (supportsDir) {
+                try {
+                    const dir = await idbGet('siteDirHandle');
+                    if (dir) {
+                        const perm = await dir.queryPermission({ mode: 'readwrite' });
+                        if (perm === 'granted') {
+                            await useDir(dir);
+                            st('Работаю с папкой «' + dir.name + '» — сохранение пишет прямо в файлы.', 'ok');
+                            return;
+                        }
+                        if (perm === 'prompt') {
+                            pendingDir = dir;
+                            $('grantBtnVer').style.display = 'inline-flex';
+                        }
+                    }
+                } catch (e) { /* папка могла переехать — выберут заново */ }
+            } else {
+                $('pickDirBtnVer').style.display = 'none';
+            }
+            loadTexts(await readFromServer());
+            if (current) {
+                st(dirHandle ? '' : 'Версия прочитана с сервера. Для сохранения один раз выбери корневую папку сайта (где лежит footer.html).', 'ok');
+            } else {
+                st('Не получилось прочитать footer.html автоматически — выбери корневую папку сайта.', '');
+            }
+        })();
+    })();
+</script>
+<script>
+    // ===== Вкладка «Версия»: публикация =====
+    // Кнопка «Запушить» делает то же, что руками в папке сайта:
+    //   git add .  →  git commit -m "<текст>"  →  git pull  →  git push
+    // Браузер сам запускать git не умеет, это делает помощник tools/admin_server.py
+    // (стартует вместе с Windows, работает в фоне на localhost:8787).
+    (function() {
+        const PORT = 8787;
+        const onHelper = location.protocol === 'http:' && location.port === String(PORT) &&
+            (location.hostname === 'localhost' || location.hostname === '127.0.0.1');
+        const API = onHelper ? '' : 'http://localhost:' + PORT;
+        const $ = function(id) { return document.getElementById(id); };
+        let state = null;
+
+        function esc(s) {
+            return String(s).replace(/[&<>"]/g, function(ch) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]; });
+        }
+        function log(text) { $('gitLog').textContent = text || ''; $('gitLog').hidden = !text; }
+
+        function suggestion() {
+            const v = window.siteVersionInfo && window.siteVersionInfo();
+            return v && v.version ? 'release: версия ' + v.version + (v.codename ? ' «' + v.codename + '»' : '') : 'что поменял';
+        }
+
+        function refreshButton() {
+            $('gitMsg').placeholder = suggestion();
+            const has = state && (state.files.length || state.ahead);
+            $('gitPushBtn').disabled = !has || !$('gitMsg').value.trim();
+        }
+
+        function render() {
+            $('gitDot').className = 'git-dot on';
+            const n = state.files.length;
+            $('gitHeadText').innerHTML = 'Ветка <code>' + esc(state.branch) + '</code> · ' +
+                (n ? 'изменённых файлов: <b>' + n + '</b>' : 'изменений нет') +
+                (state.ahead ? ' · <span style="color:#ffc107">не запушено коммитов: ' + state.ahead + '</span>' : '') +
+                '<br><span style="opacity:.6">последний коммит: ' + esc(state.last) + '</span>';
+            $('gitHelp').hidden = true;
+            $('gitBody').hidden = false;
+            $('gitChanges').style.display = n ? '' : 'none';
+            $('gitChangesSummary').textContent = 'Что уйдёт в коммит (' + n + ')';
+            $('gitFiles').innerHTML = state.files.map(function(f) {
+                const isNew = f.code === '??' || f.code === 'A' || f.code === '?';
+                const cls = isNew ? 'new' : (f.code === 'D' ? 'del' : '');
+                return '<div class="git-file ro"><span class="code ' + cls + '">' + esc(isNew ? 'new' : f.code) + '</span><code>' + esc(f.path) + '</code></div>';
+            }).join('');
+            refreshButton();
+        }
+
+        function offline(reason) {
+            state = null;
+            $('gitDot').className = 'git-dot off';
+            $('gitHeadText').textContent = 'Помощник не запущен';
+            $('gitBody').hidden = true;
+            $('gitHelp').hidden = false;
+            $('gitHelp').innerHTML = reason ||
+                'Запусти <code>start_admin.bat</code> в папке сайта — помощник включится и откроет эту страницу. ' +
+                'Чтобы больше никогда не запускать его руками, один раз запусти <code>tools\\install_autostart.bat</code>: ' +
+                'помощник будет тихо стартовать вместе с Windows.';
+        }
+
+        async function loadStatus() {
+            if (!onHelper) {
+                // Админка открыта файлом или с живого сайта — проверяем, жив ли помощник, и переходим на него
+                try {
+                    const r = await fetch(API + '/__git/ping', { cache: 'no-store' });
+                    if (r.ok) {
+                        const isLocalPage = location.protocol === 'file:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+                        if (isLocalPage) {
+                            location.replace(API + '/admin.html#version');
+                            return;
+                        }
+                        offline('Помощник работает. Пушить можно из админки на компе: ' +
+                            '<a href="' + API + '/admin.html#version">открыть её</a>.');
+                        return;
+                    }
+                } catch (e) { /* не запущен */ }
+                offline();
+                return;
+            }
+            try {
+                const r = await fetch('/__git/status', { cache: 'no-store' });
+                const data = await r.json();
+                if (!r.ok) throw new Error(data.error || ('HTTP ' + r.status));
+                state = data;
+                render();
+            } catch (e) {
+                if (e instanceof TypeError) { offline(); return; }
+                offline('Ошибка git: ' + esc(e.message));
+            }
+        }
+        window.refreshGitStatus = loadStatus;
+
+        $('gitMsg').addEventListener('input', refreshButton);
+        $('gitMsg').addEventListener('keydown', function(e) { if (e.key === 'Enter' && !$('gitPushBtn').disabled) $('gitPushBtn').click(); });
+        $('gitRefreshBtn').addEventListener('click', loadStatus);
+        ['verNewNum', 'verNewCode'].forEach(function(id) { $(id).addEventListener('input', refreshButton); });
+
+        $('gitPushBtn').addEventListener('click', async function() {
+            const btn = $('gitPushBtn');
+            const message = $('gitMsg').value.trim();
+            if (!message) return;
+            btn.disabled = true;
+            btn.textContent = '⏳ Пушу…';
+            setStatus('statusGit', '', '');
+            log('');
+            try {
+                const r = await fetch('/__git/commit-push', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-Admin': '1' },
+                    body: JSON.stringify({ message: message })
+                });
+                const data = await r.json();
+                if (!r.ok) throw new Error(data.error || ('HTTP ' + r.status));
+                log(data.log);
+                setStatus('statusGit', '✅ Запушено — сайт обновится через минуту-другую.', 'ok');
+                $('gitMsg').value = '';
+                state = data.status;
+                render();
+            } catch (e) {
+                if (e instanceof TypeError) { offline(); return; }
+                log(e.message);
+                setStatus('statusGit', '❌ Не получилось — подробности ниже.', 'err');
+                loadStatus();
+            } finally {
+                btn.textContent = '🚀 Запушить';
+                refreshButton();
+            }
+        });
+
+        if (location.hash === '#version' && window.activateTab) window.activateTab('version');
+        loadStatus();
+    })();
 </script>
 </body>
 </html>

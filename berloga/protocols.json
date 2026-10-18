@@ -1,5 +1,5 @@
 {
-  "updated": "02.10.2026",
+  "updated": "18.10.2026",
   "protocols": [
     {
       "name": "SSH (DE)",
@@ -159,9 +159,9 @@
       "platform": "iOS / Android / PC",
       "type": "link",
       "file": "",
-      "link": "tg://proxy?server=grid.lovely.lat&port=443&secret=eeec835a34516912f161a0073339be3c64677269642e6c6f76656c792e6c6174",
-      "desc": "Бесплатный прокси для работы в Telegram без VPN сервисов. ",
-      "status": "maintenance",
+      "link": "https://t.me/proxy?server=grid.lovely.lat&port=443&secret=eeec835a34516912f161a0073339be3c64677269642e6c6f76656c792e6c6174",
+      "desc": "Бесплатный прокси для работы в Telegram. Отлично подойдет, если через ваш VPN не запускается Telegram",
+      "status": "ok",
       "steps": [],
       "details": "",
       "note": ""

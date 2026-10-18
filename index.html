@@ -528,7 +528,6 @@
         height: 100%;
         object-fit: cover;
         display: block;
-        filter: saturate(0.85) brightness(0.94);
     }
 
     #page-index .kx-project-card:hover .kx-project-media img { transform: scale(1.06); }
@@ -1089,7 +1088,7 @@
                         '<a href="' + p.url + '" target="_blank" rel="noopener noreferrer" class="text-decoration-none text-white d-block h-100">' +
                             '<div class="kx-card kx-project-card h-100 d-flex flex-column">' +
                                 '<div class="kx-project-media">' +
-                                    '<img src="' + p.image + '" alt="' + p.title + '" style="pointer-events: none; user-select: none; -webkit-user-drag: none;">' +
+                                    '<img src="' + p.image + '" alt="' + p.title + '" width="1600" height="1200" loading="lazy" decoding="async" style="pointer-events: none; user-select: none; -webkit-user-drag: none;">' +
                                 '</div>' +
                                 '<div class="p-4 flex-grow-1 d-flex flex-column">' +
                                     '<div class="d-flex align-items-start justify-content-between gap-3 mb-2">' +
@@ -1239,7 +1238,7 @@
 
     <div class="text-center mt-5">
         <p class="mb-0">© 2026. Автор: Михаил Кондрашов |
-            <span class="version-info" title="codename: Vera">Версия 0.3.2</span>
+            <span class="version-info" title="codename: Minor">Версия 0.5.0</span>
         </p>
     </div>
 </div>
