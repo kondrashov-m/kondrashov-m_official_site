@@ -1,5 +1,5 @@
 {
-  "updated": "17.10.2026",
+  "updated": "21.10.2026",
   "lectures": [
     {
       "subject": "BackEnd-разработка",
@@ -228,6 +228,24 @@
       "title": "Лекция от 17.10.2026",
       "date": "2026-10-17",
       "youtube": "https://youtu.be/xZ2JE-5v4wo"
+    },
+    {
+      "subject": "Сети и телекоммуникации",
+      "title": "Лекция от 21.10.2026",
+      "date": "2026-10-21",
+      "youtube": "https://youtu.be/n9_TuqDaTGQ"
+    },
+    {
+      "subject": "Системы искусственного интеллекта",
+      "title": "Лекция от 21.10.2026",
+      "date": "2026-10-21",
+      "youtube": "https://youtu.be/kFpB2c4X_OY"
+    },
+    {
+      "subject": "Моделирование систем",
+      "title": "Лекция от 21.10.2026",
+      "date": "2026-10-21",
+      "youtube": "https://youtu.be/War6eFirzWI"
     }
   ]
 }
