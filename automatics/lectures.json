@@ -1,5 +1,5 @@
 {
-  "updated": "21.10.2026",
+  "updated": "24.10.2026",
   "lectures": [
     {
       "subject": "BackEnd-разработка",
@@ -246,6 +246,24 @@
       "title": "Лекция от 21.10.2026",
       "date": "2026-10-21",
       "youtube": "https://youtu.be/War6eFirzWI"
+    },
+    {
+      "subject": "Цифровые методы обработки информации",
+      "title": "Лекция от 24.10.2026",
+      "date": "2026-10-24",
+      "youtube": "https://youtu.be/KobxuiXRp0U"
+    },
+    {
+      "subject": "BackEnd-разработка",
+      "title": "Лекция от 24.10.2026",
+      "date": "2026-10-24",
+      "youtube": "https://youtu.be/GHUk8Kj641s"
+    },
+    {
+      "subject": "BackEnd-разработка",
+      "title": "Лекция от 24.10.2026 (часть 2)",
+      "date": "2026-10-24",
+      "youtube": "https://youtu.be/mRtGAkeG__k"
     }
   ]
 }
