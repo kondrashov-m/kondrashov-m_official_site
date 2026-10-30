@@ -19,6 +19,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://kondrashov-m.ru/binder.html</loc>
+    <lastmod>2026-10-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://kondrashov-m.ru/resume.html</loc>
     <lastmod>2026-08-24</lastmod>
     <changefreq>monthly</changefreq>

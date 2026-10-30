@@ -1,6 +1,13 @@
 {
   "projects": [
     {
+      "url": "binder.html",
+      "image": "images/project-binder.jpg",
+      "label": "BINDER",
+      "title": "Учёт заявок для Service Desk",
+      "description": "Заявки «в работе / выполнены» с таймерами, напоминание в конце смены и бинды Ctrl+F1–F12. Один exe на C без установки."
+    },
+    {
       "url": "https://pagesmi-course-project-kzoc.vercel.app",
       "image": "images/project1.jpg",
       "label": "PAGESMI",
