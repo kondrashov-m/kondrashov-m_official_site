@@ -807,6 +807,13 @@
     }
 
     .bx-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (min-width: 1200px) { .bx-cols { grid-template-columns: 1fr 1fr 1fr; } .bx-col .bx-card-num { font-size: 1.1rem; } }
+    .bx-dot-amber { background: #ffb547; }
+    .bx-count-amber { color: #ffb547; background: rgba(255,181,71,.14); }
+    .bx-card-wait::before { background: #ffb547; }
+    .bx-card-wait .bx-card-note { color: rgba(255,181,71,.75); }
+    .bx-timer-wait { color: #ebe1d2; background: #2a1f0e; border-color: #8c6428; }
+    .bx-timer-wait i { width: 6px; height: 8px; display: inline-block; border-left: 2px solid #ffb547; border-right: 2px solid #ffb547; }
     @media (max-width: 575px) { .bx-cols { grid-template-columns: 1fr; } }
     .bx-col { background: #18171b; border: 1px solid #28272d; border-radius: 18px; padding: 14px; min-width: 0; }
     .bx-col-title {
@@ -1048,7 +1055,14 @@
                                         <div class="bx-card-row"><span class="bx-card-note">сломался компьютер</span><span class="bx-timer bx-timer-run" data-start="2412"><i></i><b>40:12</b></span></div>
                                     </div>
                                 </div>
-                                <div class="bx-col d-none d-sm-block">
+                                <div class="bx-col">
+                                    <div class="bx-col-title"><i class="bx-dot bx-dot-amber"></i>Уточнение <span class="bx-count bx-count-amber">1</span></div>
+                                    <div class="bx-card bx-card-wait">
+                                        <div class="bx-card-num">2519904</div>
+                                        <div class="bx-card-row"><span class="bx-card-note">ждёт 35 мин</span><span class="bx-timer bx-timer-wait"><i></i>12:08</span></div>
+                                    </div>
+                                </div>
+                                <div class="bx-col d-none d-xl-block">
                                     <div class="bx-col-title"><i class="bx-dot bx-dot-green"></i>Выполнены <span class="bx-count bx-count-green">1</span></div>
                                     <div class="bx-card bx-card-done">
                                         <div class="bx-card-num">2520117</div>
@@ -1061,7 +1075,7 @@
                         <div class="bx-reminder">
                             <div class="bx-rem-top"></div>
                             <div class="bx-rem-title">Напоминание</div>
-                            <div class="bx-rem-text">Скоро конец смены. В работе осталось: 2</div>
+                            <div class="bx-rem-text">В работе: 2, на уточнении: 1</div>
                             <div class="bx-rem-btns"><span class="bx-rem-ok">Хорошо</span><span class="bx-rem-more">Подробнее</span></div>
                         </div>
                     </div>
@@ -1081,7 +1095,7 @@
                     </div>
                     <div class="col-lg-7">
                         <p class="lead mb-3">На Service Desk за 12-часовую смену через руки проходят десятки заявок, а рабочая система то и дело зависает. Легко взять заявку в работу и забыть про неё до конца дня.</p>
-                        <p class="lead mb-0 opacity-75">BINDER решает это просто: начал заявку — вписал номер. Пока она не закрыта, она висит в левой колонке, а таймер показывает, сколько она уже в работе. Ближе к концу смены программа сама напомнит, что ещё осталось.</p>
+                        <p class="lead mb-0 opacity-75">BINDER решает это просто: начал заявку — вписал номер. Пока она не закрыта, она висит в колонке «В работе» с идущим таймером, а заявки, по которым ждёшь ответа, лежат отдельно — «На уточнении» — и не путаются с выполненными. Ближе к концу смены программа сама напомнит, что ещё осталось.</p>
                     </div>
                 </div>
             </div>
@@ -1099,22 +1113,22 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="bx-feature">
                         <div class="bx-ficon"><svg><use xlink:href="#icon-columns"></use></svg></div>
-                        <h3 class="display-6">Две колонки заявок</h3>
-                        <p>«В работе» и «Выполнены». Номер и короткое описание, перенос галочкой или перетаскиванием, редактирование по двойному клику.</p>
+                        <h3 class="display-6">Три колонки заявок</h3>
+                        <p>«В работе», «На уточнении» и «Выполнены». Номер и описание, перенос кнопкой или перетаскиванием, редактирование по двойному клику.</p>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-4">
                     <div class="bx-feature">
                         <div class="bx-ficon"><svg><use xlink:href="#icon-clock"></use></svg></div>
                         <h3 class="display-6">Таймер по каждой заявке</h3>
-                        <p>Слева время идёт и пульсирует индикатор, справа останавливается. Считается по системным часам — даже когда программа закрыта.</p>
+                        <p>В работе время идёт и пульсирует индикатор, на уточнении — пауза и счётчик ожидания, у выполненных — итог. Считается по системным часам, даже когда программа закрыта.</p>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-4">
                     <div class="bx-feature">
                         <div class="bx-ficon"><svg><use xlink:href="#icon-bell"></use></svg></div>
                         <h3 class="display-6">Напоминание в конце смены</h3>
-                        <p>В заданное время всплывает окно со списком незакрытых заявок. Время настраивается, напоминание можно выключить, есть тестовый режим.</p>
+                        <p>В заданное время всплывает окно со списком незакрытых заявок — и в работе, и на уточнении. Время настраивается, можно выключить, есть тестовый режим.</p>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-4">
@@ -1151,7 +1165,7 @@
             </div>
             <div class="row g-4" data-aos="fade-up" data-aos-duration="1200">
                 <div class="col-sm-6 col-lg-3"><div class="bx-step"><span class="bx-step-n">01</span><h3 class="display-6">Взял заявку</h3><p>Вписал номер и нажал Enter — карточка появилась в «В работе», таймер пошёл.</p></div></div>
-                <div class="col-sm-6 col-lg-3"><div class="bx-step"><span class="bx-step-n">02</span><h3 class="display-6">Работаешь</h3><p>Стандартные фразы в протокол — через Ctrl+F1…F12, без копипаста.</p></div></div>
+                <div class="col-sm-6 col-lg-3"><div class="bx-step"><span class="bx-step-n">02</span><h3 class="display-6">Работаешь</h3><p>Фразы в протокол — через Ctrl+F1…F12. Ждёшь ответа — кнопка «?», заявка уходит на уточнение.</p></div></div>
                 <div class="col-sm-6 col-lg-3"><div class="bx-step"><span class="bx-step-n">03</span><h3 class="display-6">Закрыл</h3><p>Галочка на карточке — заявка уходит в «Выполнены», время фиксируется.</p></div></div>
                 <div class="col-sm-6 col-lg-3"><div class="bx-step"><span class="bx-step-n">04</span><h3 class="display-6">Конец смены</h3><p>Напоминание покажет, что осталось, а «очистить» сохранит итоги в историю.</p></div></div>
             </div>
@@ -1181,7 +1195,7 @@
                         <div class="bx-timeline">
                             <div class="bx-tl-item"><span class="bx-tl-v">v1</span><div><b>bat + PowerShell</b><p>Первый биндер: Ctrl+F1–F12 и текстовые файлы с фразами.</p></div></div>
                             <div class="bx-tl-item"><span class="bx-tl-v">v2</span><div><b>Go, один exe</b><p>Без батников, печать текста напрямую, без буфера обмена.</p></div></div>
-                            <div class="bx-tl-item bx-tl-now"><span class="bx-tl-v">v3</span><div><b>Оконное приложение на C</b><p>Заявки с таймерами, напоминание, редактор биндов, история.</p></div></div>
+                            <div class="bx-tl-item bx-tl-now"><span class="bx-tl-v">v3</span><div><b>Оконное приложение на C</b><p>Заявки с таймерами, уточнения, напоминание, редактор биндов, история.</p></div></div>
                         </div>
                     </div>
                 </div>
